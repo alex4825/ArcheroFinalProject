@@ -1,3 +1,4 @@
+using Assets._Project.Develop.Runtime.Infrastracture.DI;
 using Assets._Project.Develop.Runtime.Utilities.AssetsManagement;
 using Assets._Project.Develop.Runtime.Utilities.ConfigsManagement;
 using Assets._Project.Develop.Runtime.Utilities.CoroutinesManagement;
@@ -8,51 +9,58 @@ namespace Assets._Project.Develop.Runtime
 {
     public class Test : MonoBehaviour
     {
-        private ResourcesAssetsLoader _resourcesAssetsLoader;
-
-        private ICoroutinesPerformer _coroutinesPerformer;
-
-        private ConfigsProviderService _configsProviderService;
+        private DIContainer _container;
 
         private void Awake()
         {
-            _resourcesAssetsLoader = CreateResourcesAssetsLoader();
+            _container = new();
 
-            _coroutinesPerformer = CreateCoroutinesPerformer();
+            _container.RegisterAsSingle<ICoroutinesPerformer>(CreateCoroutinesPerformer);
+            _container.RegisterAsSingle(CreateConfigsProviderService);
+            _container.RegisterAsSingle(CreateResourcesAssetsLoader);
 
-            _configsProviderService = CreateConfigsProviderService();
+            ICoroutinesPerformer coroutinesPerformer = _container.Resolve<ICoroutinesPerformer>();
 
-            _coroutinesPerformer.StartPerform(LoadConfigs());
+            coroutinesPerformer.StartPerform(LoadConfigs());
         }
 
         private void Update()
         {
             if (Input.GetKeyDown(KeyCode.F))
             {
-                TestConfig config = _configsProviderService.GetConfig<TestConfig>();
+                ConfigsProviderService configsProviderService = _container.Resolve<ConfigsProviderService>();
+
+                TestConfig config = configsProviderService.GetConfig<TestConfig>();
                 Debug.Log(config.Damage);
             }
         }
 
-        private ConfigsProviderService CreateConfigsProviderService()
+        private ConfigsProviderService CreateConfigsProviderService(DIContainer c)
         {
-            ResourcesConfigsLoader resourcesConfigsLoader = new ResourcesConfigsLoader(_resourcesAssetsLoader);
+            ResourcesAssetsLoader resourcesAssetsLoader = c.Resolve<ResourcesAssetsLoader>();
+
+            ResourcesConfigsLoader resourcesConfigsLoader = new ResourcesConfigsLoader(resourcesAssetsLoader);
 
             return new ConfigsProviderService(resourcesConfigsLoader);
         }
 
-        private ResourcesAssetsLoader CreateResourcesAssetsLoader() => new ResourcesAssetsLoader();
+        private ResourcesAssetsLoader CreateResourcesAssetsLoader(DIContainer c) => new ResourcesAssetsLoader(); 
 
-        private CoroutinesPerformer CreateCoroutinesPerformer()
+        private CoroutinesPerformer CreateCoroutinesPerformer(DIContainer c)
         {
-            CoroutinesPerformer coroutinesPerformerPrefab = _resourcesAssetsLoader.Load<CoroutinesPerformer>("Utilities/CoroutinesPerformer");
+            ResourcesAssetsLoader resourcesAssetsLoader = c.Resolve<ResourcesAssetsLoader>();
+
+            CoroutinesPerformer coroutinesPerformerPrefab = resourcesAssetsLoader.Load<CoroutinesPerformer>("Utilities/CoroutinesPerformer");
+
             return Instantiate(coroutinesPerformerPrefab);
         }
 
         private IEnumerator LoadConfigs()
         {
+            ConfigsProviderService configsProviderService = _container.Resolve<ConfigsProviderService>();
+
             Debug.Log("Start load configs");
-            yield return _configsProviderService.LoadAcync();
+            yield return configsProviderService.LoadAcync();
             Debug.Log("End load configs");
         }
     }
