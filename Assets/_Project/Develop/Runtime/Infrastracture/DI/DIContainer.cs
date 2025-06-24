@@ -7,6 +7,8 @@ namespace Assets._Project.Develop.Runtime.Infrastracture.DI
     {
         private readonly Dictionary<Type, Registration> _container = new();
 
+        private readonly List<Type> _requests = new();
+
         public void RegisterAsSingle<T>(Func<DIContainer, T> creator)
         {
             Registration registration = new Registration(container => creator.Invoke(container));
@@ -16,8 +18,20 @@ namespace Assets._Project.Develop.Runtime.Infrastracture.DI
 
         public T Resolve<T>()
         {
-            if (_container.TryGetValue(typeof(T), out Registration registration))
-                return (T)registration.CreateInstanceFrom(this);
+            if (_requests.Contains(typeof(T)))
+                throw new InvalidOperationException($"Cycle resolve for {typeof(T)}");
+
+            _requests.Add(typeof(T));
+
+            try
+            {
+                if (_container.TryGetValue(typeof(T), out Registration registration))
+                    return (T)registration.CreateInstanceFrom(this);
+            }
+            finally
+            {
+                _requests.Remove(typeof(T));
+            }
 
             throw new InvalidOperationException($"Registration for {typeof(T)} not exists");
         }

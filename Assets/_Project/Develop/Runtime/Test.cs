@@ -44,7 +44,7 @@ namespace Assets._Project.Develop.Runtime
             return new ConfigsProviderService(resourcesConfigsLoader);
         }
 
-        private ResourcesAssetsLoader CreateResourcesAssetsLoader(DIContainer c) => new ResourcesAssetsLoader(); 
+        private ResourcesAssetsLoader CreateResourcesAssetsLoader(DIContainer c) => new ResourcesAssetsLoader(c.Resolve<ConfigsProviderService>()); 
 
         private CoroutinesPerformer CreateCoroutinesPerformer(DIContainer c)
         {
