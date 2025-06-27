@@ -1,12 +1,8 @@
 ﻿using Assets._Project.Develop.Runtime.Infrastracture.DI;
 using Assets._Project.Develop.Runtime.Utilities.ConfigsManagement;
 using Assets._Project.Develop.Runtime.Utilities.CoroutinesManagement;
-using System;
+using Assets._Project.Develop.Runtime.Utilities.LoadingScreen;
 using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
 
 namespace Assets._Project.Develop.Runtime.Infrastracture.EntryPoint
@@ -28,7 +24,9 @@ namespace Assets._Project.Develop.Runtime.Infrastracture.EntryPoint
 
         public IEnumerator Initialize(DIContainer container)
         {
-            Debug.Log("Открывается штора загрузки");
+            ILoadingScreen loadingScreen = container.Resolve<ILoadingScreen>();
+
+            loadingScreen.Show();
 
             Debug.Log("Начинается инициализация сервисов");
 
@@ -38,7 +36,7 @@ namespace Assets._Project.Develop.Runtime.Infrastracture.EntryPoint
 
             Debug.Log("Завершается инициализация сервисов");
 
-            Debug.Log("Закрывается штора загрузки");
+            loadingScreen.Hide(); 
 
             Debug.Log("Начинается переход на какую-то сцену");
 
