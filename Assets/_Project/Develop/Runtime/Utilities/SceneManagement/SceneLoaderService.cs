@@ -4,7 +4,7 @@ using System.Collections;
 
 namespace Assets._Project.Develop.Runtime.Utilities.SceneManagement
 {
-    public class SceneLoderService
+    public class SceneLoaderService
     {
         public IEnumerator LoadAcync(string sceneName, LoadSceneMode loadSceneMode = LoadSceneMode.Single)
         {

@@ -21,9 +21,19 @@ namespace Assets._Project.Develop.Runtime.Infrastracture.EntryPoint
             container.RegisterAsSingle(CreateSceneLoderService);
 
             container.RegisterAsSingle<ILoadingScreen>(CreateLoadingScreen);
+
+            container.RegisterAsSingle(CreateSceneSwitcherService);
         }
 
-        private static SceneLoderService CreateSceneLoderService(DIContainer c) => new SceneLoderService();
+        private static SceneSwitcherService CreateSceneSwitcherService(DIContainer c)
+            => new SceneSwitcherService(
+                c.Resolve<SceneLoaderService>(),
+                c.Resolve<ILoadingScreen>(),
+                c
+                );
+
+
+        private static SceneLoaderService CreateSceneLoderService(DIContainer c) => new SceneLoaderService();
 
         private static ConfigsProviderService CreateConfigsProviderService(DIContainer c)
         {
@@ -44,7 +54,7 @@ namespace Assets._Project.Develop.Runtime.Infrastracture.EntryPoint
 
             return Object.Instantiate(coroutinesPerformerPrefab);
         }
-        
+
         private static StandardLoadingScreen CreateLoadingScreen(DIContainer c)
         {
             ResourcesAssetsLoader resourcesAssetsLoader = c.Resolve<ResourcesAssetsLoader>();

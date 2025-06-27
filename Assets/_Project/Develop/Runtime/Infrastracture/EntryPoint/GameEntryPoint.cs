@@ -2,6 +2,7 @@
 using Assets._Project.Develop.Runtime.Utilities.ConfigsManagement;
 using Assets._Project.Develop.Runtime.Utilities.CoroutinesManagement;
 using Assets._Project.Develop.Runtime.Utilities.LoadingScreen;
+using Assets._Project.Develop.Runtime.Utilities.SceneManagement;
 using System.Collections;
 using UnityEngine;
 
@@ -25,6 +26,7 @@ namespace Assets._Project.Develop.Runtime.Infrastracture.EntryPoint
         public IEnumerator Initialize(DIContainer container)
         {
             ILoadingScreen loadingScreen = container.Resolve<ILoadingScreen>();
+            SceneSwitcherService sceneSwitcherService = container.Resolve<SceneSwitcherService>();
 
             loadingScreen.Show();
 
@@ -36,9 +38,9 @@ namespace Assets._Project.Develop.Runtime.Infrastracture.EntryPoint
 
             Debug.Log("Завершается инициализация сервисов");
 
-            loadingScreen.Hide(); 
+            loadingScreen.Hide();
 
-            Debug.Log("Начинается переход на какую-то сцену");
+            yield return sceneSwitcherService.ProcesSwitchTo(Scenes.MainMenu);
 
         }
 
