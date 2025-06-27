@@ -2,6 +2,7 @@
 using Assets._Project.Develop.Runtime.Infrastracture.Gameplay.Infrastracture;
 using Assets._Project.Develop.Runtime.Utilities.CoroutinesManagement;
 using Assets._Project.Develop.Runtime.Utilities.SceneManagement;
+using System;
 using System.Collections;
 using UnityEngine;
 
@@ -11,10 +12,14 @@ namespace Assets._Project.Develop.Runtime.Infrastracture.Meta.Infrastracture
     {
         private DIContainer _container;
 
-        public override IEnumerator Initialize(DIContainer container, IInputSceneArgs sceneArgs)
+        public override void ProcessRegistrations(DIContainer container, IInputSceneArgs sceneArgs = null)
         {
             _container = container;
 
+            MainMenuContextRegistrations.Process(_container);
+        }
+        public override IEnumerator Initialize()
+        {
             Debug.Log("Инициализация сцены главного меню.");
 
             yield break;

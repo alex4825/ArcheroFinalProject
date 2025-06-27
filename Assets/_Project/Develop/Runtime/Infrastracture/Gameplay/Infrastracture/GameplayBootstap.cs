@@ -10,15 +10,23 @@ namespace Assets._Project.Develop.Runtime.Infrastracture.Gameplay.Infrastracture
     public class GameplayBootstap : SceneBootsprap
     {
         private DIContainer _container;
+        private GameplayInputArgs _inputArgs;
 
-        public override IEnumerator Initialize(DIContainer container, IInputSceneArgs sceneArgs)
+        public override void ProcessRegistrations(DIContainer container, IInputSceneArgs sceneArgs = null)
         {
             _container = container;
 
             if (sceneArgs is not GameplayInputArgs gameplayInputArgs)
                 throw new ArgumentException($"{nameof(sceneArgs)} is not match with {typeof(GameplayInputArgs)} type");
 
-            Debug.Log($"Вы попали на уровень {gameplayInputArgs.LevelNumber}");
+            _inputArgs = gameplayInputArgs;
+
+            GameplayContextRegistrations.Process(_container, gameplayInputArgs);
+        }
+
+        public override IEnumerator Initialize()
+        {           
+            Debug.Log($"Вы попали на уровень {_inputArgs.LevelNumber}");
 
             Debug.Log("Инициализация геймплейной сцены.");
 

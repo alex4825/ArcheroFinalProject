@@ -16,11 +16,11 @@ namespace Assets._Project.Develop.Runtime.Infrastracture.EntryPoint
             SetupAppSettings();
 
             Debug.Log("Процесс регистрации сервисов всего проекта");
-            DIContainer container = new DIContainer();
+            DIContainer projectContainer = new DIContainer();
 
-            EntryPointRegistrations.Process(container);
+            ProjectContextRegistrations.Process(projectContainer);
 
-            container.Resolve<ICoroutinesPerformer>().StartPerform(Initialize(container));
+            projectContainer.Resolve<ICoroutinesPerformer>().StartPerform(Initialize(projectContainer));
         }
 
         public IEnumerator Initialize(DIContainer container)

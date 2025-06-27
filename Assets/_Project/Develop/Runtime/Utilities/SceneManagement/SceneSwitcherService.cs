@@ -11,13 +11,13 @@ namespace Assets._Project.Develop.Runtime.Utilities.SceneManagement
     {
         private SceneLoaderService _sceneLoaderService;
         private ILoadingScreen _loadingScreen;
-        private DIContainer _container;
+        private DIContainer _projectContainer;
 
-        public SceneSwitcherService(SceneLoaderService sceneLoaderService, ILoadingScreen loadingScreen, DIContainer container)
+        public SceneSwitcherService(SceneLoaderService sceneLoaderService, ILoadingScreen loadingScreen, DIContainer projectContainer)
         {
             _sceneLoaderService = sceneLoaderService;
             _loadingScreen = loadingScreen;
-            _container = container;
+            _projectContainer = projectContainer;
         }
 
         public IEnumerator ProcesSwitchTo(string sceneName, IInputSceneArgs sceneArgs = null)
@@ -32,7 +32,11 @@ namespace Assets._Project.Develop.Runtime.Utilities.SceneManagement
             if(sceneBootsprap ==  null)
                 throw new NullReferenceException(nameof(sceneBootsprap) + " not found");
 
-            yield return sceneBootsprap.Initialize(_container, sceneArgs);
+            DIContainer sceneContainer = new DIContainer(_projectContainer);
+
+            sceneBootsprap.ProcessRegistrations(sceneContainer, sceneArgs);
+
+            yield return sceneBootsprap.Initialize();
 
             _loadingScreen.Hide();
 
