@@ -1,0 +1,23 @@
+﻿using UnityEngine.SceneManagement;
+using UnityEngine;
+using System.Collections;
+
+namespace Assets._Project.Develop.Runtime.Utilities.SceneManagement
+{
+    public class SceneLoderService
+    {
+        public IEnumerator LoadAcync(string sceneName, LoadSceneMode loadSceneMode = LoadSceneMode.Single)
+        {
+            AsyncOperation wait = SceneManager.LoadSceneAsync(sceneName, loadSceneMode);  
+
+            yield return new WaitWhile(() => wait.isDone == false);
+        }
+        
+        public IEnumerator UnloadAcync(string sceneName)
+        {
+            AsyncOperation wait = SceneManager.UnloadSceneAsync(sceneName);
+
+            yield return new WaitWhile(() => wait.isDone == false);
+        }
+    }
+}
