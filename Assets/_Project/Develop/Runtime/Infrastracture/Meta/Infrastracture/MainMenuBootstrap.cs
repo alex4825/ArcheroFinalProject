@@ -1,4 +1,5 @@
 ﻿using Assets._Project.Develop.Runtime.Infrastracture.DI;
+using Assets._Project.Develop.Runtime.Infrastracture.Gameplay.Infrastracture;
 using Assets._Project.Develop.Runtime.Utilities.CoroutinesManagement;
 using Assets._Project.Develop.Runtime.Utilities.SceneManagement;
 using System.Collections;
@@ -10,7 +11,7 @@ namespace Assets._Project.Develop.Runtime.Infrastracture.Meta.Infrastracture
     {
         private DIContainer _container;
 
-        public override IEnumerator Initialize(DIContainer container)
+        public override IEnumerator Initialize(DIContainer container, IInputSceneArgs sceneArgs)
         {
             _container = container;
 
@@ -31,7 +32,7 @@ namespace Assets._Project.Develop.Runtime.Infrastracture.Meta.Infrastracture
                 SceneSwitcherService sceneSwitcherService = _container.Resolve<SceneSwitcherService>();
                 ICoroutinesPerformer coroutinesPerformer = _container.Resolve<ICoroutinesPerformer>();
 
-                coroutinesPerformer.StartPerform(sceneSwitcherService.ProcesSwitchTo(Scenes.Gameplay));
+                coroutinesPerformer.StartPerform(sceneSwitcherService.ProcesSwitchTo(Scenes.Gameplay, new GameplayInputArgs(2)));
             }
         }
     }

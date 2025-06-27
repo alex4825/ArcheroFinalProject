@@ -2,6 +2,7 @@
 using Assets._Project.Develop.Runtime.Utilities.CoroutinesManagement;
 using Assets._Project.Develop.Runtime.Utilities.SceneManagement;
 using System.Collections;
+using System;
 using UnityEngine;
 
 namespace Assets._Project.Develop.Runtime.Infrastracture.Gameplay.Infrastracture
@@ -10,9 +11,14 @@ namespace Assets._Project.Develop.Runtime.Infrastracture.Gameplay.Infrastracture
     {
         private DIContainer _container;
 
-        public override IEnumerator Initialize(DIContainer container)
+        public override IEnumerator Initialize(DIContainer container, IInputSceneArgs sceneArgs)
         {
             _container = container;
+
+            if (sceneArgs is not GameplayInputArgs gameplayInputArgs)
+                throw new ArgumentException($"{nameof(sceneArgs)} is not match with {typeof(GameplayInputArgs)} type");
+
+            Debug.Log($"Вы попали на уровень {gameplayInputArgs.LevelNumber}");
 
             Debug.Log("Инициализация геймплейной сцены.");
 

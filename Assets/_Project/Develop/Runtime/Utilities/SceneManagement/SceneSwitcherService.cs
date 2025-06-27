@@ -20,7 +20,7 @@ namespace Assets._Project.Develop.Runtime.Utilities.SceneManagement
             _container = container;
         }
 
-        public IEnumerator ProcesSwitchTo(string sceneName)
+        public IEnumerator ProcesSwitchTo(string sceneName, IInputSceneArgs sceneArgs = null)
         {
             _loadingScreen.Show();
 
@@ -32,7 +32,7 @@ namespace Assets._Project.Develop.Runtime.Utilities.SceneManagement
             if(sceneBootsprap ==  null)
                 throw new NullReferenceException(nameof(sceneBootsprap) + " not found");
 
-            yield return sceneBootsprap.Initialize(_container);
+            yield return sceneBootsprap.Initialize(_container, sceneArgs);
 
             _loadingScreen.Hide();
 
