@@ -1,11 +1,9 @@
-﻿using Assets._Project.Develop.Runtime.Infrastracture.DI;
+﻿using Assets._Project.Develop.Runtime.Infrastracture;
+using Assets._Project.Develop.Runtime.Infrastracture.DI;
 using Assets._Project.Develop.Runtime.Utilities.LoadingScreen;
 using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Object = UnityEngine.Object;
 
 namespace Assets._Project.Develop.Runtime.Utilities.SceneManagement
 {
@@ -29,7 +27,16 @@ namespace Assets._Project.Develop.Runtime.Utilities.SceneManagement
             yield return _sceneLoaderService.LoadAcync(Scenes.Empty);
             yield return _sceneLoaderService.LoadAcync(sceneName);
 
+            SceneBootsprap sceneBootsprap = Object.FindObjectOfType<SceneBootsprap>();
+
+            if(sceneBootsprap ==  null)
+                throw new NullReferenceException(nameof(sceneBootsprap) + " not found");
+
+            yield return sceneBootsprap.Initialize(_container);
+
             _loadingScreen.Hide();
+
+            sceneBootsprap.Run(); 
         }
     }
 }
