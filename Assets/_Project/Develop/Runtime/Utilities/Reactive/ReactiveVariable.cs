@@ -6,6 +6,8 @@ namespace Assets._Project.Develop.Runtime.Utilities.Reactive
     public class ReactiveVariable<T> : IReadonlyVariable<T> where T : IEquatable<T>
     {
         private List<Subscriber<T, T>> _subscribers = new();
+        private List<Subscriber<T, T>> _toAdd = new();
+        private List<Subscriber<T, T>> _toRemove = new();
 
         private T _value;
 
@@ -24,18 +26,37 @@ namespace Assets._Project.Develop.Runtime.Utilities.Reactive
                 _value = value;
 
                 if (_value.Equals(oldValue) == false)
-                    foreach (var subscriber in _subscribers)
-                        subscriber?.Invoke(oldValue, _value);
+                    Invoke(oldValue, _value);
             }
         }
 
         public IDisposable Subscribe(Action<T, T> action)
         {
             Subscriber<T, T> subscriber = new(action, Remove);
-            _subscribers.Add(subscriber);
+            _toAdd.Add(subscriber);
             return subscriber;
         }
 
-        private void Remove(Subscriber<T, T> subscriber) => _subscribers.Remove(subscriber);
+        private void Remove(Subscriber<T, T> subscriber) => _toRemove.Add(subscriber);
+
+        private void Invoke(T oldValue, T newValue)
+        {
+            if (_toAdd.Count > 0)
+            {
+                _subscribers.AddRange(_toAdd);
+                _toAdd.Clear();
+            }
+
+            if (_toRemove.Count > 0)
+            {
+                foreach (var subscriber in _toRemove)
+                    _subscribers.Remove(subscriber);
+
+                _toRemove.Clear();
+            }
+
+            foreach (var subscriber in _subscribers)
+                subscriber.Invoke(oldValue, newValue);
+        }
     }
 }
