@@ -1,5 +1,6 @@
 ﻿using Assets._Project.Develop.Runtime.Infrastracture.DI;
 using Assets._Project.Develop.Runtime.Infrastracture.Gameplay.Infrastracture;
+using Assets._Project.Develop.Runtime.Infrastracture.Meta.Features.Wallet;
 using Assets._Project.Develop.Runtime.Utilities.CoroutinesManagement;
 using Assets._Project.Develop.Runtime.Utilities.Reactive;
 using Assets._Project.Develop.Runtime.Utilities.SceneManagement;
@@ -14,6 +15,8 @@ namespace Assets._Project.Develop.Runtime.Infrastracture.Meta.Infrastracture
     {
         private DIContainer _container;
 
+        private WalletService _walletService;
+
         public override void ProcessRegistrations(DIContainer container, IInputSceneArgs sceneArgs = null)
         {
             _container = container;
@@ -23,6 +26,8 @@ namespace Assets._Project.Develop.Runtime.Infrastracture.Meta.Infrastracture
         public override IEnumerator Initialize()
         {
             Debug.Log("Инициализация сцены главного меню.");
+
+            _walletService = _container.Resolve<WalletService>();
 
             yield break;
         }
@@ -41,6 +46,21 @@ namespace Assets._Project.Develop.Runtime.Infrastracture.Meta.Infrastracture
                 ICoroutinesPerformer coroutinesPerformer = _container.Resolve<ICoroutinesPerformer>();
 
                 coroutinesPerformer.StartPerform(sceneSwitcherService.ProcesSwitchTo(Scenes.Gameplay, new GameplayInputArgs(2)));
+            }
+
+            if (Input.GetKeyDown(KeyCode.Alpha1))
+            {
+                _walletService.Add(CurrencyTypes.Gold, 10);
+                Debug.Log($"Золота осталось : {_walletService.GetCurrency(CurrencyTypes.Gold).Value}");
+            }
+
+            if (Input.GetKeyDown(KeyCode.Alpha2))
+            {
+                if (_walletService.Enough(CurrencyTypes.Gold, 10))
+                {
+                    _walletService.Spend(CurrencyTypes.Gold, 10);
+                    Debug.Log($"Золота осталось : {_walletService.GetCurrency(CurrencyTypes.Gold).Value}");
+                }
             }
         }
     }
