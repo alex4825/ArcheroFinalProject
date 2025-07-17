@@ -54,7 +54,7 @@ namespace Assets._Project.Develop.Runtime.Infrastracture.Meta.Infrastracture
                 Debug.Log($"Золота осталось : {_walletService.GetCurrency(CurrencyTypes.Gold).Value}");
             }
 
-            if (Input.GetKeyDown(KeyCode.Alpha2))
+            if (Input.GetKeyDown(KeyCode.Alpha2)) 
             {
                 if (_walletService.Enough(CurrencyTypes.Gold, 10))
                 {
