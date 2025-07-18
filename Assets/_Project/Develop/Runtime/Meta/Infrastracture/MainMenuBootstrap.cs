@@ -21,8 +21,6 @@ namespace Assets._Project.Develop.Runtime.Infrastracture.Meta.Infrastracture
         private WalletService _walletService;
 
         private PlayerData _playerData;
-        private IDataSerializer _serializer;
-        private string _serializedPlayerData;
 
         public override void ProcessRegistrations(DIContainer container, IInputSceneArgs sceneArgs = null)
         {
@@ -42,8 +40,6 @@ namespace Assets._Project.Develop.Runtime.Infrastracture.Meta.Infrastracture
                 {CurrencyTypes.Diamond, 10 },
                 {CurrencyTypes.Gold, 150 },
             };
-
-            _serializer = new JsonSerializer();
 
             yield break;
         }
@@ -77,18 +73,6 @@ namespace Assets._Project.Develop.Runtime.Infrastracture.Meta.Infrastracture
                     _walletService.Spend(CurrencyTypes.Gold, 10);
                     Debug.Log($"Золота осталось : {_walletService.GetCurrency(CurrencyTypes.Gold).Value}");
                 }
-            }
-
-            if(Input.GetKeyDown(KeyCode.S))
-            {
-                _serializedPlayerData = _serializer.Serialize(_playerData);
-                Debug.Log(_serializedPlayerData);
-            }
-
-            if(Input.GetKeyDown(KeyCode.D))
-            {
-                PlayerData playerData = _serializer.Deserialize<PlayerData>(_serializedPlayerData);
-                Debug.Log("Золото: " + playerData.WalletData[CurrencyTypes.Gold] + "Алмазы: " + playerData.WalletData[CurrencyTypes.Diamond]);
             }
         }
     }
