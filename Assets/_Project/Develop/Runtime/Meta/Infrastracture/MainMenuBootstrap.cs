@@ -22,6 +22,9 @@ namespace Assets._Project.Develop.Runtime.Infrastracture.Meta.Infrastracture
 
         private PlayerData _playerData;
 
+        private ISaveLoadService _saveLoadService;
+        private ICoroutinesPerformer _coroutinesPerformer;
+
         public override void ProcessRegistrations(DIContainer container, IInputSceneArgs sceneArgs = null)
         {
             _container = container;
@@ -33,6 +36,9 @@ namespace Assets._Project.Develop.Runtime.Infrastracture.Meta.Infrastracture
             Debug.Log("Инициализация сцены главного меню.");
 
             _walletService = _container.Resolve<WalletService>();
+
+            _saveLoadService = _container.Resolve<ISaveLoadService>();
+            _coroutinesPerformer = _container.Resolve<ICoroutinesPerformer>();
 
             _playerData = new PlayerData();
             _playerData.WalletData = new Dictionary<CurrencyTypes, int>
@@ -74,6 +80,27 @@ namespace Assets._Project.Develop.Runtime.Infrastracture.Meta.Infrastracture
                     Debug.Log($"Золота осталось : {_walletService.GetCurrency(CurrencyTypes.Gold).Value}");
                 }
             }
+
+            if (Input.GetKeyDown(KeyCode.S))
+            {
+                _coroutinesPerformer.StartPerform(_saveLoadService.Save(_playerData));
+                Debug.Log("Сохранение было вызвано"); 
+            }
+
+            if (Input.GetKeyDown(KeyCode.D))
+            {
+                _coroutinesPerformer.StartPerform(LoadPlayerData());
+            }
+        }
+
+        IEnumerator LoadPlayerData()
+        {
+            PlayerData loadedPlayerData = null;
+
+            yield return _saveLoadService.Load<PlayerData>(result  => loadedPlayerData = result);
+
+            Debug.Log($"Золота загружено: {loadedPlayerData.WalletData[CurrencyTypes.Gold]}");
+            Debug.Log($"Алмазов загружено: {loadedPlayerData.WalletData[CurrencyTypes.Diamond]}");
         }
     }
 }

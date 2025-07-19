@@ -9,6 +9,12 @@ namespace Assets._Project.Develop.Runtime.Utilities.DataManagement.DataRepositor
         private readonly string _folderPath;
         private readonly string _saveFileExtension;
 
+        public LocalFileDataRepository(string folderPath, string saveFileExtension)
+        {
+            _folderPath = folderPath;
+            _saveFileExtension = saveFileExtension;
+        }
+
         public IEnumerator Exists(string key, Action<bool> onExistsResult)
         {
             bool exists = File.Exists(FullPathFor(key));
