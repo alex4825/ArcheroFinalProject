@@ -21,6 +21,8 @@ namespace Assets._Project.Develop.Runtime.Infrastracture.EntryPoint
 
             ProjectContextRegistrations.Process(projectContainer);
 
+            projectContainer.Initialize();
+
             projectContainer.Resolve<ICoroutinesPerformer>().StartPerform(Initialize(projectContainer));
         }
 
@@ -42,7 +44,7 @@ namespace Assets._Project.Develop.Runtime.Infrastracture.EntryPoint
             yield return playerDataProvoder.Exists(result => isPlayerDataSaveExists = result);
 
             if (isPlayerDataSaveExists)
-                playerDataProvoder.Load();
+                yield return playerDataProvoder.Load();
             else
                 playerDataProvoder.Reset();
 

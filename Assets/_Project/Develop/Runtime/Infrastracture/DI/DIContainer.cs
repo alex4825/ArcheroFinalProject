@@ -26,7 +26,7 @@ namespace Assets._Project.Develop.Runtime.Infrastracture.DI
             return false;
         }
 
-        public void RegisterAsSingle<T>(Func<DIContainer, T> creator)
+        public IRegistrationsOptions RegisterAsSingle<T>(Func<DIContainer, T> creator)
         {
             if (IsAlreadyRegister<T>())
                 throw new InvalidOperationException($"{typeof(T)} is already registered");
@@ -34,6 +34,8 @@ namespace Assets._Project.Develop.Runtime.Infrastracture.DI
             Registration registration = new Registration(container => creator.Invoke(container));
 
             _container.Add(typeof(T), registration);
+
+            return registration;
         }
 
         public T Resolve<T>()
@@ -57,6 +59,15 @@ namespace Assets._Project.Develop.Runtime.Infrastracture.DI
             }
 
             throw new InvalidOperationException($"Registration for {typeof(T)} not exists");
+        }
+
+        public void Initialize()
+        {
+            foreach (Registration registration in _container.Values)
+            {
+                if (registration.IsNonLazy)
+                    registration.CreateInstanceFrom(this);
+            }
         }
     }
 }

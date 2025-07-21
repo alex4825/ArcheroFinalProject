@@ -35,7 +35,7 @@ namespace Assets._Project.Develop.Runtime.Infrastracture.EntryPoint
 
             container.RegisterAsSingle(CreateSceneSwitcherService);
 
-            container.RegisterAsSingle(CreateWalletService);
+            container.RegisterAsSingle(CreateWalletService).NonLazy();
 
             container.RegisterAsSingle<ISaveLoadService>(CreateSaveLoadService);
 
