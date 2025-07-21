@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace Assets._Project.Develop.Runtime.Utilities.DataManagement.DataProvoders
 {
-    public abstract class DataProvoder<TData> where TData : ISaveData
+    public abstract class DataProvider<TData> where TData : ISaveData
     {
         private readonly ISaveLoadService _saveLoadService;
 
@@ -13,7 +13,7 @@ namespace Assets._Project.Develop.Runtime.Utilities.DataManagement.DataProvoders
 
         private TData _data;
 
-        protected DataProvoder(ISaveLoadService saveLoadService)
+        protected DataProvider(ISaveLoadService saveLoadService)
         {
             _saveLoadService = saveLoadService;
         }

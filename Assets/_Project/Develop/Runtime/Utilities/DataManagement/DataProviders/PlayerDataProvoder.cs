@@ -7,7 +7,7 @@ using System.Collections.Generic;
 
 namespace Assets._Project.Develop.Runtime.Utilities.DataManagement.DataProvoders
 {
-    public class PlayerDataProvoder : DataProvoder<PlayerData>
+    public class PlayerDataProvoder : DataProvider<PlayerData>
     {
         private ConfigsProviderService _configsProviderService;
 
