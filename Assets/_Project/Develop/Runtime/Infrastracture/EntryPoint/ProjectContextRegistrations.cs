@@ -4,6 +4,7 @@ using Assets._Project.Develop.Runtime.Utilities.AssetsManagement;
 using Assets._Project.Develop.Runtime.Utilities.ConfigsManagement;
 using Assets._Project.Develop.Runtime.Utilities.CoroutinesManagement;
 using Assets._Project.Develop.Runtime.Utilities.DataManagement;
+using Assets._Project.Develop.Runtime.Utilities.DataManagement.DataProvoders;
 using Assets._Project.Develop.Runtime.Utilities.DataManagement.DataRepository;
 using Assets._Project.Develop.Runtime.Utilities.DataManagement.KeysStorage;
 using Assets._Project.Develop.Runtime.Utilities.DataManagement.Serializers;
@@ -13,6 +14,7 @@ using Assets._Project.Develop.Runtime.Utilities.SceneManagement;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Rendering.LookDev;
 using Object = UnityEngine.Object;
 
 namespace Assets._Project.Develop.Runtime.Infrastracture.EntryPoint
@@ -36,7 +38,12 @@ namespace Assets._Project.Develop.Runtime.Infrastracture.EntryPoint
             container.RegisterAsSingle(CreateWalletService);
 
             container.RegisterAsSingle<ISaveLoadService>(CreateSaveLoadService);
+
+            container.RegisterAsSingle(CreatePlayerDataProvoder);
         }
+
+        private static PlayerDataProvoder CreatePlayerDataProvoder(DIContainer container)
+            => new PlayerDataProvoder(container.Resolve<ISaveLoadService>(), container.Resolve<ConfigsProviderService>());
 
         private static SaveLoadService CreateSaveLoadService(DIContainer container)
         {
@@ -72,7 +79,7 @@ namespace Assets._Project.Develop.Runtime.Infrastracture.EntryPoint
         {
             ResourcesAssetsLoader resourcesAssetsLoader = c.Resolve<ResourcesAssetsLoader>();
 
-            ResourcesConfigsLoader resourcesConfigsLoader = new ResourcesConfigsLoader(resourcesAssetsLoader);
+            ResourcesConfigsLoader resourcesConfigsLoader = new ResourcesConfigsLoader(resourcesAssetsLoader); 
 
             return new ConfigsProviderService(resourcesConfigsLoader);
         }

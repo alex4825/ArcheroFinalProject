@@ -1,6 +1,7 @@
 ﻿using Assets._Project.Develop.Runtime.Infrastracture.DI;
 using Assets._Project.Develop.Runtime.Utilities.ConfigsManagement;
 using Assets._Project.Develop.Runtime.Utilities.CoroutinesManagement;
+using Assets._Project.Develop.Runtime.Utilities.DataManagement.DataProvoders;
 using Assets._Project.Develop.Runtime.Utilities.LoadingScreen;
 using Assets._Project.Develop.Runtime.Utilities.SceneManagement;
 using System.Collections;
@@ -28,11 +29,22 @@ namespace Assets._Project.Develop.Runtime.Infrastracture.EntryPoint
             ILoadingScreen loadingScreen = container.Resolve<ILoadingScreen>();
             SceneSwitcherService sceneSwitcherService = container.Resolve<SceneSwitcherService>();
 
+            PlayerDataProvoder playerDataProvoder = container.Resolve<PlayerDataProvoder>();
+
             loadingScreen.Show();
 
             Debug.Log("Начинается инициализация сервисов");
 
             yield return container.Resolve<ConfigsProviderService>().LoadAcync();
+
+            bool isPlayerDataSaveExists = false;
+
+            yield return playerDataProvoder.Exists(result => isPlayerDataSaveExists = result);
+
+            if (isPlayerDataSaveExists)
+                playerDataProvoder.Load();
+            else
+                playerDataProvoder.Reset();
 
             yield return new WaitForSeconds(1);
 

@@ -1,12 +1,19 @@
-﻿using Assets._Project.Develop.Runtime.Infrastracture.Meta.Features.Wallet;
+﻿using Assets._Project.Develop.Runtime.Configs.Meta;
+using Assets._Project.Develop.Runtime.Infrastracture.Meta.Features.Wallet;
+using Assets._Project.Develop.Runtime.Utilities.ConfigsManagement;
+using Assets._Project.Develop.Runtime.Utilities.Reactive;
+using System;
 using System.Collections.Generic;
 
 namespace Assets._Project.Develop.Runtime.Utilities.DataManagement.DataProvoders
 {
     public class PlayerDataProvoder : DataProvoder<PlayerData>
     {
-        public PlayerDataProvoder(ISaveLoadService saveLoadService) : base(saveLoadService)
+        private ConfigsProviderService _configsProviderService;
+
+        public PlayerDataProvoder(ISaveLoadService saveLoadService, ConfigsProviderService configsProviderService) : base(saveLoadService)
         {
+            _configsProviderService = configsProviderService;
         }
 
         protected override PlayerData GetOriginData()
@@ -21,8 +28,10 @@ namespace Assets._Project.Develop.Runtime.Utilities.DataManagement.DataProvoders
         {
             Dictionary<CurrencyTypes, int> walletData = new();
 
-            walletData.Add(CurrencyTypes.Gold, 100);
-            walletData.Add(CurrencyTypes.Diamond, 20);
+            StartWalletConfig startWalletConfig = _configsProviderService.GetConfig<StartWalletConfig>();
+
+            foreach (CurrencyTypes type in Enum.GetValues(typeof(CurrencyTypes)))
+                walletData[type] = startWalletConfig.GetValueFor(type);
 
             return walletData;
         }

@@ -3,6 +3,7 @@ using Assets._Project.Develop.Runtime.Infrastracture.Gameplay.Infrastracture;
 using Assets._Project.Develop.Runtime.Infrastracture.Meta.Features.Wallet;
 using Assets._Project.Develop.Runtime.Utilities.CoroutinesManagement;
 using Assets._Project.Develop.Runtime.Utilities.DataManagement;
+using Assets._Project.Develop.Runtime.Utilities.DataManagement.DataProvoders;
 using Assets._Project.Develop.Runtime.Utilities.DataManagement.Serializers;
 using Assets._Project.Develop.Runtime.Utilities.Reactive;
 using Assets._Project.Develop.Runtime.Utilities.SceneManagement;
@@ -22,7 +23,7 @@ namespace Assets._Project.Develop.Runtime.Infrastracture.Meta.Infrastracture
 
         private PlayerData _playerData;
 
-        private ISaveLoadService _saveLoadService;
+        private PlayerDataProvoder _playerDataProvoder;
         private ICoroutinesPerformer _coroutinesPerformer;
 
         public override void ProcessRegistrations(DIContainer container, IInputSceneArgs sceneArgs = null)
@@ -37,15 +38,8 @@ namespace Assets._Project.Develop.Runtime.Infrastracture.Meta.Infrastracture
 
             _walletService = _container.Resolve<WalletService>();
 
-            _saveLoadService = _container.Resolve<ISaveLoadService>();
+            _playerDataProvoder = _container.Resolve<PlayerDataProvoder>();
             _coroutinesPerformer = _container.Resolve<ICoroutinesPerformer>();
-
-            _playerData = new PlayerData();
-            _playerData.WalletData = new Dictionary<CurrencyTypes, int>
-            {
-                {CurrencyTypes.Diamond, 10 },
-                {CurrencyTypes.Gold, 150 },
-            };
 
             yield break;
         }
@@ -83,24 +77,9 @@ namespace Assets._Project.Develop.Runtime.Infrastracture.Meta.Infrastracture
 
             if (Input.GetKeyDown(KeyCode.S))
             {
-                _coroutinesPerformer.StartPerform(_saveLoadService.Save(_playerData));
+                _coroutinesPerformer.StartPerform(_playerDataProvoder.Save());
                 Debug.Log("Сохранение было вызвано"); 
             }
-
-            if (Input.GetKeyDown(KeyCode.D))
-            {
-                _coroutinesPerformer.StartPerform(LoadPlayerData());
-            }
-        }
-
-        IEnumerator LoadPlayerData()
-        {
-            PlayerData loadedPlayerData = null;
-
-            yield return _saveLoadService.Load<PlayerData>(result  => loadedPlayerData = result);
-
-            Debug.Log($"Золота загружено: {loadedPlayerData.WalletData[CurrencyTypes.Gold]}");
-            Debug.Log($"Алмазов загружено: {loadedPlayerData.WalletData[CurrencyTypes.Diamond]}");
         }
     }
 }
