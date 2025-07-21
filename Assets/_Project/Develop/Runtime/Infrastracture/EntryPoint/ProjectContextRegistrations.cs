@@ -63,7 +63,7 @@ namespace Assets._Project.Develop.Runtime.Infrastracture.EntryPoint
             foreach (CurrencyTypes type in Enum.GetValues(typeof(CurrencyTypes)))
                 currencies[type] = new ReactiveVariable<int>();
 
-            return new WalletService(currencies);
+            return new WalletService(currencies, container.Resolve<PlayerDataProvoder>());
         }
 
         private static SceneSwitcherService CreateSceneSwitcherService(DIContainer c)
