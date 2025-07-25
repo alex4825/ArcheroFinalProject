@@ -2,6 +2,7 @@
 using Assets._Project.Develop.Runtime.Infrastracture.DI;
 using Assets._Project.Develop.Runtime.Infrastracture.Meta.Features.Wallet;
 using Assets._Project.Develop.Runtime.UI.CommonViews;
+using Assets._Project.Develop.Runtime.UI.Core;
 using Assets._Project.Develop.Runtime.UI.Wallet;
 using Assets._Project.Develop.Runtime.Utilities.ConfigsManagement;
 using Assets._Project.Develop.Runtime.Utilities.Reactive;
@@ -27,6 +28,11 @@ namespace Assets._Project.Develop.Runtime.UI
                 currencyType, 
                 _container.Resolve<ConfigsProviderService>().GetConfig<CurrencyIconsConfig>(), 
                 view);
+        }
+
+        public WalletPresenter CreateWalletPresenter(IconTextListView view)
+        {
+            return new WalletPresenter(_container.Resolve<WalletService>(), this, _container.Resolve<ViewsFactory>(), view);
         }
     }
 }

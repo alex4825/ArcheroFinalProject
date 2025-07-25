@@ -20,12 +20,9 @@ namespace Assets._Project.Develop.Runtime.Infrastracture.Meta.Infrastracture
 
         private WalletService _walletService;
 
-        [SerializeField] private Transform _viewsParent;
+        [SerializeField] private IconTextListView _walletView;
 
-        private IconTextView _curencyView;
         private ProjectPresentersFactory _presentersFactory;
-        private CurrencyPresenter _currencyPresenter;
-        private ViewsFactory _viewsFactory;
 
         private PlayerDataProvider _playerDataProvider;
         private ICoroutinesPerformer _coroutinesPerformer;
@@ -46,7 +43,9 @@ namespace Assets._Project.Develop.Runtime.Infrastracture.Meta.Infrastracture
             _coroutinesPerformer = _container.Resolve<ICoroutinesPerformer>();
 
             _presentersFactory = _container.Resolve<ProjectPresentersFactory>();
-            _viewsFactory = _container.Resolve<ViewsFactory>();
+
+            WalletPresenter walletPresenter = _presentersFactory.CreateWalletPresenter(_walletView);
+            walletPresenter.Enable();
 
             yield break;
         }
@@ -88,29 +87,7 @@ namespace Assets._Project.Develop.Runtime.Infrastracture.Meta.Infrastracture
                 Debug.Log("Сохранение было вызвано");
             }
 
-            if (Input.GetKeyDown(KeyCode.G))
-            {
-                if (_curencyView != null)
-                    _viewsFactory.Release(_curencyView);
 
-                _curencyView = _viewsFactory.Create<IconTextView>(ViewIDs.CurrencyView, _viewsParent);
-
-                _currencyPresenter?.Disable();
-                _currencyPresenter = _presentersFactory.CreateCurrencyPresenter(_curencyView, _walletService.GetCurrency(CurrencyTypes.Gold), CurrencyTypes.Gold);
-                _currencyPresenter.Enable();
-            }
-
-            if (Input.GetKeyDown(KeyCode.D))
-            {
-                if (_curencyView != null)
-                    _viewsFactory.Release(_curencyView);
-
-                _curencyView = _viewsFactory.Create<IconTextView>(ViewIDs.CurrencyView, _viewsParent);
-
-                _currencyPresenter?.Disable();
-                _currencyPresenter = _presentersFactory.CreateCurrencyPresenter(_curencyView, _walletService.GetCurrency(CurrencyTypes.Diamond), CurrencyTypes.Diamond);
-                _currencyPresenter.Enable();
-            }
         }
     }
 }
