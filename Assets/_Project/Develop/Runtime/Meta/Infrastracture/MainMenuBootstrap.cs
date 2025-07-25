@@ -1,16 +1,15 @@
 ﻿using Assets._Project.Develop.Runtime.Infrastracture.DI;
 using Assets._Project.Develop.Runtime.Infrastracture.Gameplay.Infrastracture;
 using Assets._Project.Develop.Runtime.Infrastracture.Meta.Features.Wallet;
+using Assets._Project.Develop.Runtime.UI;
+using Assets._Project.Develop.Runtime.UI.CommonViews;
+using Assets._Project.Develop.Runtime.UI.Core;
+using Assets._Project.Develop.Runtime.UI.Wallet;
 using Assets._Project.Develop.Runtime.Utilities.CoroutinesManagement;
 using Assets._Project.Develop.Runtime.Utilities.DataManagement;
 using Assets._Project.Develop.Runtime.Utilities.DataManagement.DataProviders;
-using Assets._Project.Develop.Runtime.Utilities.DataManagement.Serializers;
-using Assets._Project.Develop.Runtime.Utilities.Reactive;
 using Assets._Project.Develop.Runtime.Utilities.SceneManagement;
-using System;
 using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting.FullSerializer;
 using UnityEngine;
 
 namespace Assets._Project.Develop.Runtime.Infrastracture.Meta.Infrastracture
@@ -21,7 +20,12 @@ namespace Assets._Project.Develop.Runtime.Infrastracture.Meta.Infrastracture
 
         private WalletService _walletService;
 
-        private PlayerData _playerData;
+        [SerializeField] private Transform _viewsParent;
+
+        private IconTextView _curencyView;
+        private ProjectPresentersFactory _presentersFactory;
+        private CurrencyPresenter _currencyPresenter;
+        private ViewsFactory _viewsFactory;
 
         private PlayerDataProvider _playerDataProvider;
         private ICoroutinesPerformer _coroutinesPerformer;
@@ -40,6 +44,9 @@ namespace Assets._Project.Develop.Runtime.Infrastracture.Meta.Infrastracture
 
             _playerDataProvider = _container.Resolve<PlayerDataProvider>();
             _coroutinesPerformer = _container.Resolve<ICoroutinesPerformer>();
+
+            _presentersFactory = _container.Resolve<ProjectPresentersFactory>();
+            _viewsFactory = _container.Resolve<ViewsFactory>();
 
             yield break;
         }
@@ -66,7 +73,7 @@ namespace Assets._Project.Develop.Runtime.Infrastracture.Meta.Infrastracture
                 Debug.Log($"Золота осталось : {_walletService.GetCurrency(CurrencyTypes.Gold).Value}");
             }
 
-            if (Input.GetKeyDown(KeyCode.Alpha2)) 
+            if (Input.GetKeyDown(KeyCode.Alpha2))
             {
                 if (_walletService.Enough(CurrencyTypes.Gold, 10))
                 {
@@ -78,7 +85,31 @@ namespace Assets._Project.Develop.Runtime.Infrastracture.Meta.Infrastracture
             if (Input.GetKeyDown(KeyCode.S))
             {
                 _coroutinesPerformer.StartPerform(_playerDataProvider.Save());
-                Debug.Log("Сохранение было вызвано"); 
+                Debug.Log("Сохранение было вызвано");
+            }
+
+            if (Input.GetKeyDown(KeyCode.G))
+            {
+                if (_curencyView != null)
+                    _viewsFactory.Release(_curencyView);
+
+                _curencyView = _viewsFactory.Create<IconTextView>(ViewIDs.CurrencyView, _viewsParent);
+
+                _currencyPresenter?.Disable();
+                _currencyPresenter = _presentersFactory.CreateCurrencyPresenter(_curencyView, _walletService.GetCurrency(CurrencyTypes.Gold), CurrencyTypes.Gold);
+                _currencyPresenter.Enable();
+            }
+
+            if (Input.GetKeyDown(KeyCode.D))
+            {
+                if (_curencyView != null)
+                    _viewsFactory.Release(_curencyView);
+
+                _curencyView = _viewsFactory.Create<IconTextView>(ViewIDs.CurrencyView, _viewsParent);
+
+                _currencyPresenter?.Disable();
+                _currencyPresenter = _presentersFactory.CreateCurrencyPresenter(_curencyView, _walletService.GetCurrency(CurrencyTypes.Diamond), CurrencyTypes.Diamond);
+                _currencyPresenter.Enable();
             }
         }
     }
