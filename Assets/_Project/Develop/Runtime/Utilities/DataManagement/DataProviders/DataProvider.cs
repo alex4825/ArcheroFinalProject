@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-namespace Assets._Project.Develop.Runtime.Utilities.DataManagement.DataProvoders
+namespace Assets._Project.Develop.Runtime.Utilities.DataManagement.DataProviders
 {
     public abstract class DataProvider<TData> where TData : ISaveData
     {

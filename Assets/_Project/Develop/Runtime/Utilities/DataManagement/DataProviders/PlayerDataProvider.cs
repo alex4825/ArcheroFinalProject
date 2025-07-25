@@ -5,13 +5,13 @@ using Assets._Project.Develop.Runtime.Utilities.Reactive;
 using System;
 using System.Collections.Generic;
 
-namespace Assets._Project.Develop.Runtime.Utilities.DataManagement.DataProvoders
+namespace Assets._Project.Develop.Runtime.Utilities.DataManagement.DataProviders
 {
-    public class PlayerDataProvoder : DataProvider<PlayerData>
+    public class PlayerDataProvider : DataProvider<PlayerData>
     {
         private ConfigsProviderService _configsProviderService;
 
-        public PlayerDataProvoder(ISaveLoadService saveLoadService, ConfigsProviderService configsProviderService) : base(saveLoadService)
+        public PlayerDataProvider(ISaveLoadService saveLoadService, ConfigsProviderService configsProviderService) : base(saveLoadService)
         {
             _configsProviderService = configsProviderService;
         }

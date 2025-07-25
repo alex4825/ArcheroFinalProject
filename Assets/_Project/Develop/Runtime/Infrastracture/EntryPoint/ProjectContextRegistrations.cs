@@ -4,7 +4,7 @@ using Assets._Project.Develop.Runtime.Utilities.AssetsManagement;
 using Assets._Project.Develop.Runtime.Utilities.ConfigsManagement;
 using Assets._Project.Develop.Runtime.Utilities.CoroutinesManagement;
 using Assets._Project.Develop.Runtime.Utilities.DataManagement;
-using Assets._Project.Develop.Runtime.Utilities.DataManagement.DataProvoders;
+using Assets._Project.Develop.Runtime.Utilities.DataManagement.DataProviders;
 using Assets._Project.Develop.Runtime.Utilities.DataManagement.DataRepository;
 using Assets._Project.Develop.Runtime.Utilities.DataManagement.KeysStorage;
 using Assets._Project.Develop.Runtime.Utilities.DataManagement.Serializers;
@@ -39,11 +39,11 @@ namespace Assets._Project.Develop.Runtime.Infrastracture.EntryPoint
 
             container.RegisterAsSingle<ISaveLoadService>(CreateSaveLoadService);
 
-            container.RegisterAsSingle(CreatePlayerDataProvoder);
+            container.RegisterAsSingle(CreatePlayerDataProvider);
         }
 
-        private static PlayerDataProvoder CreatePlayerDataProvoder(DIContainer container)
-            => new PlayerDataProvoder(container.Resolve<ISaveLoadService>(), container.Resolve<ConfigsProviderService>());
+        private static PlayerDataProvider CreatePlayerDataProvider(DIContainer container)
+            => new PlayerDataProvider(container.Resolve<ISaveLoadService>(), container.Resolve<ConfigsProviderService>());
 
         private static SaveLoadService CreateSaveLoadService(DIContainer container)
         {
@@ -63,7 +63,7 @@ namespace Assets._Project.Develop.Runtime.Infrastracture.EntryPoint
             foreach (CurrencyTypes type in Enum.GetValues(typeof(CurrencyTypes)))
                 currencies[type] = new ReactiveVariable<int>();
 
-            return new WalletService(currencies, container.Resolve<PlayerDataProvoder>());
+            return new WalletService(currencies, container.Resolve<PlayerDataProvider>());
         }
 
         private static SceneSwitcherService CreateSceneSwitcherService(DIContainer c)

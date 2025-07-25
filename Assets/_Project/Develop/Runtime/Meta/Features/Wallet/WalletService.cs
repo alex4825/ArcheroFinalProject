@@ -4,7 +4,7 @@ using System;
 using System.Linq;
 using System.Data;
 using Assets._Project.Develop.Runtime.Utilities.DataManagement;
-using Assets._Project.Develop.Runtime.Utilities.DataManagement.DataProvoders;
+using Assets._Project.Develop.Runtime.Utilities.DataManagement.DataProviders;
 
 namespace Assets._Project.Develop.Runtime.Infrastracture.Meta.Features.Wallet
 {
@@ -12,11 +12,11 @@ namespace Assets._Project.Develop.Runtime.Infrastracture.Meta.Features.Wallet
     {
         private readonly Dictionary<CurrencyTypes, ReactiveVariable<int>> _currencies;
 
-        public WalletService(Dictionary<CurrencyTypes, ReactiveVariable<int>> currencies, PlayerDataProvoder playerDataProvoder)
+        public WalletService(Dictionary<CurrencyTypes, ReactiveVariable<int>> currencies, PlayerDataProvider playerDataProvider)
         {
             _currencies = new(currencies);
-            playerDataProvoder.RegisterReader(this);
-            playerDataProvoder.RegisterWriter(this);
+            playerDataProvider.RegisterReader(this);
+            playerDataProvider.RegisterWriter(this);
         }
 
         public List<CurrencyTypes> AvailableCurrencies => _currencies.Keys.ToList();

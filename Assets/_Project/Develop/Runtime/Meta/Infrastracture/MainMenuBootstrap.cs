@@ -3,7 +3,7 @@ using Assets._Project.Develop.Runtime.Infrastracture.Gameplay.Infrastracture;
 using Assets._Project.Develop.Runtime.Infrastracture.Meta.Features.Wallet;
 using Assets._Project.Develop.Runtime.Utilities.CoroutinesManagement;
 using Assets._Project.Develop.Runtime.Utilities.DataManagement;
-using Assets._Project.Develop.Runtime.Utilities.DataManagement.DataProvoders;
+using Assets._Project.Develop.Runtime.Utilities.DataManagement.DataProviders;
 using Assets._Project.Develop.Runtime.Utilities.DataManagement.Serializers;
 using Assets._Project.Develop.Runtime.Utilities.Reactive;
 using Assets._Project.Develop.Runtime.Utilities.SceneManagement;
@@ -23,7 +23,7 @@ namespace Assets._Project.Develop.Runtime.Infrastracture.Meta.Infrastracture
 
         private PlayerData _playerData;
 
-        private PlayerDataProvoder _playerDataProvoder;
+        private PlayerDataProvider _playerDataProvider;
         private ICoroutinesPerformer _coroutinesPerformer;
 
         public override void ProcessRegistrations(DIContainer container, IInputSceneArgs sceneArgs = null)
@@ -38,7 +38,7 @@ namespace Assets._Project.Develop.Runtime.Infrastracture.Meta.Infrastracture
 
             _walletService = _container.Resolve<WalletService>();
 
-            _playerDataProvoder = _container.Resolve<PlayerDataProvoder>();
+            _playerDataProvider = _container.Resolve<PlayerDataProvider>();
             _coroutinesPerformer = _container.Resolve<ICoroutinesPerformer>();
 
             yield break;
@@ -77,7 +77,7 @@ namespace Assets._Project.Develop.Runtime.Infrastracture.Meta.Infrastracture
 
             if (Input.GetKeyDown(KeyCode.S))
             {
-                _coroutinesPerformer.StartPerform(_playerDataProvoder.Save());
+                _coroutinesPerformer.StartPerform(_playerDataProvider.Save());
                 Debug.Log("Сохранение было вызвано"); 
             }
         }

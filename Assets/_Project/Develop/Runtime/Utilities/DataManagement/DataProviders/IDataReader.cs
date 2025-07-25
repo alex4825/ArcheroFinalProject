@@ -1,4 +1,4 @@
-﻿namespace Assets._Project.Develop.Runtime.Utilities.DataManagement.DataProvoders
+﻿namespace Assets._Project.Develop.Runtime.Utilities.DataManagement.DataProviders
 {
     public interface IDataReader<TData> where TData: ISaveData
     {
