@@ -4,6 +4,7 @@ using Assets._Project.Develop.Runtime.Utilities.SceneManagement;
 using System.Collections;
 using System;
 using UnityEngine;
+using Assets._Project.Develop.Runtime.Infrastracture.Meta.Features.Wallet;
 
 namespace Assets._Project.Develop.Runtime.Infrastracture.Gameplay.Infrastracture
 {
@@ -11,6 +12,8 @@ namespace Assets._Project.Develop.Runtime.Infrastracture.Gameplay.Infrastracture
     {
         private DIContainer _container;
         private GameplayInputArgs _inputArgs;
+
+        private WalletService _walletService;
 
         public override void ProcessRegistrations(DIContainer container, IInputSceneArgs sceneArgs = null)
         {
@@ -30,6 +33,8 @@ namespace Assets._Project.Develop.Runtime.Infrastracture.Gameplay.Infrastracture
 
             Debug.Log("Инициализация геймплейной сцены.");
 
+            _walletService = _container.Resolve<WalletService>();
+
             yield break;
         }
 
@@ -46,6 +51,21 @@ namespace Assets._Project.Develop.Runtime.Infrastracture.Gameplay.Infrastracture
                 ICoroutinesPerformer coroutinesPerformer = _container.Resolve<ICoroutinesPerformer>();
 
                 coroutinesPerformer.StartPerform(sceneSwitcherService.ProcesSwitchTo(Scenes.MainMenu));
+            }
+
+            if (Input.GetKeyDown(KeyCode.Alpha1))
+            {
+                _walletService.Add(CurrencyTypes.Gold, 10);
+                Debug.Log($"Золота осталось : {_walletService.GetCurrency(CurrencyTypes.Gold).Value}");
+            }
+
+            if (Input.GetKeyDown(KeyCode.Alpha2))
+            {
+                if (_walletService.Enough(CurrencyTypes.Gold, 10))
+                {
+                    _walletService.Spend(CurrencyTypes.Gold, 10);
+                    Debug.Log($"Золота осталось : {_walletService.GetCurrency(CurrencyTypes.Gold).Value}");
+                }
             }
         }
     }

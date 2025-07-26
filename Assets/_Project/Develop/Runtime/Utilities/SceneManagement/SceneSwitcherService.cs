@@ -13,6 +13,8 @@ namespace Assets._Project.Develop.Runtime.Utilities.SceneManagement
         private ILoadingScreen _loadingScreen;
         private DIContainer _projectContainer;
 
+        private DIContainer _currentSceneContainer;
+
         public SceneSwitcherService(SceneLoaderService sceneLoaderService, ILoadingScreen loadingScreen, DIContainer projectContainer)
         {
             _sceneLoaderService = sceneLoaderService;
@@ -24,6 +26,8 @@ namespace Assets._Project.Develop.Runtime.Utilities.SceneManagement
         {
             _loadingScreen.Show();
 
+            _currentSceneContainer?.Dispose();
+
             yield return _sceneLoaderService.LoadAcync(Scenes.Empty);
             yield return _sceneLoaderService.LoadAcync(sceneName);
 
@@ -32,11 +36,11 @@ namespace Assets._Project.Develop.Runtime.Utilities.SceneManagement
             if(sceneBootsprap ==  null)
                 throw new NullReferenceException(nameof(sceneBootsprap) + " not found");
 
-            DIContainer sceneContainer = new DIContainer(_projectContainer);
+            _currentSceneContainer = new DIContainer(_projectContainer);
 
-            sceneBootsprap.ProcessRegistrations(sceneContainer, sceneArgs);
+            sceneBootsprap.ProcessRegistrations(_currentSceneContainer, sceneArgs);
 
-            sceneContainer.Initialize();
+            _currentSceneContainer.Initialize();
 
             yield return sceneBootsprap.Initialize();
 

@@ -20,10 +20,6 @@ namespace Assets._Project.Develop.Runtime.Infrastracture.Meta.Infrastracture
 
         private WalletService _walletService;
 
-        [SerializeField] private IconTextListView _walletView;
-
-        private ProjectPresentersFactory _presentersFactory;
-
         private PlayerDataProvider _playerDataProvider;
         private ICoroutinesPerformer _coroutinesPerformer;
 
@@ -41,11 +37,6 @@ namespace Assets._Project.Develop.Runtime.Infrastracture.Meta.Infrastracture
 
             _playerDataProvider = _container.Resolve<PlayerDataProvider>();
             _coroutinesPerformer = _container.Resolve<ICoroutinesPerformer>();
-
-            _presentersFactory = _container.Resolve<ProjectPresentersFactory>();
-
-            WalletPresenter walletPresenter = _presentersFactory.CreateWalletPresenter(_walletView);
-            walletPresenter.Enable();
 
             yield break;
         }
