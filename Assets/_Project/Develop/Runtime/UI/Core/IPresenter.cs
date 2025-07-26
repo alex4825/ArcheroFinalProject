@@ -3,7 +3,7 @@ using System;
 
 namespace Assets._Project.Develop.Runtime.UI.Core
 {
-    public interface IPresentor : IInitializable, IDisposable
+    public interface IPresenter : IInitializable, IDisposable
     {
 
     }
