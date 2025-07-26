@@ -1,4 +1,5 @@
-﻿using Assets._Project.Develop.Runtime.UI.Core;
+﻿using Assets._Project.Develop.Runtime.UI.CommonViews;
+using Assets._Project.Develop.Runtime.UI.Core;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,5 +11,6 @@ namespace Assets._Project.Develop.Runtime.UI.MainMenu
 {
     public class MainMenuScreenView : MonoBehaviour, IView
     {
+        [field: SerializeField] public IconTextListView WalletView {  get; private set; }
     }
 }
