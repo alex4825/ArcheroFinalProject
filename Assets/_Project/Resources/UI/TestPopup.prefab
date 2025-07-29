@@ -144,6 +144,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4462328652423254647}
   - component: {fileID: 7539847121880698398}
+  - component: {fileID: 2670205113355247378}
   m_Layer: 5
   m_Name: TestPopup
   m_TagString: Untagged
@@ -184,6 +185,20 @@ CanvasGroup:
   m_Interactable: 1
   m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0
+--- !u!114 &2670205113355247378
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5197741952700652078}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6f96516615536dd489614ccc78d46ff6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _mainGroup: {fileID: 7539847121880698398}
+  _text: {fileID: 2762743358291836667}
 --- !u!1 &6783365129783424424
 GameObject:
   m_ObjectHideFlags: 0
@@ -429,7 +444,20 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 7306574200723666197}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 2670205113355247378}
+        m_TargetAssemblyTypeName: Assets._Project.Develop.Runtime.UI.Core.PopupViewBase,
+          Assembly-CSharp
+        m_MethodName: OnCloseButtonClicked
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1001 &1370819914391023944
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -438,6 +466,26 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 4462328652423254647}
     m_Modifications:
+    - target: {fileID: 1263782626442872084, guid: 5e90b605df703964f83cc560d23f1390,
+        type: 3}
+      propertyPath: m_Delegates.Array.data[0].callback.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 2670205113355247378}
+    - target: {fileID: 1263782626442872084, guid: 5e90b605df703964f83cc560d23f1390,
+        type: 3}
+      propertyPath: m_Delegates.Array.data[0].callback.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: OnCloseButtonClicked
+      objectReference: {fileID: 0}
+    - target: {fileID: 1263782626442872084, guid: 5e90b605df703964f83cc560d23f1390,
+        type: 3}
+      propertyPath: m_Delegates.Array.data[0].callback.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: Assets._Project.Develop.Runtime.UI.Core.PopupViewBase, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 1263782626442872084, guid: 5e90b605df703964f83cc560d23f1390,
+        type: 3}
+      propertyPath: m_Delegates.Array.data[0].callback.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
     - target: {fileID: 2718004658953604253, guid: 5e90b605df703964f83cc560d23f1390,
         type: 3}
       propertyPath: m_Pivot.x

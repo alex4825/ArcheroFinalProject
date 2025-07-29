@@ -4,5 +4,6 @@
     {
         public const string CurrencyView = nameof(CurrencyView);
         public const string MainMenuScreen = nameof(MainMenuScreen);
+        public const string TestPopup = nameof(TestPopup);
     }
 }

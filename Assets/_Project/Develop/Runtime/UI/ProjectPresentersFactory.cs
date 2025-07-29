@@ -3,6 +3,7 @@ using Assets._Project.Develop.Runtime.Infrastracture.DI;
 using Assets._Project.Develop.Runtime.Infrastracture.Meta.Features.Wallet;
 using Assets._Project.Develop.Runtime.UI.CommonViews;
 using Assets._Project.Develop.Runtime.UI.Core;
+using Assets._Project.Develop.Runtime.UI.Core.TestPopup;
 using Assets._Project.Develop.Runtime.UI.Wallet;
 using Assets._Project.Develop.Runtime.Utilities.ConfigsManagement;
 using Assets._Project.Develop.Runtime.Utilities.Reactive;
@@ -16,6 +17,11 @@ namespace Assets._Project.Develop.Runtime.UI
         public ProjectPresentersFactory(DIContainer container)
         {
             _container = container;
+        }
+
+        public TestPopupPresenter CreateTestPopupPresenter(TestPopupView view)
+        {
+            return new TestPopupPresenter(view);
         }
 
         public CurrencyPresenter CreateCurrencyPresenter(
