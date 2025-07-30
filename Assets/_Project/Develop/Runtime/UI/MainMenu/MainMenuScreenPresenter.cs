@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace Assets._Project.Develop.Runtime.UI.MainMenu
 {
-    public class MainMenuScreenPresenter : IPresenter
+    public class MainMenuScreenPresenter : ISubscribedPresenter
     {
         private readonly MainMenuScreenView _screen;
 
@@ -13,7 +13,7 @@ namespace Assets._Project.Develop.Runtime.UI.MainMenu
 
         private readonly MainMenuPopupService _popupService;
 
-        private readonly List<IPresenter> _childPresenters = new();
+        private readonly List<ISubscribedPresenter> _childPresenters = new();
 
         public MainMenuScreenPresenter(MainMenuScreenView screen, ProjectPresentersFactory projectPresentersFactory, MainMenuPopupService popupService)
         {
@@ -28,7 +28,7 @@ namespace Assets._Project.Develop.Runtime.UI.MainMenu
 
             CreateWallet();
 
-            foreach (IPresenter childPresenter in _childPresenters)
+            foreach (ISubscribedPresenter childPresenter in _childPresenters)
                 childPresenter.Initialize();
         }
 
@@ -36,7 +36,7 @@ namespace Assets._Project.Develop.Runtime.UI.MainMenu
         {
             _screen.OpenTestPopupButtonClicked -= OnOpenTestPopupButtonClicked;
 
-            foreach (IPresenter childPresenter in _childPresenters)
+            foreach (ISubscribedPresenter childPresenter in _childPresenters)
                 childPresenter.Dispose();
 
             _childPresenters.Clear();

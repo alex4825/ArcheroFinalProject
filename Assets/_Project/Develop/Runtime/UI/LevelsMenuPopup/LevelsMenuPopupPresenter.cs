@@ -69,5 +69,21 @@ namespace Assets._Project.Develop.Runtime.UI.LevelsMenuPopup
 
             _levelTilePresenters.Clear();
         }
+
+        protected override void OnPreShow()
+        {
+            base.OnPreShow();
+
+            foreach (LevelTilePresenter levelTilePresenter in _levelTilePresenters)
+                levelTilePresenter.Subscribe();
+        }
+
+        protected override void OnPreHide()
+        {
+            base.OnPreHide();
+
+            foreach (LevelTilePresenter levelTilePresenter in _levelTilePresenters)
+                levelTilePresenter.Unsubscribe();
+        }
     }
 }

@@ -7,7 +7,7 @@ using System;
 
 namespace Assets._Project.Develop.Runtime.UI.Wallet
 {
-    public class CurrencyPresenter : IPresenter
+    public class CurrencyPresenter : ISubscribedPresenter
     {
         //Бизнес логика
         private readonly IReadonlyVariable<int> _currency;
