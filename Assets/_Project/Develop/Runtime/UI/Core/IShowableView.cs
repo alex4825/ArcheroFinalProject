@@ -2,7 +2,7 @@
 
 namespace Assets._Project.Develop.Runtime.UI.Core
 {
-    public interface IShovableView : IView
+    public interface IShowableView : IView
     {
         Tween Show();
 

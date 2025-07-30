@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 namespace Assets._Project.Develop.Runtime.UI.Core
 {
-    public abstract class PopupViewBase : MonoBehaviour, IShovableView
+    public abstract class PopupViewBase : MonoBehaviour, IShowableView
     {
         public event Action CloseRequest;
 
