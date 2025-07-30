@@ -198,7 +198,7 @@ MonoBehaviour:
   _levelNumberText: {fileID: 1305373999748258723}
   _button: {fileID: 8394375678126237323}
   _activeColor: {r: 1, g: 0.7321401, b: 0, a: 1}
-  _completedColor: {r: 0.53542435, g: 1, b: 0, a: 0}
+  _completedColor: {r: 0.53542435, g: 1, b: 0, a: 1}
   _blockedColor: {r: 0.21509439, g: 0.21509439, b: 0.21509439, a: 1}
 --- !u!114 &2761927332551175246
 MonoBehaviour:

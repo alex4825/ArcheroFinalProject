@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace Assets._Project.Develop.Runtime.UI.Wallet
 {
-    public class WalletPresenter : ISubscribedPresenter
+    public class WalletPresenter : IPresenter
     {
         private readonly WalletService _walletService;
         private readonly ProjectPresentersFactory _presentersFactory;

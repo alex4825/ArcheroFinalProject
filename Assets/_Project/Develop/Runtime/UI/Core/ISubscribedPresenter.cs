@@ -1,6 +1,6 @@
 ﻿namespace Assets._Project.Develop.Runtime.UI.Core
 {
-    public interface ISubscribedPresenter : ISubscribedPresenter
+    public interface ISubscribedPresenter : IPresenter
     {
         void Subscribe();
 

@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace Assets._Project.Develop.Runtime.UI.MainMenu
 {
-    public class MainMenuScreenPresenter : ISubscribedPresenter
+    public class MainMenuScreenPresenter : IPresenter
     {
         private readonly MainMenuScreenView _screen;
 
@@ -13,7 +13,7 @@ namespace Assets._Project.Develop.Runtime.UI.MainMenu
 
         private readonly MainMenuPopupService _popupService;
 
-        private readonly List<ISubscribedPresenter> _childPresenters = new();
+        private readonly List<IPresenter> _childPresenters = new();
 
         public MainMenuScreenPresenter(MainMenuScreenView screen, ProjectPresentersFactory projectPresentersFactory, MainMenuPopupService popupService)
         {
@@ -24,19 +24,19 @@ namespace Assets._Project.Develop.Runtime.UI.MainMenu
 
         public void Initialize()
         {
-            _screen.OpenTestPopupButtonClicked += OnOpenTestPopupButtonClicked;
+            _screen.OpenLevelsMenuButtonClicked += OnOpenLevelsMenuButtonClicked;
 
             CreateWallet();
 
-            foreach (ISubscribedPresenter childPresenter in _childPresenters)
+            foreach (IPresenter childPresenter in _childPresenters)
                 childPresenter.Initialize();
         }
 
         public void Dispose()
         {
-            _screen.OpenTestPopupButtonClicked -= OnOpenTestPopupButtonClicked;
+            _screen.OpenLevelsMenuButtonClicked -= OnOpenLevelsMenuButtonClicked;
 
-            foreach (ISubscribedPresenter childPresenter in _childPresenters)
+            foreach (IPresenter childPresenter in _childPresenters)
                 childPresenter.Dispose();
 
             _childPresenters.Clear();
@@ -49,9 +49,9 @@ namespace Assets._Project.Develop.Runtime.UI.MainMenu
             _childPresenters.Add(walletPresenter);
         }
 
-        private void OnOpenTestPopupButtonClicked()
+        private void OnOpenLevelsMenuButtonClicked()
         {
-            _popupService.OpenTestPopup();
+            _popupService.OpenLevelsMenuPopup();
         }
     }
 }

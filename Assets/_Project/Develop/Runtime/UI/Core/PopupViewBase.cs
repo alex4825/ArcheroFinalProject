@@ -53,10 +53,6 @@ namespace Assets._Project.Develop.Runtime.UI.Core
             //Анимация исчезновения
             Sequence animation = DOTween.Sequence();
 
-            animation
-                .Append(_anticlicker.DOFade(0.75f, 0.2f).From(0))
-                .Join(_body.DOScale(1, 0.5f).From(0).SetEase(Ease.OutBack));
-
             ModifyHideAnimation(animation);
 
             animation.OnComplete(OnPostHide);
