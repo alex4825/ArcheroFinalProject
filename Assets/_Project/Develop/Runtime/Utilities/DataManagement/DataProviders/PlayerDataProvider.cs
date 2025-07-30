@@ -20,7 +20,8 @@ namespace Assets._Project.Develop.Runtime.Utilities.DataManagement.DataProviders
         {
             return new PlayerData()
             {
-                WalletData = InitWalletData()
+                WalletData = InitWalletData(),
+                CompletedLevels = new()
             };
         }
 

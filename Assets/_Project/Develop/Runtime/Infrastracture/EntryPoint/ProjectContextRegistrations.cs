@@ -1,5 +1,6 @@
 ﻿using Assets._Project.Develop.Runtime.Infrastracture.DI;
 using Assets._Project.Develop.Runtime.Infrastracture.Meta.Features.Wallet;
+using Assets._Project.Develop.Runtime.Meta.Features.LevelsProgression;
 using Assets._Project.Develop.Runtime.UI;
 using Assets._Project.Develop.Runtime.UI.Core;
 using Assets._Project.Develop.Runtime.Utilities.AssetsManagement;
@@ -46,7 +47,12 @@ namespace Assets._Project.Develop.Runtime.Infrastracture.EntryPoint
             container.RegisterAsSingle(CreateProjectPresentersFactory);
 
             container.RegisterAsSingle(CreateViewsFactory);
+
+            container.RegisterAsSingle(CreateLevelsProgressionService).NonLazy();
         }
+
+        private static LevelsProgressionService CreateLevelsProgressionService(DIContainer container)
+            => new LevelsProgressionService(container.Resolve<PlayerDataProvider>());
 
         private static ViewsFactory CreateViewsFactory(DIContainer container)
             => new ViewsFactory(container.Resolve<ResourcesAssetsLoader>());
