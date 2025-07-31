@@ -10,13 +10,18 @@ namespace Assets._Project.Develop.Runtime.UI.Core
         public event Action CloseRequest;
 
         [SerializeField] private CanvasGroup _mainGroup;
-        [SerializeField] private Image _anticlicker;
-        [SerializeField] private Transform _body;
+        [SerializeField] private Image _anticklicker;
+        [SerializeField] private CanvasGroup _body;
+
+        [SerializeField] private PopupAnimationTypes _animationType;
+
+        private float _anticklickerDefaultAlpha;
 
         private Tween _currentAnimation;
 
         private void Awake()
         {
+            _anticklickerDefaultAlpha = _anticklicker.color.a;
             _mainGroup.alpha = 0;
         }
 
@@ -31,11 +36,7 @@ namespace Assets._Project.Develop.Runtime.UI.Core
             //Анимация появления
             _mainGroup.alpha = 1;
 
-            Sequence animation = DOTween.Sequence();
-
-            animation
-                .Append(_anticlicker.DOFade(0.75f, 0.2f).From(0))
-                .Join(_body.DOScale(1, 0.5f).From(0).SetEase(Ease.OutBack));
+            Sequence animation = PopupAnimationsCreator.CreateShowAnimation(_body, _anticklicker, _animationType, _anticklickerDefaultAlpha);                
 
             ModifyShowAnimation(animation);
 
@@ -51,7 +52,7 @@ namespace Assets._Project.Develop.Runtime.UI.Core
             OnPreHide();
 
             //Анимация исчезновения
-            Sequence animation = DOTween.Sequence();
+            Sequence animation = PopupAnimationsCreator.CreateHideAnimation(_body, _anticklicker, _animationType, _anticklickerDefaultAlpha);
 
             ModifyHideAnimation(animation);
 

@@ -484,8 +484,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _mainGroup: {fileID: 7539847121880698398}
-  _anticlicker: {fileID: 50282936690269828}
-  _body: {fileID: 8189976482479037669}
+  _anticklicker: {fileID: 50282936690269828}
+  _body: {fileID: 83654279534896488}
+  _animationType: 1
   _title: {fileID: 2762743358291836667}
   _levelTilesListView: {fileID: 5422511287737040329}
 --- !u!1 &6783365129783424424

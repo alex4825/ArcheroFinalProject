@@ -1,0 +1,45 @@
+﻿using DG.Tweening;
+using System;
+using System.Linq;
+using UnityEngine;
+using UnityEngine.UI;
+
+namespace Assets._Project.Develop.Runtime.UI.Core
+{
+    public class PopupAnimationsCreator
+    {
+        public static Sequence CreateShowAnimation(
+            CanvasGroup body,
+            Image anticklicker,
+            PopupAnimationTypes popupAnimationType,
+            float anticklickerMaxAlpha)
+        {
+            switch (popupAnimationType)
+            {
+                case PopupAnimationTypes.None:
+                    return DOTween.Sequence();
+
+                case PopupAnimationTypes.Expand:
+                    return DOTween.Sequence()
+                        .Append(anticklicker
+                            .DOFade(anticklickerMaxAlpha, 0.2f)
+                            .From(0))   
+                        .Join(body.transform
+                            .DOScale(1, 0.5f)
+                            .From(0).SetEase(Ease.OutBack));
+
+                default:
+                   throw new ArgumentException(nameof(popupAnimationType));
+            }
+        }
+
+        public static Sequence CreateHideAnimation(
+            CanvasGroup body,
+            Image anticklicker,
+            PopupAnimationTypes popupAnimationType,
+            float anticklickerMaxAlpha)
+        {
+            return DOTween.Sequence();
+        }
+    }
+}
