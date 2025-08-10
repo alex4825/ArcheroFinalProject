@@ -1,5 +1,7 @@
 ﻿using Assets._Project.Develop.Runtime.Gameplay.EntitiesCore;
+using Assets._Project.Develop.Runtime.Gameplay.EntitiesCore.Mono;
 using Assets._Project.Develop.Runtime.Infrastracture.DI;
+using Assets._Project.Develop.Runtime.Utilities.AssetsManagement;
 using UnityEngine;
 
 namespace Assets._Project.Develop.Runtime.Infrastracture.Gameplay.Infrastracture
@@ -13,7 +15,12 @@ namespace Assets._Project.Develop.Runtime.Infrastracture.Gameplay.Infrastracture
             container.RegisterAsSingle(CreateEntitiesFactory);
 
             container.RegisterAsSingle(CreateEntitiesLifeContext);
+
+            container.RegisterAsSingle(CreateMonoEntitiesFactory).NonLazy();
         }
+
+        private static MonoEntitiesFactory CreateMonoEntitiesFactory(DIContainer container)
+            => new MonoEntitiesFactory(container.Resolve<ResourcesAssetsLoader>(), container.Resolve<EntitiesLifeContext>());
 
         private static EntitiesLifeContext CreateEntitiesLifeContext(DIContainer container)
             => new EntitiesLifeContext();

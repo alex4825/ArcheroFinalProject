@@ -25,7 +25,7 @@ namespace Assets._Project.Develop.Runtime.Gameplay.EntitiesCore
             for (int i = 0; i < _entities.Count; i++)
                 _entities[i].OnUpdate(deltaTime);
 
-            foreach (var entity in _entities)
+            foreach (var entity in _releaseRequests)
             {
                 _entities.Remove(entity);
                 entity.Dispose();
