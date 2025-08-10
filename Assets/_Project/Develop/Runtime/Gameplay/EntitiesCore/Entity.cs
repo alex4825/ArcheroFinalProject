@@ -26,7 +26,7 @@ namespace Assets._Project.Develop.Runtime.Gameplay.EntitiesCore
 
         public void OnUpdate(float deltaTime)
         {
-            if (!_isInit == false)
+            if (_isInit == false)
                 return;
 
             foreach (var updatable in _updatables)
