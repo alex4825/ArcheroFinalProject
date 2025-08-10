@@ -1,4 +1,5 @@
 ﻿using Assets._Project.Develop.Runtime.Infrastracture.DI;
+using Assets._Project.Develop.Runtime.Infrastracture.Gameplay.Infrastracture;
 using Assets._Project.Develop.Runtime.Utilities.ConfigsManagement;
 using Assets._Project.Develop.Runtime.Utilities.CoroutinesManagement;
 using Assets._Project.Develop.Runtime.Utilities.DataManagement.DataProviders;
@@ -54,7 +55,7 @@ namespace Assets._Project.Develop.Runtime.Infrastracture.EntryPoint
 
             loadingScreen.Hide();
 
-            yield return sceneSwitcherService.ProcesSwitchTo(Scenes.MainMenu);
+            yield return sceneSwitcherService.ProcesSwitchTo(Scenes.Gameplay, new GameplayInputArgs(1));
 
         }
 
