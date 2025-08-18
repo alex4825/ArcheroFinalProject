@@ -20,6 +20,24 @@ namespace Assets._Project.Develop.Runtime.Gameplay.EntitiesCore
             _monoEntitiesFactory = container.Resolve<MonoEntitiesFactory>();
         }
 
+        public Entity CreateRigidbodyEntity(Vector3 position)
+        {
+            Entity entity = CreateEmpty();
+
+            _monoEntitiesFactory.Create(entity, position, "Entities/TestEntity");
+
+            entity.AddMoveDirection()
+                  .AddMoveSpeed(new ReactiveVariable<float>(10))
+                  .AddRotationSpeed(new ReactiveVariable<float>(10));
+
+            entity.AddSystem(new RigidbodyMovementSystem())
+                  .AddSystem(new RigidbodyRotationSystem());
+
+            _entitiesLifeContext.Add(entity);
+
+            return entity;
+        }
+
         public Entity CreateTestEntity(Vector3 position)
         {
             Entity entity = CreateEmpty();

@@ -12,7 +12,7 @@ namespace Assets._Project.Develop.Runtime.Gameplay
 
         private bool _isRunning = false;
 
-        private Entity _entity;
+        private Entity _rigidbodyEntity;
 
         public void Initialize(DIContainer container)
         {
@@ -22,7 +22,7 @@ namespace Assets._Project.Develop.Runtime.Gameplay
 
         public void Run()
         {
-            _entity = _entitiesFactory.CreateTestEntity(Vector3.zero);
+            _rigidbodyEntity = _entitiesFactory.CreateRigidbodyEntity(Vector3.zero);
 
             _isRunning = true;
         }
@@ -34,7 +34,7 @@ namespace Assets._Project.Develop.Runtime.Gameplay
 
             Vector3 input = new Vector3(Input.GetAxisRaw("Horizontal"), 0, Input.GetAxisRaw("Vertical"));
 
-            _entity.MoveDirection.Value = input;
+            _rigidbodyEntity.MoveDirection.Value = input;
         }
     }
 }
