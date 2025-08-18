@@ -1,23 +1,22 @@
 ﻿using Assets._Project.Develop.Runtime.Gameplay.EntitiesCore;
-using System;
 using UnityEngine;
 
 namespace Assets._Project.Develop.Runtime.Gameplay.Features.MovementFeature
 {
-    public class RigidbodyRotationSystem : RotationSystem
+    public class CharacterControllerRotationSystem : RotationSystem
     {
-        private Rigidbody _rigidbody;
+        private CharacterController _characterController;
 
         public override void OnInit(Entity entity)
         {
             base.OnInit(entity);
-            _rigidbody = entity.Rigidbody;
+            _characterController = entity.CharacterController;
         }
 
         protected override Quaternion CurrentRotation
         {
-            get => _rigidbody.rotation;
-            set => _rigidbody.rotation = value;
+            get => _characterController.transform.rotation;
+            set => _characterController.transform.rotation = value;
         }
     }
 }

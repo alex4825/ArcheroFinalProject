@@ -22,7 +22,7 @@ namespace Assets._Project.Develop.Runtime.Gameplay
 
         public void Run()
         {
-            _rigidbodyEntity = _entitiesFactory.CreateRigidbodyEntity(Vector3.zero);
+            _rigidbodyEntity = _entitiesFactory.CreateCharacterControllerEntity(Vector3.zero);
 
             _isRunning = true;
         }
