@@ -34,7 +34,7 @@ namespace Assets._Project.Develop.Runtime.Gameplay
 
             if(Input.GetKeyDown(KeyCode.Space))
             {
-                _entity.CurrentHealth.Value -= 50;
+                _entity.TakeDamageRequest.Invoke(50);
                 Debug.Log($"Текущий уровень здоровья: {_entity.CurrentHealth.Value.ToString()}");
             }
 
