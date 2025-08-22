@@ -80,6 +80,7 @@ namespace Assets._Project.Develop.Runtime.Gameplay.EntitiesCore
                   .AddSystem(new DealDamageOnContactSystem())
                   .AddSystem(new ApplyDamageSystem())
                   .AddSystem(new DeathSystem())
+                  .AddSystem(new DisableCollidersOnDeathSystem())
                   .AddSystem(new DeathProcessTimerSystem())
                   .AddSystem(new SelfReleaseSystem(_entitiesLifeContext));
 
