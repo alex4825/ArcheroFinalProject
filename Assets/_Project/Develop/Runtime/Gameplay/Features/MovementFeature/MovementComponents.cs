@@ -13,6 +13,11 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Features.MovementFeature
     public class MoveSpeed : IEntityComponent
     {
         public ReactiveVariable<float> Value;
+    }
+
+    public class IsMoving : IEntityComponent
+    {
+        public ReactiveVariable<bool> Value;
     }    
 
     public class CanMove : IEntityComponent

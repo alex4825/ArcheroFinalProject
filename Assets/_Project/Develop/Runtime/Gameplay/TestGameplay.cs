@@ -22,7 +22,7 @@ namespace Assets._Project.Develop.Runtime.Gameplay
 
         public void Run()
         {
-            _entity = _entitiesFactory.CreateGhost(Vector3.zero);
+            _entity = _entitiesFactory.CreateHero(Vector3.zero);
             _entitiesFactory.CreateGhost(Vector3.zero + Vector3.forward * 5); 
 
             _isRunning = true;
@@ -39,7 +39,12 @@ namespace Assets._Project.Develop.Runtime.Gameplay
                 Debug.Log($"Текущий уровень здоровья: {_entity.CurrentHealth.Value.ToString()}");
             }
 
-            Vector3 input = new Vector3(Input.GetAxisRaw("Horizontal"), 0, Input.GetAxisRaw("Vertical"));
+            if (Input.GetKeyDown(KeyCode.R))
+            {
+                _entity.StartAttackRequest.Invoke();
+            }
+
+                Vector3 input = new Vector3(Input.GetAxisRaw("Horizontal"), 0, Input.GetAxisRaw("Vertical"));
 
             _entity.MoveDirection.Value = input;
             _entity.RotationDirection.Value = input;
