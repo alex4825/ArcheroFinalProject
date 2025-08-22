@@ -6,6 +6,8 @@ using Assets._Project.Develop.Runtime.Gameplay.EntitiesCore.Mono;
 using Assets._Project.Develop.Runtime.Gameplay.Features.LifeCycle;
 using Assets._Project.Develop.Runtime.Utilities.Conditions;
 using Assets._Project.Develop.Runtime.Gameplay.Features.ApplyDamage;
+using Assets._Project.Develop.Runtime.Utilities;
+using Assets._Project.Develop.Runtime.Gameplay.Features.Sensors;
 
 namespace Assets._Project.Develop.Runtime.Gameplay.EntitiesCore
 {
@@ -13,7 +15,7 @@ namespace Assets._Project.Develop.Runtime.Gameplay.EntitiesCore
     {
         private readonly DIContainer _container;
         private readonly EntitiesLifeContext _entitiesLifeContext;
-
+        private readonly CollidersRegistryService _collidersRegistryService;
         private readonly MonoEntitiesFactory _monoEntitiesFactory;
 
         public EntitiesFactory(DIContainer container)
@@ -21,6 +23,7 @@ namespace Assets._Project.Develop.Runtime.Gameplay.EntitiesCore
             _container = container;
             _entitiesLifeContext = container.Resolve<EntitiesLifeContext>();
             _monoEntitiesFactory = container.Resolve<MonoEntitiesFactory>();
+            _collidersRegistryService = container.Resolve<CollidersRegistryService>();
         }
 
         public Entity CreateGhost(Vector3 position)
@@ -40,7 +43,10 @@ namespace Assets._Project.Develop.Runtime.Gameplay.EntitiesCore
                   .AddDeathProcessInitialTime(new ReactiveVariable<float>(2))
                   .AddDeathProcessCurrentTime()
                   .AddTakeDamageRequest()
-                  .AddTakeDamageEvent();
+                  .AddTakeDamageEvent()
+                  .AddContactsDetectingMask(1 << LayerMask.NameToLayer("Characters"))
+                  .AddContactCollidersBuffer(new Buffer<Collider>(64))
+                  .AddContactEntitiesBuffer(new Buffer<Entity>(64));
 
             ICompositeCondition canMove = new CompositeCondition()
                 .Add(new FuncCondition(() => entity.IsDead.Value == false));
@@ -67,6 +73,8 @@ namespace Assets._Project.Develop.Runtime.Gameplay.EntitiesCore
 
             entity.AddSystem(new RigidbodyMovementSystem())
                   .AddSystem(new RigidbodyRotationSystem())
+                  .AddSystem(new BodyContactDetectingSystem())
+                  .AddSystem(new BodyContactsEntitiesFilterSystem(_collidersRegistryService))
                   .AddSystem(new ApplyDamageSystem())
                   .AddSystem(new DeathSystem())
                   .AddSystem(new DeathProcessTimerSystem())

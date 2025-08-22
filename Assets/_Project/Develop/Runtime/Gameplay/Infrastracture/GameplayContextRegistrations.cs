@@ -17,10 +17,18 @@ namespace Assets._Project.Develop.Runtime.Infrastracture.Gameplay.Infrastracture
             container.RegisterAsSingle(CreateEntitiesLifeContext);
 
             container.RegisterAsSingle(CreateMonoEntitiesFactory).NonLazy();
+
+            container.RegisterAsSingle(CreateCollidersRegistryService);
         }
 
+        private static CollidersRegistryService CreateCollidersRegistryService(DIContainer container)
+            => new CollidersRegistryService();
+
         private static MonoEntitiesFactory CreateMonoEntitiesFactory(DIContainer container)
-            => new MonoEntitiesFactory(container.Resolve<ResourcesAssetsLoader>(), container.Resolve<EntitiesLifeContext>());
+            => new MonoEntitiesFactory(
+                container.Resolve<ResourcesAssetsLoader>(), 
+                container.Resolve<EntitiesLifeContext>(),
+                container.Resolve<CollidersRegistryService>());
 
         private static EntitiesLifeContext CreateEntitiesLifeContext(DIContainer container)
             => new EntitiesLifeContext();
