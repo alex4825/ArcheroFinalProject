@@ -56,7 +56,8 @@ namespace Assets._Project.Develop.Runtime.Gameplay.EntitiesCore
                   .AddEndAttackEvent()
                   .AddAttackDelayTime(new ReactiveVariable<float>(1))
                   .AddAttackDelayEndEvent()
-                  .AddInstantAttackDamage(new ReactiveVariable<float>(50));
+                  .AddInstantAttackDamage(new ReactiveVariable<float>(50))
+                  .AddAttackCancelEvent();
 
             ICompositeCondition canMove = new CompositeCondition()
                 .Add(new FuncCondition(() => entity.IsDead.Value == false));
@@ -79,16 +80,22 @@ namespace Assets._Project.Develop.Runtime.Gameplay.EntitiesCore
                 .Add(new FuncCondition(() => entity.InAttackProcess.Value == false))
                 .Add(new FuncCondition(() => entity.IsMoving.Value == false));
 
+            ICompositeCondition mustCancelAttack = new CompositeCondition(LogicOperations.Or)
+                .Add(new FuncCondition(() => entity.IsDead.Value))
+                .Add(new FuncCondition(() => entity.IsMoving.Value));
+
             entity
                 .AddCanMove(canMove)
                 .AddCanRotate(canRotate)
                 .AddMustDie(mustDie)
                 .AddMustSelfRelease(mustSelfRelease)
                 .AddCanApplyDamage(canApplyDamage)
-                .AddCanStartAttack(canStartAttack);
+                .AddCanStartAttack(canStartAttack)
+                .AddMustCalcelAttack(mustCancelAttack);
 
             entity.AddSystem(new RigidbodyMovementSystem())
                   .AddSystem(new RigidbodyRotationSystem())
+                  .AddSystem(new AttackCancelSystem())
                   .AddSystem(new StartAttackSystem())
                   .AddSystem(new AttackProcessTimerSystem())
                   .AddSystem(new AttackDelayEndTriggerSystem())
