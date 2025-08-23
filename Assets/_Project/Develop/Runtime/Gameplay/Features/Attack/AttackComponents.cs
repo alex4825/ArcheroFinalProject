@@ -1,6 +1,7 @@
 using Assets._Project.Develop.Runtime.Gameplay.EntitiesCore;
 using Assets._Project.Develop.Runtime.Utilities.Conditions;
 using Assets._Project.Develop.Runtime.Utilities.Reactive;
+using UnityEngine;
 
 namespace Assets._Project.Develop.Runtime.Gameplay.Features.Attack
 {
@@ -47,5 +48,15 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Features.Attack
     public class AttackDelayEndEvent : IEntityComponent
     {
         public ReactiveEvent Value;
+    }
+
+    public class InstantAttackDamage : IEntityComponent
+    {
+        public ReactiveVariable<float> Value;
+    }
+
+    public class ShootPoint : IEntityComponent
+    {
+        public Transform Value;
     }
 }

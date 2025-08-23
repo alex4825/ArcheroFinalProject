@@ -10,6 +10,7 @@ using Assets._Project.Develop.Runtime.Utilities;
 using Assets._Project.Develop.Runtime.Gameplay.Features.Sensors;
 using Assets._Project.Develop.Runtime.Gameplay.Features.ContactTakeDamage;
 using Assets._Project.Develop.Runtime.Gameplay.Features.Attack;
+using Assets._Project.Develop.Runtime.Gameplay.Features.Attack.Shoot;
 
 namespace Assets._Project.Develop.Runtime.Gameplay.EntitiesCore
 {
@@ -54,7 +55,8 @@ namespace Assets._Project.Develop.Runtime.Gameplay.EntitiesCore
                   .AddStartAttackEvent()
                   .AddEndAttackEvent()
                   .AddAttackDelayTime(new ReactiveVariable<float>(1))
-                  .AddAttackDelayEndEvent();
+                  .AddAttackDelayEndEvent()
+                  .AddInstantAttackDamage(new ReactiveVariable<float>(50));
 
             ICompositeCondition canMove = new CompositeCondition()
                 .Add(new FuncCondition(() => entity.IsDead.Value == false));
@@ -90,6 +92,7 @@ namespace Assets._Project.Develop.Runtime.Gameplay.EntitiesCore
                   .AddSystem(new StartAttackSystem())
                   .AddSystem(new AttackProcessTimerSystem())
                   .AddSystem(new AttackDelayEndTriggerSystem())
+                  .AddSystem(new InstantShootSystem())
                   .AddSystem(new EndAttackSystem())
                   .AddSystem(new ApplyDamageSystem())
                   .AddSystem(new DeathSystem())
