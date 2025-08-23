@@ -265,6 +265,62 @@ namespace Assets._Project.Develop.Runtime.Gameplay.EntitiesCore
 			return AddComponent(new Assets._Project.Develop.Runtime.Gameplay.Features.LifeCycle.DisableCollidersOnDeath() {Value = value}); 
 		}
 
+		public Assets._Project.Develop.Runtime.Gameplay.Features.CurrencyFeature.InitialEnergyCount InitialEnergyCountC => GetComponent<Assets._Project.Develop.Runtime.Gameplay.Features.CurrencyFeature.InitialEnergyCount>();
+
+		public Assets._Project.Develop.Runtime.Utilities.Reactive.ReactiveVariable<System.Single> InitialEnergyCount => InitialEnergyCountC.Value;
+
+		public Assets._Project.Develop.Runtime.Gameplay.EntitiesCore.Entity AddInitialEnergyCount()
+		{
+			return AddComponent(new Assets._Project.Develop.Runtime.Gameplay.Features.CurrencyFeature.InitialEnergyCount() { Value = new Assets._Project.Develop.Runtime.Utilities.Reactive.ReactiveVariable<System.Single>() }); 
+		}
+
+		public Assets._Project.Develop.Runtime.Gameplay.EntitiesCore.Entity AddInitialEnergyCount(Assets._Project.Develop.Runtime.Utilities.Reactive.ReactiveVariable<System.Single> value)
+		{
+			return AddComponent(new Assets._Project.Develop.Runtime.Gameplay.Features.CurrencyFeature.InitialEnergyCount() {Value = value}); 
+		}
+
+		public Assets._Project.Develop.Runtime.Gameplay.Features.CurrencyFeature.CurrentEnergyCount CurrentEnergyCountC => GetComponent<Assets._Project.Develop.Runtime.Gameplay.Features.CurrencyFeature.CurrentEnergyCount>();
+
+		public Assets._Project.Develop.Runtime.Utilities.Reactive.ReactiveVariable<System.Single> CurrentEnergyCount => CurrentEnergyCountC.Value;
+
+		public Assets._Project.Develop.Runtime.Gameplay.EntitiesCore.Entity AddCurrentEnergyCount()
+		{
+			return AddComponent(new Assets._Project.Develop.Runtime.Gameplay.Features.CurrencyFeature.CurrentEnergyCount() { Value = new Assets._Project.Develop.Runtime.Utilities.Reactive.ReactiveVariable<System.Single>() }); 
+		}
+
+		public Assets._Project.Develop.Runtime.Gameplay.EntitiesCore.Entity AddCurrentEnergyCount(Assets._Project.Develop.Runtime.Utilities.Reactive.ReactiveVariable<System.Single> value)
+		{
+			return AddComponent(new Assets._Project.Develop.Runtime.Gameplay.Features.CurrencyFeature.CurrentEnergyCount() {Value = value}); 
+		}
+
+		public Assets._Project.Develop.Runtime.Gameplay.Features.CurrencyFeature.RecoveryEnergyCount RecoveryEnergyCountC => GetComponent<Assets._Project.Develop.Runtime.Gameplay.Features.CurrencyFeature.RecoveryEnergyCount>();
+
+		public Assets._Project.Develop.Runtime.Utilities.Reactive.ReactiveVariable<System.Single> RecoveryEnergyCount => RecoveryEnergyCountC.Value;
+
+		public Assets._Project.Develop.Runtime.Gameplay.EntitiesCore.Entity AddRecoveryEnergyCount()
+		{
+			return AddComponent(new Assets._Project.Develop.Runtime.Gameplay.Features.CurrencyFeature.RecoveryEnergyCount() { Value = new Assets._Project.Develop.Runtime.Utilities.Reactive.ReactiveVariable<System.Single>() }); 
+		}
+
+		public Assets._Project.Develop.Runtime.Gameplay.EntitiesCore.Entity AddRecoveryEnergyCount(Assets._Project.Develop.Runtime.Utilities.Reactive.ReactiveVariable<System.Single> value)
+		{
+			return AddComponent(new Assets._Project.Develop.Runtime.Gameplay.Features.CurrencyFeature.RecoveryEnergyCount() {Value = value}); 
+		}
+
+		public Assets._Project.Develop.Runtime.Gameplay.Features.CurrencyFeature.TimeToRecoverEnergy TimeToRecoverEnergyC => GetComponent<Assets._Project.Develop.Runtime.Gameplay.Features.CurrencyFeature.TimeToRecoverEnergy>();
+
+		public Assets._Project.Develop.Runtime.Utilities.Reactive.ReactiveVariable<System.Single> TimeToRecoverEnergy => TimeToRecoverEnergyC.Value;
+
+		public Assets._Project.Develop.Runtime.Gameplay.EntitiesCore.Entity AddTimeToRecoverEnergy()
+		{
+			return AddComponent(new Assets._Project.Develop.Runtime.Gameplay.Features.CurrencyFeature.TimeToRecoverEnergy() { Value = new Assets._Project.Develop.Runtime.Utilities.Reactive.ReactiveVariable<System.Single>() }); 
+		}
+
+		public Assets._Project.Develop.Runtime.Gameplay.EntitiesCore.Entity AddTimeToRecoverEnergy(Assets._Project.Develop.Runtime.Utilities.Reactive.ReactiveVariable<System.Single> value)
+		{
+			return AddComponent(new Assets._Project.Develop.Runtime.Gameplay.Features.CurrencyFeature.TimeToRecoverEnergy() {Value = value}); 
+		}
+
 		public Assets._Project.Develop.Runtime.Gameplay.Features.ContactTakeDamage.BodyContactDamage BodyContactDamageC => GetComponent<Assets._Project.Develop.Runtime.Gameplay.Features.ContactTakeDamage.BodyContactDamage>();
 
 		public Assets._Project.Develop.Runtime.Utilities.Reactive.ReactiveVariable<System.Single> BodyContactDamage => BodyContactDamageC.Value;
@@ -277,6 +333,20 @@ namespace Assets._Project.Develop.Runtime.Gameplay.EntitiesCore
 		public Assets._Project.Develop.Runtime.Gameplay.EntitiesCore.Entity AddBodyContactDamage(Assets._Project.Develop.Runtime.Utilities.Reactive.ReactiveVariable<System.Single> value)
 		{
 			return AddComponent(new Assets._Project.Develop.Runtime.Gameplay.Features.ContactTakeDamage.BodyContactDamage() {Value = value}); 
+		}
+
+		public Assets._Project.Develop.Runtime.Gameplay.Features.ContactTakeDamage.ExplodeContactDamage ExplodeContactDamageC => GetComponent<Assets._Project.Develop.Runtime.Gameplay.Features.ContactTakeDamage.ExplodeContactDamage>();
+
+		public Assets._Project.Develop.Runtime.Utilities.Reactive.ReactiveVariable<System.Single> ExplodeContactDamage => ExplodeContactDamageC.Value;
+
+		public Assets._Project.Develop.Runtime.Gameplay.EntitiesCore.Entity AddExplodeContactDamage()
+		{
+			return AddComponent(new Assets._Project.Develop.Runtime.Gameplay.Features.ContactTakeDamage.ExplodeContactDamage() { Value = new Assets._Project.Develop.Runtime.Utilities.Reactive.ReactiveVariable<System.Single>() }); 
+		}
+
+		public Assets._Project.Develop.Runtime.Gameplay.EntitiesCore.Entity AddExplodeContactDamage(Assets._Project.Develop.Runtime.Utilities.Reactive.ReactiveVariable<System.Single> value)
+		{
+			return AddComponent(new Assets._Project.Develop.Runtime.Gameplay.Features.ContactTakeDamage.ExplodeContactDamage() {Value = value}); 
 		}
 
 		public Assets._Project.Develop.Runtime.Gameplay.Features.Attack.StartAttackRequest StartAttackRequestC => GetComponent<Assets._Project.Develop.Runtime.Gameplay.Features.Attack.StartAttackRequest>();

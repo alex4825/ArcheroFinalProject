@@ -11,6 +11,7 @@ using Assets._Project.Develop.Runtime.Gameplay.Features.Sensors;
 using Assets._Project.Develop.Runtime.Gameplay.Features.ContactTakeDamage;
 using Assets._Project.Develop.Runtime.Gameplay.Features.Attack;
 using Assets._Project.Develop.Runtime.Gameplay.Features.Attack.Shoot;
+using Assets._Project.Develop.Runtime.Gameplay.Features.CurrencyFeature;
 
 namespace Assets._Project.Develop.Runtime.Gameplay.EntitiesCore
 {
@@ -116,7 +117,7 @@ namespace Assets._Project.Develop.Runtime.Gameplay.EntitiesCore
 
             return entity;
         }
-        
+
         public Entity CreateGhost(Vector3 position)
         {
             Entity entity = CreateEmpty();
@@ -179,7 +180,62 @@ namespace Assets._Project.Develop.Runtime.Gameplay.EntitiesCore
 
             return entity;
         }
-        
+
+        public Entity CreateMinato(Vector3 position)
+        {
+            Entity entity = CreateEmpty();
+
+            _monoEntitiesFactory.Create(entity, position, "Entities/Minato");
+
+            entity.AddMaxHealth(new ReactiveVariable<float>(100))
+                  .AddCurrentHealth(new ReactiveVariable<float>(100))
+                  .AddIsDead()
+                  .AddInDeadProcess()
+                  .AddDeathProcessInitialTime(new ReactiveVariable<float>(2))
+                  .AddDeathProcessCurrentTime()
+                  .AddTakeDamageRequest()
+                  .AddTakeDamageEvent()
+                  .AddContactsDetectingMask(1 << LayerMask.NameToLayer("Characters"))
+                  .AddContactCollidersBuffer(new Buffer<Collider>(64))
+                  .AddContactEntitiesBuffer(new Buffer<Entity>(64))
+                  .AddInitialEnergyCount(new ReactiveVariable<float>(150))
+                  .AddCurrentEnergyCount(new ReactiveVariable<float>(150))
+                  .AddRecoveryEnergyCount(new ReactiveVariable<float>(20))
+                  .AddTimeToRecoverEnergy(new ReactiveVariable<float>(4));
+
+            ICompositeCondition canMove = new CompositeCondition()
+                .Add(new FuncCondition(() => entity.IsDead.Value == false));
+
+            ICompositeCondition mustDie = new CompositeCondition()
+                .Add(new FuncCondition(() => entity.CurrentHealth.Value <= 0));
+
+            ICompositeCondition mustSelfRelease = new CompositeCondition()
+                .Add(new FuncCondition(() => entity.IsDead.Value))
+                .Add(new FuncCondition(() => entity.InDeadProcess.Value == false));
+
+            ICompositeCondition canApplyDamage = new CompositeCondition()
+                .Add(new FuncCondition(() => entity.IsDead.Value == false));
+
+            entity
+                .AddCanMove(canMove)
+                .AddMustDie(mustDie)
+                .AddMustSelfRelease(mustSelfRelease)
+                .AddCanApplyDamage(canApplyDamage);
+
+            entity.AddSystem(new EnergyRecoverySystem())
+                  .AddSystem(new BodyContactDetectingSystem())
+                  .AddSystem(new BodyContactsEntitiesFilterSystem(_collidersRegistryService))
+                  .AddSystem(new ApplyDamageSystem())
+                  .AddSystem(new DeathSystem())
+                  .AddSystem(new DisableCollidersOnDeathSystem())
+                  .AddSystem(new DeathProcessTimerSystem())
+                  .AddSystem(new SelfReleaseSystem(_entitiesLifeContext));
+
+            _entitiesLifeContext.Add(entity);
+
+            return entity;
+        }
+
         public Entity CreateProjectile(Vector3 position, Vector3 direction, float damage)
         {
             Entity entity = CreateEmpty();
