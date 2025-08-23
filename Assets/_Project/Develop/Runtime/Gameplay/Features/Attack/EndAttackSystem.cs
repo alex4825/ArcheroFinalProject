@@ -34,9 +34,9 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Features.Attack
         {
             if (TimeIsDone(currentTime))
             {
+                Debug.Log("Конец атаки");
                 _inAttackProcess.Value = false;
                 _endAttackEvent.Invoke();
-                Debug.Log("Конец атаки");
             }
         }
 
