@@ -293,18 +293,18 @@ namespace Assets._Project.Develop.Runtime.Gameplay.EntitiesCore
 			return AddComponent(new Assets._Project.Develop.Runtime.Gameplay.Features.CurrencyFeature.CurrentEnergyCount() {Value = value}); 
 		}
 
-		public Assets._Project.Develop.Runtime.Gameplay.Features.CurrencyFeature.RecoveryEnergyCount RecoveryEnergyCountC => GetComponent<Assets._Project.Develop.Runtime.Gameplay.Features.CurrencyFeature.RecoveryEnergyCount>();
+		public Assets._Project.Develop.Runtime.Gameplay.Features.CurrencyFeature.RecoveryEnergyCountKoef RecoveryEnergyCountKoefC => GetComponent<Assets._Project.Develop.Runtime.Gameplay.Features.CurrencyFeature.RecoveryEnergyCountKoef>();
 
-		public Assets._Project.Develop.Runtime.Utilities.Reactive.ReactiveVariable<System.Single> RecoveryEnergyCount => RecoveryEnergyCountC.Value;
+		public Assets._Project.Develop.Runtime.Utilities.Reactive.ReactiveVariable<System.Single> RecoveryEnergyCountKoef => RecoveryEnergyCountKoefC.Value;
 
-		public Assets._Project.Develop.Runtime.Gameplay.EntitiesCore.Entity AddRecoveryEnergyCount()
+		public Assets._Project.Develop.Runtime.Gameplay.EntitiesCore.Entity AddRecoveryEnergyCountKoef()
 		{
-			return AddComponent(new Assets._Project.Develop.Runtime.Gameplay.Features.CurrencyFeature.RecoveryEnergyCount() { Value = new Assets._Project.Develop.Runtime.Utilities.Reactive.ReactiveVariable<System.Single>() }); 
+			return AddComponent(new Assets._Project.Develop.Runtime.Gameplay.Features.CurrencyFeature.RecoveryEnergyCountKoef() { Value = new Assets._Project.Develop.Runtime.Utilities.Reactive.ReactiveVariable<System.Single>() }); 
 		}
 
-		public Assets._Project.Develop.Runtime.Gameplay.EntitiesCore.Entity AddRecoveryEnergyCount(Assets._Project.Develop.Runtime.Utilities.Reactive.ReactiveVariable<System.Single> value)
+		public Assets._Project.Develop.Runtime.Gameplay.EntitiesCore.Entity AddRecoveryEnergyCountKoef(Assets._Project.Develop.Runtime.Utilities.Reactive.ReactiveVariable<System.Single> value)
 		{
-			return AddComponent(new Assets._Project.Develop.Runtime.Gameplay.Features.CurrencyFeature.RecoveryEnergyCount() {Value = value}); 
+			return AddComponent(new Assets._Project.Develop.Runtime.Gameplay.Features.CurrencyFeature.RecoveryEnergyCountKoef() {Value = value}); 
 		}
 
 		public Assets._Project.Develop.Runtime.Gameplay.Features.CurrencyFeature.TimeToRecoverEnergy TimeToRecoverEnergyC => GetComponent<Assets._Project.Develop.Runtime.Gameplay.Features.CurrencyFeature.TimeToRecoverEnergy>();

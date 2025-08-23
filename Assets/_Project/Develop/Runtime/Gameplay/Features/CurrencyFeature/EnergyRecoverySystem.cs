@@ -8,11 +8,12 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Features.CurrencyFeature
 {
     public class EnergyRecoverySystem : IInitializableSystem, IDisposableSystem, IUpdatableSystem
     {
-        public ReactiveVariable<float> _initialEnergyCount;
-        public ReactiveVariable<float> _currentEnergyCount;
-        public ReactiveVariable<float> _recoveryEnergyCount;
-        public ReactiveVariable<float> _timeToRecoverEnergy;
+        private ReactiveVariable<float> _initialEnergyCount;
+        private ReactiveVariable<float> _currentEnergyCount;
+        private ReactiveVariable<float> _timeToRecoverEnergy;
+        private ReactiveVariable<float> _recoveryEnergyCountKoef;
 
+        private float _recoveryEnergyCount;
         private bool _inRecoveryProcess;
         private float _timerToRecover;
 
@@ -22,8 +23,10 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Features.CurrencyFeature
         {
             _initialEnergyCount = entity.InitialEnergyCount;
             _currentEnergyCount = entity.CurrentEnergyCount;
-            _recoveryEnergyCount = entity.RecoveryEnergyCount;
             _timeToRecoverEnergy = entity.TimeToRecoverEnergy;
+            _recoveryEnergyCountKoef = entity.RecoveryEnergyCountKoef;
+
+            _recoveryEnergyCount = _initialEnergyCount.Value * _recoveryEnergyCountKoef.Value;
 
             _timerToRecover = 0;
 
@@ -40,7 +43,7 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Features.CurrencyFeature
                 _timerToRecover = 0;
                 _inRecoveryProcess = false;
 
-                _currentEnergyCount.Value = MathF.Min(_currentEnergyCount.Value + _recoveryEnergyCount.Value, _initialEnergyCount.Value);
+                _currentEnergyCount.Value = MathF.Min(_currentEnergyCount.Value + _recoveryEnergyCount, _initialEnergyCount.Value);
             }
         }
 

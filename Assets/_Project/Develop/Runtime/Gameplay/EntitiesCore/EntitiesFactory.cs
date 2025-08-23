@@ -200,7 +200,7 @@ namespace Assets._Project.Develop.Runtime.Gameplay.EntitiesCore
                   .AddContactEntitiesBuffer(new Buffer<Entity>(64))
                   .AddInitialEnergyCount(new ReactiveVariable<float>(150))
                   .AddCurrentEnergyCount(new ReactiveVariable<float>(150))
-                  .AddRecoveryEnergyCount(new ReactiveVariable<float>(20))
+                  .AddRecoveryEnergyCountKoef(new ReactiveVariable<float>(0.1f))
                   .AddTimeToRecoverEnergy(new ReactiveVariable<float>(4));
 
             ICompositeCondition canMove = new CompositeCondition()

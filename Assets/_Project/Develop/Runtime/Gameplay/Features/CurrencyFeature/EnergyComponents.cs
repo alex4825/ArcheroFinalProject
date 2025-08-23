@@ -15,7 +15,7 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Features.CurrencyFeature
         public ReactiveVariable<float> Value;
     }
 
-    public class RecoveryEnergyCount : IEntityComponent
+    public class RecoveryEnergyCountKoef : IEntityComponent
     {
         public ReactiveVariable<float> Value;
     }
