@@ -149,6 +149,57 @@ namespace Assets._Project.Develop.Runtime.Gameplay.EntitiesCore
 			return AddComponent(new Assets._Project.Develop.Runtime.Gameplay.Features.MovementFeature.RotationSpeed() {Value = value}); 
 		}
 
+		public Assets._Project.Develop.Runtime.Gameplay.Features.MovementFeature.TeleportMovement.TeleportEnergyCost TeleportEnergyCostC => GetComponent<Assets._Project.Develop.Runtime.Gameplay.Features.MovementFeature.TeleportMovement.TeleportEnergyCost>();
+
+		public Assets._Project.Develop.Runtime.Utilities.Reactive.ReactiveVariable<System.Single> TeleportEnergyCost => TeleportEnergyCostC.Value;
+
+		public Assets._Project.Develop.Runtime.Gameplay.EntitiesCore.Entity AddTeleportEnergyCost()
+		{
+			return AddComponent(new Assets._Project.Develop.Runtime.Gameplay.Features.MovementFeature.TeleportMovement.TeleportEnergyCost() { Value = new Assets._Project.Develop.Runtime.Utilities.Reactive.ReactiveVariable<System.Single>() }); 
+		}
+
+		public Assets._Project.Develop.Runtime.Gameplay.EntitiesCore.Entity AddTeleportEnergyCost(Assets._Project.Develop.Runtime.Utilities.Reactive.ReactiveVariable<System.Single> value)
+		{
+			return AddComponent(new Assets._Project.Develop.Runtime.Gameplay.Features.MovementFeature.TeleportMovement.TeleportEnergyCost() {Value = value}); 
+		}
+
+		public Assets._Project.Develop.Runtime.Gameplay.Features.MovementFeature.TeleportMovement.TeleportMaxRadius TeleportMaxRadiusC => GetComponent<Assets._Project.Develop.Runtime.Gameplay.Features.MovementFeature.TeleportMovement.TeleportMaxRadius>();
+
+		public Assets._Project.Develop.Runtime.Utilities.Reactive.ReactiveVariable<System.Single> TeleportMaxRadius => TeleportMaxRadiusC.Value;
+
+		public Assets._Project.Develop.Runtime.Gameplay.EntitiesCore.Entity AddTeleportMaxRadius()
+		{
+			return AddComponent(new Assets._Project.Develop.Runtime.Gameplay.Features.MovementFeature.TeleportMovement.TeleportMaxRadius() { Value = new Assets._Project.Develop.Runtime.Utilities.Reactive.ReactiveVariable<System.Single>() }); 
+		}
+
+		public Assets._Project.Develop.Runtime.Gameplay.EntitiesCore.Entity AddTeleportMaxRadius(Assets._Project.Develop.Runtime.Utilities.Reactive.ReactiveVariable<System.Single> value)
+		{
+			return AddComponent(new Assets._Project.Develop.Runtime.Gameplay.Features.MovementFeature.TeleportMovement.TeleportMaxRadius() {Value = value}); 
+		}
+
+		public Assets._Project.Develop.Runtime.Gameplay.Features.MovementFeature.TeleportMovement.TeleportedEvent TeleportedEventC => GetComponent<Assets._Project.Develop.Runtime.Gameplay.Features.MovementFeature.TeleportMovement.TeleportedEvent>();
+
+		public Assets._Project.Develop.Runtime.Utilities.Reactive.ReactiveEvent<UnityEngine.Vector3> TeleportedEvent => TeleportedEventC.Value;
+
+		public Assets._Project.Develop.Runtime.Gameplay.EntitiesCore.Entity AddTeleportedEvent()
+		{
+			return AddComponent(new Assets._Project.Develop.Runtime.Gameplay.Features.MovementFeature.TeleportMovement.TeleportedEvent() { Value = new Assets._Project.Develop.Runtime.Utilities.Reactive.ReactiveEvent<UnityEngine.Vector3>() }); 
+		}
+
+		public Assets._Project.Develop.Runtime.Gameplay.EntitiesCore.Entity AddTeleportedEvent(Assets._Project.Develop.Runtime.Utilities.Reactive.ReactiveEvent<UnityEngine.Vector3> value)
+		{
+			return AddComponent(new Assets._Project.Develop.Runtime.Gameplay.Features.MovementFeature.TeleportMovement.TeleportedEvent() {Value = value}); 
+		}
+
+		public Assets._Project.Develop.Runtime.Gameplay.Features.MovementFeature.TeleportMovement.CanTeleport CanTeleportC => GetComponent<Assets._Project.Develop.Runtime.Gameplay.Features.MovementFeature.TeleportMovement.CanTeleport>();
+
+		public Assets._Project.Develop.Runtime.Utilities.Conditions.ICompositeCondition CanTeleport => CanTeleportC.Value;
+
+		public Assets._Project.Develop.Runtime.Gameplay.EntitiesCore.Entity AddCanTeleport(Assets._Project.Develop.Runtime.Utilities.Conditions.ICompositeCondition value)
+		{
+			return AddComponent(new Assets._Project.Develop.Runtime.Gameplay.Features.MovementFeature.TeleportMovement.CanTeleport() {Value = value}); 
+		}
+
 		public Assets._Project.Develop.Runtime.Gameplay.Features.LifeCycle.CurrentHealth CurrentHealthC => GetComponent<Assets._Project.Develop.Runtime.Gameplay.Features.LifeCycle.CurrentHealth>();
 
 		public Assets._Project.Develop.Runtime.Utilities.Reactive.ReactiveVariable<System.Single> CurrentHealth => CurrentHealthC.Value;
@@ -293,6 +344,34 @@ namespace Assets._Project.Develop.Runtime.Gameplay.EntitiesCore
 			return AddComponent(new Assets._Project.Develop.Runtime.Gameplay.Features.CurrencyFeature.CurrentEnergyCount() {Value = value}); 
 		}
 
+		public Assets._Project.Develop.Runtime.Gameplay.Features.CurrencyFeature.AddEnergyCountRequest AddEnergyCountRequestC => GetComponent<Assets._Project.Develop.Runtime.Gameplay.Features.CurrencyFeature.AddEnergyCountRequest>();
+
+		public Assets._Project.Develop.Runtime.Utilities.Reactive.ReactiveEvent<System.Single> AddEnergyCountRequest => AddEnergyCountRequestC.Value;
+
+		public Assets._Project.Develop.Runtime.Gameplay.EntitiesCore.Entity AddAddEnergyCountRequest()
+		{
+			return AddComponent(new Assets._Project.Develop.Runtime.Gameplay.Features.CurrencyFeature.AddEnergyCountRequest() { Value = new Assets._Project.Develop.Runtime.Utilities.Reactive.ReactiveEvent<System.Single>() }); 
+		}
+
+		public Assets._Project.Develop.Runtime.Gameplay.EntitiesCore.Entity AddAddEnergyCountRequest(Assets._Project.Develop.Runtime.Utilities.Reactive.ReactiveEvent<System.Single> value)
+		{
+			return AddComponent(new Assets._Project.Develop.Runtime.Gameplay.Features.CurrencyFeature.AddEnergyCountRequest() {Value = value}); 
+		}
+
+		public Assets._Project.Develop.Runtime.Gameplay.Features.CurrencyFeature.SubtractEnergyCountRequest SubtractEnergyCountRequestC => GetComponent<Assets._Project.Develop.Runtime.Gameplay.Features.CurrencyFeature.SubtractEnergyCountRequest>();
+
+		public Assets._Project.Develop.Runtime.Utilities.Reactive.ReactiveEvent<System.Single> SubtractEnergyCountRequest => SubtractEnergyCountRequestC.Value;
+
+		public Assets._Project.Develop.Runtime.Gameplay.EntitiesCore.Entity AddSubtractEnergyCountRequest()
+		{
+			return AddComponent(new Assets._Project.Develop.Runtime.Gameplay.Features.CurrencyFeature.SubtractEnergyCountRequest() { Value = new Assets._Project.Develop.Runtime.Utilities.Reactive.ReactiveEvent<System.Single>() }); 
+		}
+
+		public Assets._Project.Develop.Runtime.Gameplay.EntitiesCore.Entity AddSubtractEnergyCountRequest(Assets._Project.Develop.Runtime.Utilities.Reactive.ReactiveEvent<System.Single> value)
+		{
+			return AddComponent(new Assets._Project.Develop.Runtime.Gameplay.Features.CurrencyFeature.SubtractEnergyCountRequest() {Value = value}); 
+		}
+
 		public Assets._Project.Develop.Runtime.Gameplay.Features.CurrencyFeature.RecoveryEnergyCountKoef RecoveryEnergyCountKoefC => GetComponent<Assets._Project.Develop.Runtime.Gameplay.Features.CurrencyFeature.RecoveryEnergyCountKoef>();
 
 		public Assets._Project.Develop.Runtime.Utilities.Reactive.ReactiveVariable<System.Single> RecoveryEnergyCountKoef => RecoveryEnergyCountKoefC.Value;
@@ -333,20 +412,6 @@ namespace Assets._Project.Develop.Runtime.Gameplay.EntitiesCore
 		public Assets._Project.Develop.Runtime.Gameplay.EntitiesCore.Entity AddBodyContactDamage(Assets._Project.Develop.Runtime.Utilities.Reactive.ReactiveVariable<System.Single> value)
 		{
 			return AddComponent(new Assets._Project.Develop.Runtime.Gameplay.Features.ContactTakeDamage.BodyContactDamage() {Value = value}); 
-		}
-
-		public Assets._Project.Develop.Runtime.Gameplay.Features.ContactTakeDamage.ExplodeContactDamage ExplodeContactDamageC => GetComponent<Assets._Project.Develop.Runtime.Gameplay.Features.ContactTakeDamage.ExplodeContactDamage>();
-
-		public Assets._Project.Develop.Runtime.Utilities.Reactive.ReactiveVariable<System.Single> ExplodeContactDamage => ExplodeContactDamageC.Value;
-
-		public Assets._Project.Develop.Runtime.Gameplay.EntitiesCore.Entity AddExplodeContactDamage()
-		{
-			return AddComponent(new Assets._Project.Develop.Runtime.Gameplay.Features.ContactTakeDamage.ExplodeContactDamage() { Value = new Assets._Project.Develop.Runtime.Utilities.Reactive.ReactiveVariable<System.Single>() }); 
-		}
-
-		public Assets._Project.Develop.Runtime.Gameplay.EntitiesCore.Entity AddExplodeContactDamage(Assets._Project.Develop.Runtime.Utilities.Reactive.ReactiveVariable<System.Single> value)
-		{
-			return AddComponent(new Assets._Project.Develop.Runtime.Gameplay.Features.ContactTakeDamage.ExplodeContactDamage() {Value = value}); 
 		}
 
 		public Assets._Project.Develop.Runtime.Gameplay.Features.Attack.StartAttackRequest StartAttackRequestC => GetComponent<Assets._Project.Develop.Runtime.Gameplay.Features.Attack.StartAttackRequest>();
@@ -602,6 +667,15 @@ namespace Assets._Project.Develop.Runtime.Gameplay.EntitiesCore
 		public Assets._Project.Develop.Runtime.Gameplay.EntitiesCore.Entity AddRigidbody(UnityEngine.Rigidbody value)
 		{
 			return AddComponent(new Assets._Project.Develop.Runtime.Gameplay.Common.RigidbodyComponent() {Value = value}); 
+		}
+
+		public Assets._Project.Develop.Runtime.Gameplay.Common.TransformComponent TransformC => GetComponent<Assets._Project.Develop.Runtime.Gameplay.Common.TransformComponent>();
+
+		public UnityEngine.Transform Transform => TransformC.Value;
+
+		public Assets._Project.Develop.Runtime.Gameplay.EntitiesCore.Entity AddTransform(UnityEngine.Transform value)
+		{
+			return AddComponent(new Assets._Project.Develop.Runtime.Gameplay.Common.TransformComponent() {Value = value}); 
 		}
 
 	}

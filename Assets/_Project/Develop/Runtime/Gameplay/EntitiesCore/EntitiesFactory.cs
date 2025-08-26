@@ -12,6 +12,7 @@ using Assets._Project.Develop.Runtime.Gameplay.Features.ContactTakeDamage;
 using Assets._Project.Develop.Runtime.Gameplay.Features.Attack;
 using Assets._Project.Develop.Runtime.Gameplay.Features.Attack.Shoot;
 using Assets._Project.Develop.Runtime.Gameplay.Features.CurrencyFeature;
+using Assets._Project.Develop.Runtime.Gameplay.Features.MovementFeature.TeleportMovement;
 
 namespace Assets._Project.Develop.Runtime.Gameplay.EntitiesCore
 {
@@ -201,7 +202,12 @@ namespace Assets._Project.Develop.Runtime.Gameplay.EntitiesCore
                   .AddInitialEnergyCount(new ReactiveVariable<float>(150))
                   .AddCurrentEnergyCount(new ReactiveVariable<float>(150))
                   .AddRecoveryEnergyCountKoef(new ReactiveVariable<float>(0.1f))
-                  .AddTimeToRecoverEnergy(new ReactiveVariable<float>(4));
+                  .AddTimeToRecoverEnergy(new ReactiveVariable<float>(1.5f))
+                  .AddAddEnergyCountRequest()
+                  .AddSubtractEnergyCountRequest()
+                  .AddTeleportEnergyCost(new ReactiveVariable<float>(100))
+                  .AddTeleportMaxRadius(new ReactiveVariable<float>(5))
+                  .AddTeleportedEvent();
 
             ICompositeCondition canMove = new CompositeCondition()
                 .Add(new FuncCondition(() => entity.IsDead.Value == false));
@@ -216,13 +222,20 @@ namespace Assets._Project.Develop.Runtime.Gameplay.EntitiesCore
             ICompositeCondition canApplyDamage = new CompositeCondition()
                 .Add(new FuncCondition(() => entity.IsDead.Value == false));
 
+            ICompositeCondition canTeleport = new CompositeCondition()
+                .Add(new FuncCondition(() => entity.IsDead.Value == false))
+                .Add(new FuncCondition(() => entity.CurrentEnergyCount.Value >= entity.TeleportEnergyCost.Value));
+
             entity
                 .AddCanMove(canMove)
                 .AddMustDie(mustDie)
                 .AddMustSelfRelease(mustSelfRelease)
-                .AddCanApplyDamage(canApplyDamage);
+                .AddCanApplyDamage(canApplyDamage)
+                .AddCanTeleport(canTeleport);
 
-            entity.AddSystem(new EnergyRecoverySystem())
+            entity.AddSystem(new EnergyRegulateSystem())
+                  .AddSystem(new EnergyRecoverySystem())
+                  .AddSystem(new RandomTeleportMovementSystem())
                   .AddSystem(new BodyContactDetectingSystem())
                   .AddSystem(new BodyContactsEntitiesFilterSystem(_collidersRegistryService))
                   .AddSystem(new ApplyDamageSystem())
