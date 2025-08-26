@@ -46,6 +46,8 @@ namespace Assets._Project.Develop.Runtime.Utilities.StateMachineCore
                     break;
                 }
             }
+
+            UpdateLogic(deltaTime);
         }
 
         public void Exit()
@@ -65,6 +67,8 @@ namespace Assets._Project.Develop.Runtime.Utilities.StateMachineCore
 
             _states.Clear();
         }
+
+        protected virtual void UpdateLogic(float deltaTime) { }
 
         private void SwitchState(StateNode<TState> nextState)
         {
