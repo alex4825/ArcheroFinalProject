@@ -2,6 +2,7 @@
 using Assets._Project.Develop.Runtime.Gameplay.EntitiesCore.Systems;
 using Assets._Project.Develop.Runtime.Utilities.Reactive;
 using System;
+using UnityEngine;
 
 namespace Assets._Project.Develop.Runtime.Gameplay.Features.CurrencyFeature
 {
@@ -12,6 +13,8 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Features.CurrencyFeature
         private ReactiveEvent<float> _addEnergyCountRequest;
         private ReactiveEvent<float> _subtractEnergyCountRequest;
 
+        private ReactiveEvent _fullEnergyEvent;
+
         private IDisposable _addEnergyCountDisposable;
         private IDisposable _subtractEnergyCountDisposable;
 
@@ -21,6 +24,8 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Features.CurrencyFeature
             _currentEnergyCount = entity.CurrentEnergyCount;
             _addEnergyCountRequest = entity.AddEnergyCountRequest;
             _subtractEnergyCountRequest = entity.SubtractEnergyCountRequest;
+
+            _fullEnergyEvent = entity.FullEnergyEvent;
 
             _addEnergyCountDisposable = _addEnergyCountRequest.Subscribe(OnAddEnergyCount);
             _subtractEnergyCountDisposable = _subtractEnergyCountRequest.Subscribe(OnSubtractEnergyCount);
@@ -33,9 +38,19 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Features.CurrencyFeature
         }
 
         private void OnAddEnergyCount(float amount)
-            => _currentEnergyCount.Value = MathF.Min(_currentEnergyCount.Value + amount, _initialEnergyCount.Value);
+        {
+            _currentEnergyCount.Value = MathF.Min(_currentEnergyCount.Value + amount, _initialEnergyCount.Value);
+
+            Debug.Log("Текущий уровень энергии: " + _currentEnergyCount.Value.ToString());
+
+            if (_currentEnergyCount.Value == _initialEnergyCount.Value)
+                _fullEnergyEvent?.Invoke();
+        }
 
         private void OnSubtractEnergyCount(float amount)
-            => _currentEnergyCount.Value = MathF.Max(_currentEnergyCount.Value - amount, 0);
+        {
+            _currentEnergyCount.Value = MathF.Max(_currentEnergyCount.Value - amount, 0);
+            Debug.Log("Текущий уровень энергии: " + _currentEnergyCount.Value.ToString());
+        }
     }
 }

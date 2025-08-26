@@ -202,9 +202,10 @@ namespace Assets._Project.Develop.Runtime.Gameplay.EntitiesCore
                   .AddInitialEnergyCount(new ReactiveVariable<float>(150))
                   .AddCurrentEnergyCount(new ReactiveVariable<float>(150))
                   .AddRecoveryEnergyCountKoef(new ReactiveVariable<float>(0.1f))
-                  .AddTimeToRecoverEnergy(new ReactiveVariable<float>(1.5f))
+                  .AddTimeToRecoverEnergy(new ReactiveVariable<float>(1f))
                   .AddAddEnergyCountRequest()
                   .AddSubtractEnergyCountRequest()
+                  .AddFullEnergyEvent()
                   .AddTeleportEnergyCost(new ReactiveVariable<float>(100))
                   .AddTeleportMaxRadius(new ReactiveVariable<float>(5))
                   .AddTeleportedEvent();

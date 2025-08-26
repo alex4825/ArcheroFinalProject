@@ -344,6 +344,20 @@ namespace Assets._Project.Develop.Runtime.Gameplay.EntitiesCore
 			return AddComponent(new Assets._Project.Develop.Runtime.Gameplay.Features.CurrencyFeature.CurrentEnergyCount() {Value = value}); 
 		}
 
+		public Assets._Project.Develop.Runtime.Gameplay.Features.CurrencyFeature.FullEnergyEvent FullEnergyEventC => GetComponent<Assets._Project.Develop.Runtime.Gameplay.Features.CurrencyFeature.FullEnergyEvent>();
+
+		public Assets._Project.Develop.Runtime.Utilities.Reactive.ReactiveEvent FullEnergyEvent => FullEnergyEventC.Value;
+
+		public Assets._Project.Develop.Runtime.Gameplay.EntitiesCore.Entity AddFullEnergyEvent()
+		{
+			return AddComponent(new Assets._Project.Develop.Runtime.Gameplay.Features.CurrencyFeature.FullEnergyEvent() { Value = new Assets._Project.Develop.Runtime.Utilities.Reactive.ReactiveEvent() }); 
+		}
+
+		public Assets._Project.Develop.Runtime.Gameplay.EntitiesCore.Entity AddFullEnergyEvent(Assets._Project.Develop.Runtime.Utilities.Reactive.ReactiveEvent value)
+		{
+			return AddComponent(new Assets._Project.Develop.Runtime.Gameplay.Features.CurrencyFeature.FullEnergyEvent() {Value = value}); 
+		}
+
 		public Assets._Project.Develop.Runtime.Gameplay.Features.CurrencyFeature.AddEnergyCountRequest AddEnergyCountRequestC => GetComponent<Assets._Project.Develop.Runtime.Gameplay.Features.CurrencyFeature.AddEnergyCountRequest>();
 
 		public Assets._Project.Develop.Runtime.Utilities.Reactive.ReactiveEvent<System.Single> AddEnergyCountRequest => AddEnergyCountRequestC.Value;

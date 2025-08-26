@@ -15,6 +15,11 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Features.CurrencyFeature
         public ReactiveVariable<float> Value;
     }
 
+    public class FullEnergyEvent : IEntityComponent
+    {
+        public ReactiveEvent Value;
+    }
+
     public class AddEnergyCountRequest : IEntityComponent
     {
         public ReactiveEvent<float> Value;

@@ -2,22 +2,25 @@
 using Assets._Project.Develop.Runtime.Gameplay.EntitiesCore.Systems;
 using Assets._Project.Develop.Runtime.Utilities.Reactive;
 using System;
-using UnityEngine;
 
 namespace Assets._Project.Develop.Runtime.Gameplay.Features.CurrencyFeature
 {
-    public class EnergyRecoverySystem : IInitializableSystem, IDisposableSystem, IUpdatableSystem
+    public class EnergyRecoverySystem : IInitializableSystem, IUpdatableSystem, IDisposableSystem
     {
         private ReactiveVariable<float> _initialEnergyCount;
         private ReactiveVariable<float> _currentEnergyCount;
         private ReactiveVariable<float> _timeToRecoverEnergy;
         private ReactiveVariable<float> _recoveryEnergyCountKoef;
 
+        private ReactiveEvent<float> _addEnergyRequest;
+        private ReactiveEvent _fullEnergyEvent;
+
         private float _recoveryEnergyCount;
         private bool _inRecoveryProcess;
         private float _timerToRecover;
 
-        private IDisposable _changedEnergyDisposable;
+        private IDisposable _currentEnergyDisposable;
+        private IDisposable _fullEnergyDisposable;
 
         public void OnInit(Entity entity)
         {
@@ -25,12 +28,13 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Features.CurrencyFeature
             _currentEnergyCount = entity.CurrentEnergyCount;
             _timeToRecoverEnergy = entity.TimeToRecoverEnergy;
             _recoveryEnergyCountKoef = entity.RecoveryEnergyCountKoef;
+            _addEnergyRequest = entity.AddEnergyCountRequest;
+            _fullEnergyEvent = entity.FullEnergyEvent;
 
             _recoveryEnergyCount = _initialEnergyCount.Value * _recoveryEnergyCountKoef.Value;
 
-            _timerToRecover = 0;
-
-            _changedEnergyDisposable = _currentEnergyCount.Subscribe(OnChangedEnergy);
+            _currentEnergyDisposable = _currentEnergyCount.Subscribe(OnEnergyCountChanged);
+            _fullEnergyDisposable = _fullEnergyEvent.Subscribe(OnFullEnergy);
         }
 
         public void OnUpdate(float deltaTime)
@@ -41,32 +45,20 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Features.CurrencyFeature
             if (IsTimerExpire())
             {
                 _timerToRecover = 0;
-                _inRecoveryProcess = false;
 
-                _currentEnergyCount.Value = MathF.Min(_currentEnergyCount.Value + _recoveryEnergyCount, _initialEnergyCount.Value);
+                _addEnergyRequest.Invoke(_recoveryEnergyCount);
             }
         }
 
         public void OnDispose(Entity entity)
         {
-            _changedEnergyDisposable.Dispose();
+            _currentEnergyDisposable.Dispose();
+            _fullEnergyDisposable.Dispose();
         }
 
-        private void OnChangedEnergy(float arg1, float currentEnergy)
-        {
-            if (IsFullEnergy(currentEnergy))
-            {
-                Debug.Log("Полная энергия. Текущий уровень энергии: " + _currentEnergyCount.Value.ToString());
-            }
-            else
-            {
-                Debug.Log("Начался процесс восстановления энергии. Текущий уровень энергии: " + _currentEnergyCount.Value.ToString());
-                _inRecoveryProcess = true;
-            }
-        }
+        private void OnEnergyCountChanged(float arg1, float arg2) => _inRecoveryProcess = true;
 
-        private bool IsFullEnergy(float currentEnergy)
-            => _initialEnergyCount.Value == currentEnergy;
+        private void OnFullEnergy() => _inRecoveryProcess = false;
 
         private bool IsTimerExpire() => _timerToRecover >= _timeToRecoverEnergy.Value;
     }
