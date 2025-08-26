@@ -637,6 +637,20 @@ namespace Assets._Project.Develop.Runtime.Gameplay.EntitiesCore
 			return AddComponent(new Assets._Project.Develop.Runtime.Gameplay.Features.Attack.InAttackCooldown() {Value = value}); 
 		}
 
+		public Assets._Project.Develop.Runtime.Gameplay.Features.Attack.Explode.OnTeleportExplodeRadius OnTeleportExplodeRadiusC => GetComponent<Assets._Project.Develop.Runtime.Gameplay.Features.Attack.Explode.OnTeleportExplodeRadius>();
+
+		public Assets._Project.Develop.Runtime.Utilities.Reactive.ReactiveVariable<System.Single> OnTeleportExplodeRadius => OnTeleportExplodeRadiusC.Value;
+
+		public Assets._Project.Develop.Runtime.Gameplay.EntitiesCore.Entity AddOnTeleportExplodeRadius()
+		{
+			return AddComponent(new Assets._Project.Develop.Runtime.Gameplay.Features.Attack.Explode.OnTeleportExplodeRadius() { Value = new Assets._Project.Develop.Runtime.Utilities.Reactive.ReactiveVariable<System.Single>() }); 
+		}
+
+		public Assets._Project.Develop.Runtime.Gameplay.EntitiesCore.Entity AddOnTeleportExplodeRadius(Assets._Project.Develop.Runtime.Utilities.Reactive.ReactiveVariable<System.Single> value)
+		{
+			return AddComponent(new Assets._Project.Develop.Runtime.Gameplay.Features.Attack.Explode.OnTeleportExplodeRadius() {Value = value}); 
+		}
+
 		public Assets._Project.Develop.Runtime.Gameplay.Features.ApplyDamage.TakeDamageRequest TakeDamageRequestC => GetComponent<Assets._Project.Develop.Runtime.Gameplay.Features.ApplyDamage.TakeDamageRequest>();
 
 		public Assets._Project.Develop.Runtime.Utilities.Reactive.ReactiveEvent<System.Single> TakeDamageRequest => TakeDamageRequestC.Value;

@@ -202,13 +202,17 @@ namespace Assets._Project.Develop.Runtime.Gameplay.EntitiesCore
                   .AddInitialEnergyCount(new ReactiveVariable<float>(150))
                   .AddCurrentEnergyCount(new ReactiveVariable<float>(150))
                   .AddRecoveryEnergyCountKoef(new ReactiveVariable<float>(0.1f))
-                  .AddTimeToRecoverEnergy(new ReactiveVariable<float>(1f))
+                  .AddTimeToRecoverEnergy(new ReactiveVariable<float>(0.3f))
                   .AddAddEnergyCountRequest()
                   .AddSubtractEnergyCountRequest()
                   .AddFullEnergyEvent()
                   .AddTeleportEnergyCost(new ReactiveVariable<float>(100))
                   .AddTeleportMaxRadius(new ReactiveVariable<float>(5))
-                  .AddTeleportedEvent();
+                  .AddTeleportedEvent()
+                  .AddOnTeleportExplodeRadius(new ReactiveVariable<float>(3))
+                  .AddBodyContactDamage(new ReactiveVariable<float>(60))
+                  .AddDeathMask(1 << LayerMask.NameToLayer("Characters"))
+                  .AddIsTouchDeathMask();
 
             ICompositeCondition canMove = new CompositeCondition()
                 .Add(new FuncCondition(() => entity.IsDead.Value == false));
@@ -237,9 +241,11 @@ namespace Assets._Project.Develop.Runtime.Gameplay.EntitiesCore
             entity.AddSystem(new EnergyRegulateSystem())
                   .AddSystem(new EnergyRecoverySystem())
                   .AddSystem(new RandomTeleportMovementSystem())
-                  .AddSystem(new BodyContactDetectingSystem())
+                  .AddSystem(new RadiusContactsOnTeleportDetectingSystem())
                   .AddSystem(new BodyContactsEntitiesFilterSystem(_collidersRegistryService))
+                  .AddSystem(new DealDamageOnContactSystem())
                   .AddSystem(new ApplyDamageSystem())
+                  .AddSystem(new DeathMaskTouchDetectorSystem())
                   .AddSystem(new DeathSystem())
                   .AddSystem(new DisableCollidersOnDeathSystem())
                   .AddSystem(new DeathProcessTimerSystem())
