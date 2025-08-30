@@ -13,6 +13,7 @@ using Assets._Project.Develop.Runtime.Gameplay.Features.Attack;
 using Assets._Project.Develop.Runtime.Gameplay.Features.Attack.Shoot;
 using Assets._Project.Develop.Runtime.Gameplay.Features.CurrencyFeature;
 using Assets._Project.Develop.Runtime.Gameplay.Features.MovementFeature.TeleportMovement;
+using Assets._Project.Develop.Runtime.Gameplay.Features.Cleanup;
 
 namespace Assets._Project.Develop.Runtime.Gameplay.EntitiesCore
 {
@@ -207,9 +208,9 @@ namespace Assets._Project.Develop.Runtime.Gameplay.EntitiesCore
                   .AddSubtractEnergyCountRequest()
                   .AddFullEnergyEvent()
                   .AddTeleportEnergyCost(new ReactiveVariable<float>(100))
-                  .AddTeleportMaxRadius(new ReactiveVariable<float>(5))
+                  .AddTeleportMaxRadius(new ReactiveVariable<float>(3))
                   .AddTeleportedEvent()
-                  .AddOnTeleportExplodeRadius(new ReactiveVariable<float>(3))
+                  .AddOnTeleportExplodeRadius(new ReactiveVariable<float>(5))
                   .AddBodyContactDamage(new ReactiveVariable<float>(60))
                   .AddDeathMask(1 << LayerMask.NameToLayer("Characters"))
                   .AddIsTouchDeathMask();
@@ -244,6 +245,7 @@ namespace Assets._Project.Develop.Runtime.Gameplay.EntitiesCore
                   .AddSystem(new RadiusContactsOnTeleportDetectingSystem())
                   .AddSystem(new BodyContactsEntitiesFilterSystem(_collidersRegistryService))
                   .AddSystem(new DealDamageOnContactSystem())
+                  .AddSystem(new OnTeleportContactsCleanSystem())
                   .AddSystem(new ApplyDamageSystem())
                   .AddSystem(new DeathMaskTouchDetectorSystem())
                   .AddSystem(new DeathSystem())

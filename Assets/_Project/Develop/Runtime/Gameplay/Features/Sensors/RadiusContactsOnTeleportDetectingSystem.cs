@@ -2,16 +2,20 @@ using Assets._Project.Develop.Runtime.Gameplay.EntitiesCore;
 using Assets._Project.Develop.Runtime.Gameplay.EntitiesCore.Systems;
 using Assets._Project.Develop.Runtime.Utilities;
 using Assets._Project.Develop.Runtime.Utilities.Reactive;
+using System;
 using UnityEngine;
 
 namespace Assets._Project.Develop.Runtime.Gameplay.Features.Sensors
 {
-    public class RadiusContactsOnTeleportDetectingSystem : IInitializableSystem, IUpdatableSystem
+    public class RadiusContactsOnTeleportDetectingSystem : IInitializableSystem, IDisposableSystem
     {
         private Buffer<Collider> _contacts;
         private CapsuleCollider _body;
         private LayerMask _mask;
         private ReactiveVariable<float> _radius;
+        private ReactiveEvent<Vector3> _teleportedEvent;
+
+        private IDisposable _teleportedDisposable;
 
         public void OnInit(Entity entity)
         {
@@ -19,8 +23,22 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Features.Sensors
             _body = entity.BodyCollider;
             _mask = entity.ContactsDetectingMask;
             _radius = entity.OnTeleportExplodeRadius;
+            _teleportedEvent = entity.TeleportedEvent;
+
+            _teleportedDisposable = _teleportedEvent.Subscribe(OnTeleported);
         }
-        public void OnUpdate(float deltaTime)
+
+        public void OnDispose(Entity entity)
+        {
+            _teleportedDisposable.Dispose();
+        }
+
+        private void OnTeleported(Vector3 vector)
+        {
+            DetectContacts();
+        }
+
+        private void DetectContacts()
         {
             _contacts.Count = Physics.OverlapSphereNonAlloc(
                  _body.transform.position,
