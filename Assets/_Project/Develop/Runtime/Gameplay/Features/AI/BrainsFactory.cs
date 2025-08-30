@@ -12,14 +12,26 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Features.AI
     {
         private readonly DIContainer _container;
         private readonly TimerServiceFactory _timerServiceFactory;
+        private readonly AIBrainsContext _brainsContext;
 
         public BrainsFactory(DIContainer container)
         {
             _container = container;
             _timerServiceFactory = container.Resolve<TimerServiceFactory>();
+            _brainsContext = container.Resolve<AIBrainsContext>();
         }
 
-        public AIStateMachine CreateRandomMovementStateMashine(Entity entity)
+        public StateMachineBrain CreateGhostBrain(Entity entity)
+        {
+            AIStateMachine stateMachine = CreateRandomMovementStateMashine(entity);
+            StateMachineBrain brain = new StateMachineBrain(stateMachine);
+
+            _brainsContext.SetFor(entity, brain);
+
+            return brain;
+        }
+
+        private AIStateMachine CreateRandomMovementStateMashine(Entity entity)
         {
             List<IDisposable> disposables = new List<IDisposable>();
 
