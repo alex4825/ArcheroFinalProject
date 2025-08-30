@@ -13,6 +13,13 @@ namespace Assets._Project.Develop.Runtime.Utilities.StateMachineCore
 
         private bool _isRunning;
 
+        private List<IDisposable> _disposables;
+
+        protected StateMachine(List<IDisposable> disposables)
+        {
+            _disposables = new List<IDisposable>(disposables);
+        }
+
         protected TState CurrentState => _currentState.State;
 
         public void AddState(TState state) => _states.Add(new StateNode<TState>(state));
@@ -66,6 +73,11 @@ namespace Assets._Project.Develop.Runtime.Utilities.StateMachineCore
                     disposableState.Dispose();
 
             _states.Clear();
+
+            foreach (var disposable in _disposables)
+                disposable.Dispose();
+
+            _disposables.Clear();
         }
 
         protected virtual void UpdateLogic(float deltaTime) { }
