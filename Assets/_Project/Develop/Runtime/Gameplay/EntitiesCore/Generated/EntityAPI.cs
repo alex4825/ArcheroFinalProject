@@ -283,6 +283,16 @@ namespace Assets._Project.Develop.Runtime.Gameplay.EntitiesCore
 
 		public Assets._Project.Develop.Runtime.Utilities.Reactive.ReactiveVariable<System.Single> TeleportEnergyCost => TeleportEnergyCostC.Value;
 
+		public bool TryGetTeleportEnergyCost(out Assets._Project.Develop.Runtime.Utilities.Reactive.ReactiveVariable<System.Single> value)
+		{
+			bool result = TryGetComponent(out Assets._Project.Develop.Runtime.Gameplay.Features.MovementFeature.TeleportMovement.TeleportEnergyCost component);
+			if(result)
+				value = component.Value;
+			else
+				value = default(Assets._Project.Develop.Runtime.Utilities.Reactive.ReactiveVariable<System.Single>);
+			return result;
+		}
+
 		public Assets._Project.Develop.Runtime.Gameplay.EntitiesCore.Entity AddTeleportEnergyCost()
 		{
 			return AddComponent(new Assets._Project.Develop.Runtime.Gameplay.Features.MovementFeature.TeleportMovement.TeleportEnergyCost() { Value = new Assets._Project.Develop.Runtime.Utilities.Reactive.ReactiveVariable<System.Single>() }); 
@@ -296,6 +306,16 @@ namespace Assets._Project.Develop.Runtime.Gameplay.EntitiesCore
 		public Assets._Project.Develop.Runtime.Gameplay.Features.MovementFeature.TeleportMovement.TeleportMaxRadius TeleportMaxRadiusC => GetComponent<Assets._Project.Develop.Runtime.Gameplay.Features.MovementFeature.TeleportMovement.TeleportMaxRadius>();
 
 		public Assets._Project.Develop.Runtime.Utilities.Reactive.ReactiveVariable<System.Single> TeleportMaxRadius => TeleportMaxRadiusC.Value;
+
+		public bool TryGetTeleportMaxRadius(out Assets._Project.Develop.Runtime.Utilities.Reactive.ReactiveVariable<System.Single> value)
+		{
+			bool result = TryGetComponent(out Assets._Project.Develop.Runtime.Gameplay.Features.MovementFeature.TeleportMovement.TeleportMaxRadius component);
+			if(result)
+				value = component.Value;
+			else
+				value = default(Assets._Project.Develop.Runtime.Utilities.Reactive.ReactiveVariable<System.Single>);
+			return result;
+		}
 
 		public Assets._Project.Develop.Runtime.Gameplay.EntitiesCore.Entity AddTeleportMaxRadius()
 		{
@@ -311,6 +331,16 @@ namespace Assets._Project.Develop.Runtime.Gameplay.EntitiesCore
 
 		public Assets._Project.Develop.Runtime.Utilities.Reactive.ReactiveEvent<UnityEngine.Vector3> TeleportedEvent => TeleportedEventC.Value;
 
+		public bool TryGetTeleportedEvent(out Assets._Project.Develop.Runtime.Utilities.Reactive.ReactiveEvent<UnityEngine.Vector3> value)
+		{
+			bool result = TryGetComponent(out Assets._Project.Develop.Runtime.Gameplay.Features.MovementFeature.TeleportMovement.TeleportedEvent component);
+			if(result)
+				value = component.Value;
+			else
+				value = default(Assets._Project.Develop.Runtime.Utilities.Reactive.ReactiveEvent<UnityEngine.Vector3>);
+			return result;
+		}
+
 		public Assets._Project.Develop.Runtime.Gameplay.EntitiesCore.Entity AddTeleportedEvent()
 		{
 			return AddComponent(new Assets._Project.Develop.Runtime.Gameplay.Features.MovementFeature.TeleportMovement.TeleportedEvent() { Value = new Assets._Project.Develop.Runtime.Utilities.Reactive.ReactiveEvent<UnityEngine.Vector3>() }); 
@@ -324,6 +354,16 @@ namespace Assets._Project.Develop.Runtime.Gameplay.EntitiesCore
 		public Assets._Project.Develop.Runtime.Gameplay.Features.MovementFeature.TeleportMovement.CanTeleport CanTeleportC => GetComponent<Assets._Project.Develop.Runtime.Gameplay.Features.MovementFeature.TeleportMovement.CanTeleport>();
 
 		public Assets._Project.Develop.Runtime.Utilities.Conditions.ICompositeCondition CanTeleport => CanTeleportC.Value;
+
+		public bool TryGetCanTeleport(out Assets._Project.Develop.Runtime.Utilities.Conditions.ICompositeCondition value)
+		{
+			bool result = TryGetComponent(out Assets._Project.Develop.Runtime.Gameplay.Features.MovementFeature.TeleportMovement.CanTeleport component);
+			if(result)
+				value = component.Value;
+			else
+				value = default(Assets._Project.Develop.Runtime.Utilities.Conditions.ICompositeCondition);
+			return result;
+		}
 
 		public Assets._Project.Develop.Runtime.Gameplay.EntitiesCore.Entity AddCanTeleport(Assets._Project.Develop.Runtime.Utilities.Conditions.ICompositeCondition value)
 		{
@@ -540,6 +580,16 @@ namespace Assets._Project.Develop.Runtime.Gameplay.EntitiesCore
 
 		public Assets._Project.Develop.Runtime.Utilities.Reactive.ReactiveVariable<System.Single> InitialEnergyCount => InitialEnergyCountC.Value;
 
+		public bool TryGetInitialEnergyCount(out Assets._Project.Develop.Runtime.Utilities.Reactive.ReactiveVariable<System.Single> value)
+		{
+			bool result = TryGetComponent(out Assets._Project.Develop.Runtime.Gameplay.Features.CurrencyFeature.InitialEnergyCount component);
+			if(result)
+				value = component.Value;
+			else
+				value = default(Assets._Project.Develop.Runtime.Utilities.Reactive.ReactiveVariable<System.Single>);
+			return result;
+		}
+
 		public Assets._Project.Develop.Runtime.Gameplay.EntitiesCore.Entity AddInitialEnergyCount()
 		{
 			return AddComponent(new Assets._Project.Develop.Runtime.Gameplay.Features.CurrencyFeature.InitialEnergyCount() { Value = new Assets._Project.Develop.Runtime.Utilities.Reactive.ReactiveVariable<System.Single>() }); 
@@ -553,6 +603,16 @@ namespace Assets._Project.Develop.Runtime.Gameplay.EntitiesCore
 		public Assets._Project.Develop.Runtime.Gameplay.Features.CurrencyFeature.CurrentEnergyCount CurrentEnergyCountC => GetComponent<Assets._Project.Develop.Runtime.Gameplay.Features.CurrencyFeature.CurrentEnergyCount>();
 
 		public Assets._Project.Develop.Runtime.Utilities.Reactive.ReactiveVariable<System.Single> CurrentEnergyCount => CurrentEnergyCountC.Value;
+
+		public bool TryGetCurrentEnergyCount(out Assets._Project.Develop.Runtime.Utilities.Reactive.ReactiveVariable<System.Single> value)
+		{
+			bool result = TryGetComponent(out Assets._Project.Develop.Runtime.Gameplay.Features.CurrencyFeature.CurrentEnergyCount component);
+			if(result)
+				value = component.Value;
+			else
+				value = default(Assets._Project.Develop.Runtime.Utilities.Reactive.ReactiveVariable<System.Single>);
+			return result;
+		}
 
 		public Assets._Project.Develop.Runtime.Gameplay.EntitiesCore.Entity AddCurrentEnergyCount()
 		{
@@ -568,6 +628,16 @@ namespace Assets._Project.Develop.Runtime.Gameplay.EntitiesCore
 
 		public Assets._Project.Develop.Runtime.Utilities.Reactive.ReactiveEvent FullEnergyEvent => FullEnergyEventC.Value;
 
+		public bool TryGetFullEnergyEvent(out Assets._Project.Develop.Runtime.Utilities.Reactive.ReactiveEvent value)
+		{
+			bool result = TryGetComponent(out Assets._Project.Develop.Runtime.Gameplay.Features.CurrencyFeature.FullEnergyEvent component);
+			if(result)
+				value = component.Value;
+			else
+				value = default(Assets._Project.Develop.Runtime.Utilities.Reactive.ReactiveEvent);
+			return result;
+		}
+
 		public Assets._Project.Develop.Runtime.Gameplay.EntitiesCore.Entity AddFullEnergyEvent()
 		{
 			return AddComponent(new Assets._Project.Develop.Runtime.Gameplay.Features.CurrencyFeature.FullEnergyEvent() { Value = new Assets._Project.Develop.Runtime.Utilities.Reactive.ReactiveEvent() }); 
@@ -581,6 +651,16 @@ namespace Assets._Project.Develop.Runtime.Gameplay.EntitiesCore
 		public Assets._Project.Develop.Runtime.Gameplay.Features.CurrencyFeature.AddEnergyCountRequest AddEnergyCountRequestC => GetComponent<Assets._Project.Develop.Runtime.Gameplay.Features.CurrencyFeature.AddEnergyCountRequest>();
 
 		public Assets._Project.Develop.Runtime.Utilities.Reactive.ReactiveEvent<System.Single> AddEnergyCountRequest => AddEnergyCountRequestC.Value;
+
+		public bool TryGetAddEnergyCountRequest(out Assets._Project.Develop.Runtime.Utilities.Reactive.ReactiveEvent<System.Single> value)
+		{
+			bool result = TryGetComponent(out Assets._Project.Develop.Runtime.Gameplay.Features.CurrencyFeature.AddEnergyCountRequest component);
+			if(result)
+				value = component.Value;
+			else
+				value = default(Assets._Project.Develop.Runtime.Utilities.Reactive.ReactiveEvent<System.Single>);
+			return result;
+		}
 
 		public Assets._Project.Develop.Runtime.Gameplay.EntitiesCore.Entity AddAddEnergyCountRequest()
 		{
@@ -596,6 +676,16 @@ namespace Assets._Project.Develop.Runtime.Gameplay.EntitiesCore
 
 		public Assets._Project.Develop.Runtime.Utilities.Reactive.ReactiveEvent<System.Single> SubtractEnergyCountRequest => SubtractEnergyCountRequestC.Value;
 
+		public bool TryGetSubtractEnergyCountRequest(out Assets._Project.Develop.Runtime.Utilities.Reactive.ReactiveEvent<System.Single> value)
+		{
+			bool result = TryGetComponent(out Assets._Project.Develop.Runtime.Gameplay.Features.CurrencyFeature.SubtractEnergyCountRequest component);
+			if(result)
+				value = component.Value;
+			else
+				value = default(Assets._Project.Develop.Runtime.Utilities.Reactive.ReactiveEvent<System.Single>);
+			return result;
+		}
+
 		public Assets._Project.Develop.Runtime.Gameplay.EntitiesCore.Entity AddSubtractEnergyCountRequest()
 		{
 			return AddComponent(new Assets._Project.Develop.Runtime.Gameplay.Features.CurrencyFeature.SubtractEnergyCountRequest() { Value = new Assets._Project.Develop.Runtime.Utilities.Reactive.ReactiveEvent<System.Single>() }); 
@@ -610,6 +700,16 @@ namespace Assets._Project.Develop.Runtime.Gameplay.EntitiesCore
 
 		public Assets._Project.Develop.Runtime.Utilities.Reactive.ReactiveVariable<System.Single> RecoveryEnergyCountKoef => RecoveryEnergyCountKoefC.Value;
 
+		public bool TryGetRecoveryEnergyCountKoef(out Assets._Project.Develop.Runtime.Utilities.Reactive.ReactiveVariable<System.Single> value)
+		{
+			bool result = TryGetComponent(out Assets._Project.Develop.Runtime.Gameplay.Features.CurrencyFeature.RecoveryEnergyCountKoef component);
+			if(result)
+				value = component.Value;
+			else
+				value = default(Assets._Project.Develop.Runtime.Utilities.Reactive.ReactiveVariable<System.Single>);
+			return result;
+		}
+
 		public Assets._Project.Develop.Runtime.Gameplay.EntitiesCore.Entity AddRecoveryEnergyCountKoef()
 		{
 			return AddComponent(new Assets._Project.Develop.Runtime.Gameplay.Features.CurrencyFeature.RecoveryEnergyCountKoef() { Value = new Assets._Project.Develop.Runtime.Utilities.Reactive.ReactiveVariable<System.Single>() }); 
@@ -623,6 +723,16 @@ namespace Assets._Project.Develop.Runtime.Gameplay.EntitiesCore
 		public Assets._Project.Develop.Runtime.Gameplay.Features.CurrencyFeature.TimeToRecoverEnergy TimeToRecoverEnergyC => GetComponent<Assets._Project.Develop.Runtime.Gameplay.Features.CurrencyFeature.TimeToRecoverEnergy>();
 
 		public Assets._Project.Develop.Runtime.Utilities.Reactive.ReactiveVariable<System.Single> TimeToRecoverEnergy => TimeToRecoverEnergyC.Value;
+
+		public bool TryGetTimeToRecoverEnergy(out Assets._Project.Develop.Runtime.Utilities.Reactive.ReactiveVariable<System.Single> value)
+		{
+			bool result = TryGetComponent(out Assets._Project.Develop.Runtime.Gameplay.Features.CurrencyFeature.TimeToRecoverEnergy component);
+			if(result)
+				value = component.Value;
+			else
+				value = default(Assets._Project.Develop.Runtime.Utilities.Reactive.ReactiveVariable<System.Single>);
+			return result;
+		}
 
 		public Assets._Project.Develop.Runtime.Gameplay.EntitiesCore.Entity AddTimeToRecoverEnergy()
 		{
@@ -1030,6 +1140,16 @@ namespace Assets._Project.Develop.Runtime.Gameplay.EntitiesCore
 		public Assets._Project.Develop.Runtime.Gameplay.Features.Attack.Explode.OnTeleportExplodeRadius OnTeleportExplodeRadiusC => GetComponent<Assets._Project.Develop.Runtime.Gameplay.Features.Attack.Explode.OnTeleportExplodeRadius>();
 
 		public Assets._Project.Develop.Runtime.Utilities.Reactive.ReactiveVariable<System.Single> OnTeleportExplodeRadius => OnTeleportExplodeRadiusC.Value;
+
+		public bool TryGetOnTeleportExplodeRadius(out Assets._Project.Develop.Runtime.Utilities.Reactive.ReactiveVariable<System.Single> value)
+		{
+			bool result = TryGetComponent(out Assets._Project.Develop.Runtime.Gameplay.Features.Attack.Explode.OnTeleportExplodeRadius component);
+			if(result)
+				value = component.Value;
+			else
+				value = default(Assets._Project.Develop.Runtime.Utilities.Reactive.ReactiveVariable<System.Single>);
+			return result;
+		}
 
 		public Assets._Project.Develop.Runtime.Gameplay.EntitiesCore.Entity AddOnTeleportExplodeRadius()
 		{

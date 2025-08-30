@@ -210,7 +210,7 @@ namespace Assets._Project.Develop.Runtime.Gameplay.EntitiesCore
                   .AddTeleportEnergyCost(new ReactiveVariable<float>(100))
                   .AddTeleportMaxRadius(new ReactiveVariable<float>(3))
                   .AddTeleportedEvent()
-                  .AddOnTeleportExplodeRadius(new ReactiveVariable<float>(5))
+                  .AddOnTeleportExplodeRadius(new ReactiveVariable<float>(4))
                   .AddBodyContactDamage(new ReactiveVariable<float>(60))
                   .AddDeathMask(1 << LayerMask.NameToLayer("Characters"))
                   .AddIsTouchDeathMask();
