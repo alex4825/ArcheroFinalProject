@@ -1,5 +1,6 @@
 using Assets._Project.Develop.Runtime.Gameplay.EntitiesCore;
 using Assets._Project.Develop.Runtime.Gameplay.Features.AI;
+using Assets._Project.Develop.Runtime.Gameplay.Features.AI.States;
 using Assets._Project.Develop.Runtime.Gameplay.Features.MovementFeature;
 using Assets._Project.Develop.Runtime.Infrastracture.DI;
 using Assets._Project.Develop.Runtime.Utilities.Reactive;
@@ -29,7 +30,7 @@ namespace Assets._Project.Develop.Runtime.Gameplay
         {
             _hero = _entitiesFactory.CreateHero(Vector3.zero);
             _hero.AddCurrentTarget();
-            _brainsFactory.CreateMainHeroBrain(_hero);
+            _brainsFactory.CreateMainHeroBrain(_hero, new NearestDamageableTargetSelector(_hero));
 
             _ghost = _entitiesFactory.CreateGhost(Vector3.zero + Vector3.forward * 5); 
 

@@ -17,6 +17,7 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Features.AI
         private readonly TimerServiceFactory _timerServiceFactory;
         private readonly AIBrainsContext _brainsContext;
         private readonly IInputService _inputService;
+        private readonly EntitiesLifeContext _entitiesLifeContext;
 
         public BrainsFactory(DIContainer container)
         {
@@ -24,9 +25,10 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Features.AI
             _timerServiceFactory = container.Resolve<TimerServiceFactory>();
             _brainsContext = container.Resolve<AIBrainsContext>();
             _inputService = container.Resolve<IInputService>();
+            _entitiesLifeContext = container.Resolve<EntitiesLifeContext>();
         }
 
-        public StateMachineBrain CreateMainHeroBrain(Entity entity)
+        public StateMachineBrain CreateMainHeroBrain(Entity entity, ITargetSelector targetSelector)
         {
             AIStateMachine combatState = CreateAutoAttackStateMachine(entity);
 
@@ -50,7 +52,13 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Features.AI
             behavior.AddTransition(movementState, combatState, fromMovementToCombatStateCondition);
             behavior.AddTransition(combatState, movementState, fromCombatToMovementStateCondition);
 
-            StateMachineBrain brain = new StateMachineBrain(behavior);
+            FindTargetState findTargetState = new FindTargetState(targetSelector, _entitiesLifeContext, entity);
+            AIParallelState parallelState = new AIParallelState(findTargetState, behavior);
+
+            AIStateMachine rootStateMachine = new AIStateMachine();
+            rootStateMachine.AddState(parallelState);
+
+            StateMachineBrain brain = new StateMachineBrain(rootStateMachine);
             _brainsContext.SetFor(entity, brain);
 
             return brain;
