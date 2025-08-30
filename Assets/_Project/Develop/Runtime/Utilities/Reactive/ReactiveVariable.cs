@@ -11,9 +11,9 @@ namespace Assets._Project.Develop.Runtime.Utilities.Reactive
 
         private T _value;
 
-        public ReactiveVariable(T value) => Value = value;
+        public ReactiveVariable(T value) => _value = value;
 
-        public ReactiveVariable() => Value = default(T);
+        public ReactiveVariable() => _value = default(T);
 
         public T Value
         {
