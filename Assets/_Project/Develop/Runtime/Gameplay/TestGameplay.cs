@@ -2,6 +2,7 @@ using Assets._Project.Develop.Runtime.Gameplay.EntitiesCore;
 using Assets._Project.Develop.Runtime.Gameplay.Features.AI;
 using Assets._Project.Develop.Runtime.Gameplay.Features.MovementFeature;
 using Assets._Project.Develop.Runtime.Infrastracture.DI;
+using Assets._Project.Develop.Runtime.Utilities.Reactive;
 using UnityEngine;
 
 namespace Assets._Project.Develop.Runtime.Gameplay
@@ -14,7 +15,7 @@ namespace Assets._Project.Develop.Runtime.Gameplay
 
         private bool _isRunning = false;
 
-        private Entity _entity;
+        private Entity _hero;
         private Entity _ghost;
 
         public void Initialize(DIContainer container)
@@ -26,7 +27,10 @@ namespace Assets._Project.Develop.Runtime.Gameplay
 
         public void Run()
         {
-            _entity = _entitiesFactory.CreateHero(Vector3.zero);
+            _hero = _entitiesFactory.CreateHero(Vector3.zero);
+            _hero.AddCurrentTarget();
+            _brainsFactory.CreateMainHeroBrain(_hero);
+
             _ghost = _entitiesFactory.CreateGhost(Vector3.zero + Vector3.forward * 5); 
 
             _isRunning = true;
@@ -39,24 +43,19 @@ namespace Assets._Project.Develop.Runtime.Gameplay
 
             if(Input.GetKeyDown(KeyCode.Space))
             {
-                _entity.TakeDamageRequest.Invoke(50);
-                Debug.Log($"Текущий уровень здоровья: {_entity.CurrentHealth.Value.ToString()}");
+                _hero.TakeDamageRequest.Invoke(50);
+                Debug.Log($"Текущий уровень здоровья: {_hero.CurrentHealth.Value.ToString()}");
             }
 
             if (Input.GetKeyDown(KeyCode.R))
             {
-                _entity.StartAttackRequest.Invoke();
+                _hero.StartAttackRequest.Invoke();
             }
 
             if (Input.GetKeyDown(KeyCode.I))
             {
                 _brainsFactory.CreateGhostBrain(_ghost);
             }
-
-                Vector3 input = new Vector3(Input.GetAxisRaw("Horizontal"), 0, Input.GetAxisRaw("Vertical"));
-
-            _entity.MoveDirection.Value = input;
-            _entity.RotationDirection.Value = input;
         }
     }
 }
