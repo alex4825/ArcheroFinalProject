@@ -8,7 +8,7 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Common
     {
         public override void Register(Entity entity)
         {
-            entity.AddTransform(GetComponent<Transform>());
+            entity.AddTransform(transform);
         }
     }
 }
