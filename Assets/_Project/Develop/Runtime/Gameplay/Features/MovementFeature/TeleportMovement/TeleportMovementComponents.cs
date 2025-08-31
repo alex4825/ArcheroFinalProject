@@ -24,4 +24,9 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Features.MovementFeature.Tele
     {
         public ICompositeCondition Value;
     }
+
+    public class TeleportDelay : IEntityComponent
+    {
+        public ReactiveVariable<float> Value;
+    }
 }
