@@ -1,5 +1,6 @@
 using Assets._Project.Develop.Runtime.Gameplay.EntitiesCore;
 using Assets._Project.Develop.Runtime.Gameplay.Features.AI.States;
+using Assets._Project.Develop.Runtime.Gameplay.Features.AI.TargetSelection;
 using Assets._Project.Develop.Runtime.Gameplay.Features.InputFeature;
 using Assets._Project.Develop.Runtime.Infrastracture.DI;
 using Assets._Project.Develop.Runtime.Utilities.Conditions;
@@ -75,6 +76,52 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Features.AI
             return brain;
         }
 
+        public StateMachineBrain CreateaRandomMinatoBrain(Entity entity)
+        {
+            AIStateMachine stateMachine = CreateaRandomTeleportStateMashine(entity);
+            StateMachineBrain brain = new StateMachineBrain(stateMachine);
+
+            _brainsContext.SetFor(entity, brain);
+
+            return brain;
+        }
+
+        private AIStateMachine CreateaRandomTeleportStateMashine(Entity entity)
+        {
+            List<IDisposable> disposables = new List<IDisposable>();
+
+            RandomTeleportState randomTeleportState = new RandomTeleportState(entity);
+
+            EmptyState explodeState = new EmptyState(); ///
+
+            TimerService teleportTimer = _timerServiceFactory.Create(entity.TeleportDelay.Value);
+            disposables.Add(teleportTimer);
+            disposables.Add(randomTeleportState.Entered.Subscribe(teleportTimer.Restart));
+
+            ICompositeCondition fromTeleportToExplodeCondition = new CompositeCondition()
+                .Add(new FuncCondition(() => teleportTimer.IsOver))
+                .Add(entity.CanTeleport);
+
+            FuncCondition fromExplodeToTeleportCondition = new FuncCondition(() =>
+            {
+                bool isTeleported = false;
+
+                disposables.Add(entity.TeleportedEvent.Subscribe(position => isTeleported = true));
+
+                return isTeleported;
+            });
+
+            AIStateMachine stateMachine = new AIStateMachine(disposables);
+
+            stateMachine.AddState(randomTeleportState);
+            stateMachine.AddState(explodeState);
+
+            stateMachine.AddTransition(randomTeleportState, explodeState, fromTeleportToExplodeCondition);
+            stateMachine.AddTransition(explodeState, randomTeleportState, fromExplodeToTeleportCondition);
+
+            return stateMachine;
+        }
+
         private AIStateMachine CreateRandomMovementStateMashine(Entity entity)
         {
             List<IDisposable> disposables = new List<IDisposable>();
@@ -121,7 +168,7 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Features.AI
                 {
                     Entity target = currentTarget.Value;
 
-                    if(target == null)
+                    if (target == null)
                         return false;
 
                     float angleToTarget = Quaternion.Angle(transform.rotation, Quaternion.LookRotation(target.Transform.position - transform.position));
@@ -130,7 +177,7 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Features.AI
                 }));
 
             ReactiveVariable<bool> inAttackProcess = entity.InAttackProcess;
-            ICondition fromAttackToRotateStateCondition = new FuncCondition(() => inAttackProcess.Value == false); 
+            ICondition fromAttackToRotateStateCondition = new FuncCondition(() => inAttackProcess.Value == false);
 
             AIStateMachine stateMachine = new AIStateMachine();
 
