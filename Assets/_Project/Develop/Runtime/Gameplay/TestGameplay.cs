@@ -1,6 +1,6 @@
 using Assets._Project.Develop.Runtime.Gameplay.EntitiesCore;
 using Assets._Project.Develop.Runtime.Gameplay.Features.AI;
-using Assets._Project.Develop.Runtime.Gameplay.Features.AI.States;
+using Assets._Project.Develop.Runtime.Gameplay.Features.AI.TargetSelection;
 using Assets._Project.Develop.Runtime.Infrastracture.DI;
 using UnityEngine;
 
@@ -16,6 +16,7 @@ namespace Assets._Project.Develop.Runtime.Gameplay
 
         private Entity _hero;
         private Entity _ghost;
+        private Entity _minato;
 
         public void Initialize(DIContainer container)
         {
@@ -27,11 +28,13 @@ namespace Assets._Project.Develop.Runtime.Gameplay
         public void Run()
         {
             _hero = _entitiesFactory.CreateHero(Vector3.zero - Vector3.forward * 6);
-            _ghost = _entitiesFactory.CreateGhost(Vector3.zero + Vector3.forward * 5);
-            _entitiesFactory.CreateMinato(Vector3.zero);
-
             _hero.AddCurrentTarget();
             _brainsFactory.CreateMainHeroBrain(_hero, new NearestDamageableTargetSelector(_hero));
+
+            _ghost = _entitiesFactory.CreateGhost(Vector3.zero + Vector3.forward * 5);
+
+            _minato = _entitiesFactory.CreateMinato(Vector3.zero);
+            _brainsFactory.CreateaRandomMinatoBrain(_minato/*, new MostDamagedTargetSelector(_hero)*/);
 
             _isRunning = true;
         }

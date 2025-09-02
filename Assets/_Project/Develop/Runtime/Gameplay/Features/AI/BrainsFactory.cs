@@ -78,7 +78,7 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Features.AI
 
         public StateMachineBrain CreateaRandomMinatoBrain(Entity entity)
         {
-            AIStateMachine stateMachine = CreateaRandomTeleportStateMashine(entity);
+            AIStateMachine stateMachine = CreateaRandomTeleportExplodeStateMashine(entity);
             StateMachineBrain brain = new StateMachineBrain(stateMachine);
 
             _brainsContext.SetFor(entity, brain);
@@ -86,38 +86,17 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Features.AI
             return brain;
         }
 
-        private AIStateMachine CreateaRandomTeleportStateMashine(Entity entity)
+        private AIStateMachine CreateaRandomTeleportExplodeStateMashine(Entity entity)
         {
-            List<IDisposable> disposables = new List<IDisposable>();
-
             RandomTeleportState randomTeleportState = new RandomTeleportState(entity);
 
-            EmptyState explodeState = new EmptyState(); ///
+            ExplodeState explodeState = new ExplodeState(entity, _container.Resolve<CollidersRegistryService>());
 
-            TimerService teleportTimer = _timerServiceFactory.Create(entity.TeleportDelay.Value);
-            disposables.Add(teleportTimer);
-            disposables.Add(randomTeleportState.Entered.Subscribe(teleportTimer.Restart));
+            AIParallelState parallelState = new AIParallelState(randomTeleportState, explodeState);
 
-            ICompositeCondition fromTeleportToExplodeCondition = new CompositeCondition()
-                .Add(new FuncCondition(() => teleportTimer.IsOver))
-                .Add(entity.CanTeleport);
+            AIStateMachine stateMachine = new AIStateMachine();
 
-            FuncCondition fromExplodeToTeleportCondition = new FuncCondition(() =>
-            {
-                bool isTeleported = false;
-
-                disposables.Add(entity.TeleportedEvent.Subscribe(position => isTeleported = true));
-
-                return isTeleported;
-            });
-
-            AIStateMachine stateMachine = new AIStateMachine(disposables);
-
-            stateMachine.AddState(randomTeleportState);
-            stateMachine.AddState(explodeState);
-
-            stateMachine.AddTransition(randomTeleportState, explodeState, fromTeleportToExplodeCondition);
-            stateMachine.AddTransition(explodeState, randomTeleportState, fromExplodeToTeleportCondition);
+            stateMachine.AddState(parallelState);
 
             return stateMachine;
         }
@@ -131,7 +110,7 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Features.AI
             EmptyState emptyState = new EmptyState();
 
             TimerService movementTimer = _timerServiceFactory.Create(2f);
-            disposables.Add(movementTimer);
+            disposables.Add(movementTimer); 
             disposables.Add(randomMovementState.Entered.Subscribe(movementTimer.Restart));
 
             TimerService idleTimer = _timerServiceFactory.Create(3f);
