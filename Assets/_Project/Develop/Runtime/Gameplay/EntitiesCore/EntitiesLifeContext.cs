@@ -1,9 +1,10 @@
-﻿using System;
+﻿using Assets._Project.Develop.Runtime.Infrastracture.DI;
+using System;
 using System.Collections.Generic;
 
 namespace Assets._Project.Develop.Runtime.Gameplay.EntitiesCore
 {
-    public class EntitiesLifeContext : IDisposable
+    public class EntitiesLifeContext : IDisposable, IUpdatable
     {
         public event Action<Entity> Added;
         public event Action<Entity> Released;

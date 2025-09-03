@@ -11,6 +11,8 @@ namespace Assets._Project.Develop.Runtime.Infrastracture.DI
 
         private readonly DIContainer _parent;
 
+        private readonly List<IUpdatable> _updatables = new();
+
         public DIContainer() : this(null) { }
 
         public DIContainer(DIContainer parent) => _parent = parent;
@@ -31,9 +33,9 @@ namespace Assets._Project.Develop.Runtime.Infrastracture.DI
             if (IsAlreadyRegister<T>())
                 throw new InvalidOperationException($"{typeof(T)} is already registered");
 
-            Registration registration = new Registration(container => creator.Invoke(container));
+            Registration registration = new Registration(container => creator.Invoke(container), _updatables);
 
-            _container.Add(typeof(T), registration);
+            _container.Add(typeof(T), registration);                
 
             return registration;
         }
@@ -72,10 +74,18 @@ namespace Assets._Project.Develop.Runtime.Infrastracture.DI
             }
         }
 
+        public void Update(float deltaTime)
+        {
+            foreach (IUpdatable updatable in _updatables)
+                updatable?.Update(deltaTime);
+        }
+
         public void Dispose()
         {
             foreach (Registration registration in _container.Values)
                 registration.OnDispose();
+
+            _updatables.Clear();
         }
     }
 }

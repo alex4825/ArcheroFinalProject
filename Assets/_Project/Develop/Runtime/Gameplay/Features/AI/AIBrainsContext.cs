@@ -1,10 +1,11 @@
 using Assets._Project.Develop.Runtime.Gameplay.EntitiesCore;
+using Assets._Project.Develop.Runtime.Infrastracture.DI;
 using System;
 using System.Collections.Generic;
 
 namespace Assets._Project.Develop.Runtime.Gameplay.Features.AI
 {
-    public class AIBrainsContext : IDisposable
+    public class AIBrainsContext : IDisposable, IUpdatable
     {
         private readonly List<EntityToBrain> _entityToBrains = new();
 

@@ -60,9 +60,7 @@ namespace Assets._Project.Develop.Runtime.Infrastracture.Gameplay.Infrastracture
 
         private void Update()
         {
-            _brainsContext?.Update(Time.deltaTime);
-
-            _entitiesLifeContext?.Update(Time.deltaTime);
+            _container?.Update(Time.deltaTime);
 
             if (Input.GetKeyDown(KeyCode.F))
             {
