@@ -76,29 +76,33 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Features.AI
             return brain;
         }
 
-        public StateMachineBrain CreateaRandomMinatoBrain(Entity entity)
+        public StateMachineBrain CreateMinatoBrain(Entity entity, ITargetSelector targetSelector)
         {
-            AIStateMachine stateMachine = CreateaRandomTeleportExplodeStateMashine(entity);
-            StateMachineBrain brain = new StateMachineBrain(stateMachine);
+            ExplodeState explodeState = new ExplodeState(entity, _container.Resolve<CollidersRegistryService>());
+
+            FindTargetState findTargetState = new FindTargetState(targetSelector, _entitiesLifeContext, entity);
+
+            RandomTeleportState randomTeleportState = new RandomTeleportState(entity);
+            TargetOrientedTeleportState targetOrientedTeleportState = new TargetOrientedTeleportState(entity, targetSelector, _entitiesLifeContext);
+
+            AIStateMachine teleportBehavior = new AIStateMachine();
+
+            teleportBehavior.AddState(targetOrientedTeleportState);
+            teleportBehavior.AddState(randomTeleportState);
+
+            teleportBehavior.AddTransition(targetOrientedTeleportState, randomTeleportState, new FuncCondition(() => entity.CurrentTarget.Value == null));
+            teleportBehavior.AddTransition(randomTeleportState, targetOrientedTeleportState, new FuncCondition(() => entity.CurrentTarget.Value != null));
+
+            AIParallelState parallelState = new AIParallelState(teleportBehavior, explodeState, findTargetState);
+
+            AIStateMachine rootStateMachine = new AIStateMachine();
+            rootStateMachine.AddState(parallelState);
+
+            StateMachineBrain brain = new StateMachineBrain(rootStateMachine);
 
             _brainsContext.SetFor(entity, brain);
 
             return brain;
-        }
-
-        private AIStateMachine CreateaRandomTeleportExplodeStateMashine(Entity entity)
-        {
-            RandomTeleportState randomTeleportState = new RandomTeleportState(entity);
-
-            ExplodeState explodeState = new ExplodeState(entity, _container.Resolve<CollidersRegistryService>());
-
-            AIParallelState parallelState = new AIParallelState(randomTeleportState, explodeState);
-
-            AIStateMachine stateMachine = new AIStateMachine();
-
-            stateMachine.AddState(parallelState);
-
-            return stateMachine;
         }
 
         private AIStateMachine CreateRandomMovementStateMashine(Entity entity)

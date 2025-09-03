@@ -34,7 +34,7 @@ namespace Assets._Project.Develop.Runtime.Gameplay
             _ghost = _entitiesFactory.CreateGhost(Vector3.zero + Vector3.forward * 5);
 
             _minato = _entitiesFactory.CreateMinato(Vector3.zero);
-            _brainsFactory.CreateaRandomMinatoBrain(_minato/*, new MostDamagedTargetSelector(_hero)*/);
+            _brainsFactory.CreateMinatoBrain(_minato, new MinHPTargetSelector(_minato));
 
             _isRunning = true;
         }

@@ -200,21 +200,22 @@ namespace Assets._Project.Develop.Runtime.Gameplay.EntitiesCore
                   .AddContactsDetectingMask(1 << LayerMask.NameToLayer("Characters"))
                   .AddContactCollidersBuffer(new Buffer<Collider>(64))
                   .AddContactEntitiesBuffer(new Buffer<Entity>(64))
-                  .AddInitialEnergyCount(new ReactiveVariable<float>(150))
-                  .AddCurrentEnergyCount(new ReactiveVariable<float>(150))
+                  .AddInitialEnergyCount(new ReactiveVariable<float>(300))
+                  .AddCurrentEnergyCount(new ReactiveVariable<float>(300))
                   .AddRecoveryEnergyCountKoef(new ReactiveVariable<float>(0.1f))
-                  .AddTimeToRecoverEnergy(new ReactiveVariable<float>(0.3f))
+                  .AddTimeToRecoverEnergy(new ReactiveVariable<float>(1f))
                   .AddAddEnergyCountRequest()
                   .AddSubtractEnergyCountRequest()
                   .AddFullEnergyEvent()
-                  .AddTeleportEnergyCost(new ReactiveVariable<float>(100))
+                  .AddTeleportEnergyCost(new ReactiveVariable<float>(120))
                   .AddTeleportMaxRadius(new ReactiveVariable<float>(3))
                   .AddTeleportedEvent()
                   .AddTeleportDelay(new ReactiveVariable<float>(1f))
                   .AddOnTeleportExplodeRadius(new ReactiveVariable<float>(4))
                   .AddBodyContactDamage(new ReactiveVariable<float>(60))
                   .AddDeathMask(1 << LayerMask.NameToLayer("Characters"))
-                  .AddIsTouchDeathMask();
+                  .AddIsTouchDeathMask()
+                  .AddCurrentTarget();
 
             ICompositeCondition canMove = new CompositeCondition()
                 .Add(new FuncCondition(() => entity.IsDead.Value == false));
@@ -229,9 +230,12 @@ namespace Assets._Project.Develop.Runtime.Gameplay.EntitiesCore
             ICompositeCondition canApplyDamage = new CompositeCondition()
                 .Add(new FuncCondition(() => entity.IsDead.Value == false));
 
+            float minEnergyKoef = 0.4f;
+
             ICompositeCondition canTeleport = new CompositeCondition()
                 .Add(new FuncCondition(() => entity.IsDead.Value == false))
-                .Add(new FuncCondition(() => entity.CurrentEnergyCount.Value >= entity.TeleportEnergyCost.Value));
+                .Add(new FuncCondition(() => entity.CurrentEnergyCount.Value >= entity.TeleportEnergyCost.Value))
+                .Add(new FuncCondition(() => entity.CurrentEnergyCount.Value >= entity.InitialEnergyCount.Value * minEnergyKoef));
 
             entity
                 .AddCanMove(canMove)
@@ -242,11 +246,6 @@ namespace Assets._Project.Develop.Runtime.Gameplay.EntitiesCore
 
             entity.AddSystem(new EnergyRegulateSystem())
                   .AddSystem(new EnergyRecoverySystem())
-                  //.AddSystem(new RandomTeleportMovementSystem())
-                  //.AddSystem(new RadiusContactsOnTeleportDetectingSystem())
-                  //.AddSystem(new BodyContactsEntitiesFilterSystem(_collidersRegistryService))
-                  //.AddSystem(new DealDamageOnContactSystem())
-                  //.AddSystem(new OnTeleportContactsCleanSystem())
                   .AddSystem(new ApplyDamageSystem())
                   .AddSystem(new DeathMaskTouchDetectorSystem())
                   .AddSystem(new DeathSystem())
