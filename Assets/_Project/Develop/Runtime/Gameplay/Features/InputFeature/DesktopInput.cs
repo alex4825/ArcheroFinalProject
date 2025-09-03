@@ -2,6 +2,7 @@
 using Assets._Project.Develop.Runtime.Utilities.Reactive;
 using System;
 using UnityEngine;
+using static UnityEngine.GraphicsBuffer;
 
 namespace Assets._Project.Develop.Runtime.Gameplay.Features.InputFeature
 {
@@ -9,10 +10,12 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Features.InputFeature
     {
         private const string HorizontalAxisName = "Horizontal";
         private const string VerticalAxisName = "Vertical";
-        private const string MouseXName = "Mouse X";
-        private const string MouseYName = "Mouse Y";
+        private const int LeftMouseButton = 0;
+        private readonly Vector3 ScreenCenter = new Vector3(Screen.width / 2, 0, Screen.height / 2);
 
         private ReactiveVariable<Vector3> _mousePosition = new();
+
+        private ReactiveEvent _attacked = new();
 
         private IDisposable _mousePositionDisposable;
 
@@ -36,9 +39,14 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Features.InputFeature
 
         public Vector3 RotationDirection { get; private set; }
 
+        public IReadonlyEvent Attacked => _attacked;
+
         public void Update(float deltaTime)
         {
             _mousePosition.Value = GetMousePosition();
+
+            if (Input.GetMouseButtonDown(LeftMouseButton))
+                _attacked.Invoke();
         }
 
         public void Dispose()
@@ -47,9 +55,13 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Features.InputFeature
         }
 
         private Vector3 GetMousePosition()
-            => new Vector3(Input.GetAxisRaw(MouseXName), 0, Input.GetAxisRaw(MouseYName));
+            => new Vector3(Input.mousePosition.x, 0, Input.mousePosition.y);
 
         private void OnMousePositionChanged(Vector3 lastPosition, Vector3 currentPosition)
-            => RotationDirection = (currentPosition - lastPosition).normalized;
+        {
+            Vector3 cursorMoveVector = currentPosition - ScreenCenter;
+
+            RotationDirection = cursorMoveVector.normalized;
+        }
     }
 }

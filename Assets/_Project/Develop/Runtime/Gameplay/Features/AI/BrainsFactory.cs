@@ -29,6 +29,33 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Features.AI
             _entitiesLifeContext = container.Resolve<EntitiesLifeContext>();
         }
 
+        public StateMachineBrain CreateMainHeroSelfControlShootBrain(Entity entity)
+        {
+            PlayerInputMovementState movementState = new PlayerInputMovementState(entity, _inputService);
+
+            AIStateMachine combatState = CreateInputRotateAttackStateMachine(entity);
+
+            ICompositeCondition fromMovementToCombatStateCondition = new CompositeCondition()
+                .Add(new FuncCondition(() => _inputService.MoveDirection == Vector3.zero));
+
+            ICompositeCondition fromCombatToMovementStateCondition = new CompositeCondition(LogicOperations.Or)
+                .Add(new FuncCondition(() => _inputService.MoveDirection != Vector3.zero));
+
+            AIStateMachine behavior = new AIStateMachine();
+
+            behavior.AddState(combatState);
+            behavior.AddState(movementState);
+
+            behavior.AddTransition(movementState, combatState, fromMovementToCombatStateCondition);
+            behavior.AddTransition(combatState, movementState, fromCombatToMovementStateCondition);
+
+            StateMachineBrain brain = new StateMachineBrain(behavior);
+            _brainsContext.SetFor(entity, brain);
+
+            return brain;
+
+        }
+
         public StateMachineBrain CreateMainHeroBrain(Entity entity, ITargetSelector targetSelector)
         {
             AIStateMachine combatState = CreateAutoAttackStateMachine(entity);
@@ -114,7 +141,7 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Features.AI
             EmptyState emptyState = new EmptyState();
 
             TimerService movementTimer = _timerServiceFactory.Create(2f);
-            disposables.Add(movementTimer); 
+            disposables.Add(movementTimer);
             disposables.Add(randomMovementState.Entered.Subscribe(movementTimer.Restart));
 
             TimerService idleTimer = _timerServiceFactory.Create(3f);
@@ -131,6 +158,40 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Features.AI
 
             stateMachine.AddTransition(randomMovementState, emptyState, movementTimerEndedCondition);
             stateMachine.AddTransition(emptyState, randomMovementState, idleTimerEndedCondition);
+
+            return stateMachine;
+        }
+
+        private AIStateMachine CreateInputRotateAttackStateMachine(Entity entity)
+        {
+            PlayerInputRotationState rotationState = new PlayerInputRotationState(entity, _inputService);
+
+            AttackTriggerState attackTriggerState = new AttackTriggerState(entity);
+
+            List<IDisposable> disposables = new();
+
+            bool needAttack = false;
+
+            disposables.Add(_inputService.Attacked.Subscribe(() => needAttack = true));
+
+            ICompositeCondition fromRotateToAttackCondition = new CompositeCondition()
+                .Add(entity.CanStartAttack)
+                .Add(new FuncCondition(() =>
+                {
+                    bool needAttackCashed = needAttack;
+                    needAttack = false;
+                    return needAttackCashed;
+                }));
+
+            ICondition fromAttackToRotateStateCondition = new FuncCondition(() => entity.InAttackProcess.Value == false);
+
+            AIStateMachine stateMachine = new AIStateMachine(disposables);
+
+            stateMachine.AddState(rotationState);
+            stateMachine.AddState(attackTriggerState);
+
+            stateMachine.AddTransition(rotationState, attackTriggerState, fromRotateToAttackCondition);
+            stateMachine.AddTransition(attackTriggerState, rotationState, fromAttackToRotateStateCondition);
 
             return stateMachine;
         }
