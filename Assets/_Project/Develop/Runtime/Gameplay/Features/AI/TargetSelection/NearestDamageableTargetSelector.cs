@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-namespace Assets._Project.Develop.Runtime.Gameplay.Features.AI.States
+namespace Assets._Project.Develop.Runtime.Gameplay.Features.AI.TargetSelection
 {
     public class NearestDamageableTargetSelector : ITargetSelector
     {
@@ -29,7 +29,7 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Features.AI.States
                     result = result && canApplyDamage.Evaluate();
                 }
 
-                result = result && (target != _source);
+                result = result && target != _source;
 
                 return result;
             });
