@@ -48,7 +48,12 @@ namespace Assets._Project.Develop.Runtime.Infrastracture.Gameplay.Infrastracture
 
             container.RegisterAsSingle(CreatePreparationTriggerService);
 
+            container.RegisterAsSingle(CreateMainHeroHolderService).NonLazy();
+
         }
+
+        private static MainHeroHolderService CreateMainHeroHolderService(DIContainer container)
+            => new MainHeroHolderService(container.Resolve<EntitiesLifeContext>());
 
         private static PreparationTriggerService CreatePreparationTriggerService(DIContainer container)
             => new PreparationTriggerService(container.Resolve<EntitiesFactory>(), container.Resolve<EntitiesLifeContext>());
