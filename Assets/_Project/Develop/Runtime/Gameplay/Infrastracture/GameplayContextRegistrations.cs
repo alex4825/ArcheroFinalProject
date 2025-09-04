@@ -7,6 +7,7 @@ using Assets._Project.Develop.Runtime.Gameplay.Features.Enemies;
 using Assets._Project.Develop.Runtime.Gameplay.Features.InputFeature;
 using Assets._Project.Develop.Runtime.Gameplay.Features.MainHero;
 using Assets._Project.Develop.Runtime.Gameplay.Features.StagesFeature;
+using Assets._Project.Develop.Runtime.Gameplay.States;
 using Assets._Project.Develop.Runtime.Infrastracture.DI;
 using Assets._Project.Develop.Runtime.Utilities.AssetsManagement;
 using Assets._Project.Develop.Runtime.Utilities.ConfigsManagement;
@@ -50,7 +51,11 @@ namespace Assets._Project.Develop.Runtime.Infrastracture.Gameplay.Infrastracture
 
             container.RegisterAsSingle(CreateMainHeroHolderService).NonLazy();
 
+            container.RegisterAsSingle(CreateGameplayStatesFactory);
         }
+
+        private static GameplayStatesFactory CreateGameplayStatesFactory(DIContainer container)
+            => new GameplayStatesFactory(container);
 
         private static MainHeroHolderService CreateMainHeroHolderService(DIContainer container)
             => new MainHeroHolderService(container.Resolve<EntitiesLifeContext>());

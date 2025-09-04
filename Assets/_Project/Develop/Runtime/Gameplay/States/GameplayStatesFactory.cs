@@ -9,7 +9,6 @@ using Assets._Project.Develop.Runtime.Utilities.Conditions;
 using Assets._Project.Develop.Runtime.Utilities.CoroutinesManagement;
 using Assets._Project.Develop.Runtime.Utilities.DataManagement.DataProviders;
 using Assets._Project.Develop.Runtime.Utilities.SceneManagement;
-using System;
 
 namespace Assets._Project.Develop.Runtime.Gameplay.States
 {
@@ -82,7 +81,8 @@ namespace Assets._Project.Develop.Runtime.Gameplay.States
             gameplayCycle.AddState(winState);
             gameplayCycle.AddState(defeatState);
 
-            gameplayCycle.AddTransition(coreLoopState, winState, coreLoopToDefeatStateCondition);
+            gameplayCycle.AddTransition(coreLoopState, winState, coreLoopToWinStateCondition);
+            gameplayCycle.AddTransition(coreLoopState, defeatState, coreLoopToDefeatStateCondition);
 
             return null;
         }
