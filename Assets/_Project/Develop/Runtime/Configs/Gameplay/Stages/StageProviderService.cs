@@ -8,10 +8,14 @@ namespace Assets._Project.Develop.Runtime.Configs.Gameplay.Stages
     public class StageProviderService : IDisposable
     {
         private ReactiveVariable<int> _currentStageNumber = new();
-        private LevelConfig  _levelConfig;
+        private ReactiveVariable<StageResults> _currentStageResult = new();
+
+        private LevelConfig _levelConfig;
         private StagesFactory _stagesFactory;
 
         private IStage _currentStage;
+
+        private IDisposable _stageEndedDisposable;
 
         public StageProviderService(LevelConfig levelConfig, StagesFactory stagesFactory)
         {
@@ -20,6 +24,7 @@ namespace Assets._Project.Develop.Runtime.Configs.Gameplay.Stages
         }
 
         public IReadonlyVariable<int> CurrentStageNumber => _currentStageNumber;
+        public IReadonlyVariable<StageResults> CurrentStageResult => _currentStageResult;
 
         public int StagesCount => _levelConfig.StageConfigs.Count;
 
@@ -34,12 +39,17 @@ namespace Assets._Project.Develop.Runtime.Configs.Gameplay.Stages
                 CleanupCurrent();
 
             _currentStageNumber.Value++;
+            _currentStageResult.Value = StageResults.Uncompleted;
 
             _currentStage = _stagesFactory.Create(_levelConfig.StageConfigs[_currentStageNumber.Value - 1]);
         }
 
-        public void StartCurrent() => _currentStage.Start();
-        
+        public void StartCurrent()
+        {
+            _stageEndedDisposable = _currentStage.Completed.Subscribe(OnStageCompleted);
+            _currentStage.Start();
+        }
+
         public void UpdateCurrent(float deltaTime) => _currentStage.Update(deltaTime);
 
         public void CleanupCurrent() => _currentStage.Cleanup();
@@ -47,6 +57,12 @@ namespace Assets._Project.Develop.Runtime.Configs.Gameplay.Stages
         public void Dispose()
         {
             _currentStage?.Dispose();
+            _stageEndedDisposable?.Dispose();
+        }
+
+        private void OnStageCompleted()
+        {
+            _currentStageResult.Value = StageResults.Completed;
         }
     }
 }
