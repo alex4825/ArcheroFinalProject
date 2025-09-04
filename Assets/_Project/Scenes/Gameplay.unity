@@ -453,7 +453,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _heroConfig: {fileID: 11400000, guid: 723e0e54b14122945802b7d6a8adfa29, type: 2}
-  _ghostConfig: {fileID: 11400000, guid: 6f48ae7642c684e44a05bc21e0d7045c, type: 2}
+  _stageConfig: {fileID: 11400000, guid: e768bab1614418449b5bb1831930dceb, type: 2}
 --- !u!4 &1969435118
 Transform:
   m_ObjectHideFlags: 0

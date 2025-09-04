@@ -4,6 +4,7 @@ using Assets._Project.Develop.Runtime.Gameplay.Features.AI;
 using Assets._Project.Develop.Runtime.Gameplay.Features.Enemies;
 using Assets._Project.Develop.Runtime.Gameplay.Features.InputFeature;
 using Assets._Project.Develop.Runtime.Gameplay.Features.MainHero;
+using Assets._Project.Develop.Runtime.Gameplay.Features.StagesFeature;
 using Assets._Project.Develop.Runtime.Infrastracture.DI;
 using Assets._Project.Develop.Runtime.Utilities.AssetsManagement;
 using UnityEngine;
@@ -33,7 +34,12 @@ namespace Assets._Project.Develop.Runtime.Infrastracture.Gameplay.Infrastracture
             container.RegisterAsSingle(CreateEnemiesFactory);
 
             container.RegisterAsSingle(CreateMainHeroFactory);
+
+            container.RegisterAsSingle(CreateStagesFactory);
         }
+
+        private static StagesFactory CreateStagesFactory(DIContainer container)
+            => new StagesFactory(container);
 
         private static EnemiesFactory CreateEnemiesFactory(DIContainer container)
             => new EnemiesFactory(container);
