@@ -1,3 +1,4 @@
+using Assets._Project.Develop.Runtime.Configs.Gameplay.Entities;
 using Assets._Project.Develop.Runtime.Gameplay.EntitiesCore;
 using Assets._Project.Develop.Runtime.Gameplay.Features.AI;
 using Assets._Project.Develop.Runtime.Gameplay.Features.AI.States;
@@ -14,6 +15,9 @@ namespace Assets._Project.Develop.Runtime.Gameplay
         private EntitiesFactory _entitiesFactory;
         private BrainsFactory _brainsFactory;
 
+        [SerializeField] private HeroConfig _heroConfig;
+        [SerializeField] private GhostConfig _ghostConfig;
+
         private bool _isRunning = false;
 
         private Entity _hero;
@@ -28,11 +32,11 @@ namespace Assets._Project.Develop.Runtime.Gameplay
 
         public void Run()
         {
-            _hero = _entitiesFactory.CreateHero(Vector3.zero);
+            _hero = _entitiesFactory.CreateHero(Vector3.zero, _heroConfig);
             _hero.AddCurrentTarget();
             _brainsFactory.CreateMainHeroBrain(_hero, new NearestDamageableTargetSelector(_hero));
 
-            _ghost = _entitiesFactory.CreateGhost(Vector3.zero + Vector3.forward * 5); 
+            _ghost = _entitiesFactory.CreateGhost(Vector3.zero + Vector3.forward * 5, _ghostConfig); 
 
             _isRunning = true;
         }
