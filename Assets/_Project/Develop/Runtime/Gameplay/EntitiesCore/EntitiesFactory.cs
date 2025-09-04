@@ -137,7 +137,7 @@ namespace Assets._Project.Develop.Runtime.Gameplay.EntitiesCore
                   .AddDeathProcessCurrentTime()
                   .AddTakeDamageRequest()
                   .AddTakeDamageEvent()
-                  .AddContactsDetectingMask(1 << LayerMask.NameToLayer("Characters"))
+                  .AddContactsDetectingMask(Layers.CharactersMask)
                   .AddContactCollidersBuffer(new Buffer<Collider>(64))
                   .AddContactEntitiesBuffer(new Buffer<Entity>(64))
                   .AddBodyContactDamage(new ReactiveVariable<float>(config.BodyContactDamage));
@@ -193,11 +193,11 @@ namespace Assets._Project.Develop.Runtime.Gameplay.EntitiesCore
                   .AddRotationDirection(new ReactiveVariable<Vector3>(direction))
                   .AddRotationSpeed(new ReactiveVariable<float>(9999))
                   .AddIsDead()
-                  .AddContactsDetectingMask(1 << LayerMask.NameToLayer("Characters"))
+                  .AddContactsDetectingMask(Layers.CharactersMask)
                   .AddContactCollidersBuffer(new Buffer<Collider>(64))
                   .AddContactEntitiesBuffer(new Buffer<Entity>(64))
                   .AddBodyContactDamage(new ReactiveVariable<float>(damage))
-                  .AddDeathMask(1 << LayerMask.NameToLayer("Characters"))
+                  .AddDeathMask(Layers.CharactersMask)
                   .AddIsTouchDeathMask();
 
             ICompositeCondition canMove = new CompositeCondition()
