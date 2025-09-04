@@ -4,6 +4,8 @@ using Assets._Project.Develop.Runtime.Gameplay.Features.AI;
 using Assets._Project.Develop.Runtime.Infrastracture.DI;
 using UnityEngine;
 using System;
+using Assets._Project.Develop.Runtime.Gameplay.Features.TeamsFeature;
+using Assets._Project.Develop.Runtime.Utilities.Reactive;
 
 namespace Assets._Project.Develop.Runtime.Gameplay.Features.Enemies
 {
@@ -22,7 +24,7 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Features.Enemies
             _entitiesLifeContext = container.Resolve<EntitiesLifeContext>();
         }
 
-        public Entity CreateGhost(Vector3 position, EntityConfig config)
+        public Entity Create(Vector3 position, EntityConfig config)
         {
             Entity entity;
 
@@ -36,6 +38,9 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Features.Enemies
                 default:
                     throw new ArgumentException($"Not support {config.GetType()} type config");
             }
+
+            entity
+                .AddTeam(new ReactiveVariable<Teams>(Teams.Enemies));
 
             _entitiesLifeContext.Add(entity);
 

@@ -42,7 +42,7 @@ namespace Assets._Project.Develop.Runtime.Gameplay
         {
             _hero = _mainHeroFactory.Create(Vector3.zero);
 
-            _ghost = _enemiesFactory.CreateGhost(Vector3.zero + Vector3.forward * 5, _ghostConfig); 
+            _ghost = _enemiesFactory.Create(Vector3.zero + Vector3.forward * 5, _ghostConfig); 
 
             _isRunning = true;
         }
