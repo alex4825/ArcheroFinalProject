@@ -74,7 +74,7 @@ namespace Assets._Project.Develop.Runtime.Infrastracture.Meta.Infrastracture
 
             if (Input.GetKeyDown(KeyCode.S))
             {
-                _coroutinesPerformer.StartPerform(_playerDataProvider.Save());
+                _coroutinesPerformer.StartPerform(_playerDataProvider.SaveAcync());
                 Debug.Log("Сохранение было вызвано");
             }
 

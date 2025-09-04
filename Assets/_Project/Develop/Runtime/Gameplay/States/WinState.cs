@@ -40,7 +40,7 @@ namespace Assets._Project.Develop.Runtime.Gameplay.States
 
             _levelsProgressionService.AddLevelToCompleted(_gameplayInputArgs.LevelNumber);
 
-            _playerDataProvider.Save();
+            _coroutinesPerformer.StartPerform(_playerDataProvider.SaveAcync());
         }
 
         public void Update(float deltaTime)
