@@ -84,7 +84,7 @@ namespace Assets._Project.Develop.Runtime.Gameplay.States
             gameplayCycle.AddTransition(coreLoopState, winState, coreLoopToWinStateCondition);
             gameplayCycle.AddTransition(coreLoopState, defeatState, coreLoopToDefeatStateCondition);
 
-            return null;
+            return gameplayCycle;
         }
 
         public GameplayStateMachine CreateCoreLoopState()

@@ -9,7 +9,7 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Features.StagesFeature
 {
     public class PreparationTriggerService
     {
-        private ReactiveVariable<bool> _hasMainHeroContact;
+        private ReactiveVariable<bool> _hasMainHeroContact = new();
 
         private EntitiesFactory _entitiesFactory;
         private EntitiesLifeContext _entitiesLifeContext;
