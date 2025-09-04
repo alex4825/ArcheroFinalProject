@@ -46,7 +46,12 @@ namespace Assets._Project.Develop.Runtime.Infrastracture.Gameplay.Infrastracture
 
             container.RegisterAsSingle(CreateStageProviderService);
 
+            container.RegisterAsSingle(CreatePreparationTriggerService);
+
         }
+
+        private static PreparationTriggerService CreatePreparationTriggerService(DIContainer container)
+            => new PreparationTriggerService(container.Resolve<EntitiesFactory>(), container.Resolve<EntitiesLifeContext>());
 
         private static StageProviderService CreateStageProviderService(DIContainer container)
             => new StageProviderService(

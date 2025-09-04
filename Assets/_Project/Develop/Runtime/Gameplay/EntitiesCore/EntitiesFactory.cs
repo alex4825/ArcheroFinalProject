@@ -116,7 +116,7 @@ namespace Assets._Project.Develop.Runtime.Gameplay.EntitiesCore
 
             return entity;
         }
-        
+
         public Entity CreateGhost(Vector3 position, GhostConfig config)
         {
             Entity entity = CreateEmpty();
@@ -177,7 +177,7 @@ namespace Assets._Project.Develop.Runtime.Gameplay.EntitiesCore
 
             return entity;
         }
-        
+
         public Entity CreateProjectile(Vector3 position, Vector3 direction, float damage, Entity owner)
         {
             Entity entity = CreateEmpty();
@@ -228,6 +228,24 @@ namespace Assets._Project.Develop.Runtime.Gameplay.EntitiesCore
                   .AddSystem(new DeathSystem())
                   .AddSystem(new DisableCollidersOnDeathSystem())
                   .AddSystem(new SelfReleaseSystem(_entitiesLifeContext));
+
+            _entitiesLifeContext.Add(entity);
+
+            return entity;
+        }
+
+        public Entity CreateContactTrigger(Vector3 position)
+        {
+            Entity entity = CreateEmpty();
+
+            _monoEntitiesFactory.Create(entity, position, "Entities/ContactTrigger");
+
+            entity.AddContactsDetectingMask(Layers.CharactersMask)
+                  .AddContactCollidersBuffer(new Buffer<Collider>(64))
+                  .AddContactEntitiesBuffer(new Buffer<Entity>(64));
+
+            entity.AddSystem(new BodyContactDetectingSystem())
+                  .AddSystem(new BodyContactsEntitiesFilterSystem(_collidersRegistryService));
 
             _entitiesLifeContext.Add(entity);
 
