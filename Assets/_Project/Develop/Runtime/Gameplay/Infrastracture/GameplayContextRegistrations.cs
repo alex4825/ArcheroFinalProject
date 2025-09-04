@@ -52,7 +52,12 @@ namespace Assets._Project.Develop.Runtime.Infrastracture.Gameplay.Infrastracture
             container.RegisterAsSingle(CreateMainHeroHolderService).NonLazy();
 
             container.RegisterAsSingle(CreateGameplayStatesFactory);
+
+            container.RegisterAsSingle(CreateGameplayStatesContext);
         }
+
+        private static GameplayStatesContext CreateGameplayStatesContext(DIContainer container)
+            => new GameplayStatesContext(container.Resolve<GameplayStatesFactory>().CreateGameplayStateMachine(_inputArgs));
 
         private static GameplayStatesFactory CreateGameplayStatesFactory(DIContainer container)
             => new GameplayStatesFactory(container);
