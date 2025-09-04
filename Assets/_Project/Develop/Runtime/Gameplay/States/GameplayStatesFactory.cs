@@ -1,5 +1,6 @@
 using Assets._Project.Develop.Runtime.Configs.Gameplay.Stages;
 using Assets._Project.Develop.Runtime.Gameplay.Features.InputFeature;
+using Assets._Project.Develop.Runtime.Gameplay.Features.MainHero;
 using Assets._Project.Develop.Runtime.Gameplay.Features.StagesFeature;
 using Assets._Project.Develop.Runtime.Infrastracture.DI;
 using Assets._Project.Develop.Runtime.Infrastracture.Gameplay.Infrastracture;
@@ -59,11 +60,29 @@ namespace Assets._Project.Develop.Runtime.Gameplay.States
 
             PreparationTriggerService preparationTriggerService = _container.Resolve<PreparationTriggerService>();
             StageProviderService stageProviderService = _container.Resolve<StageProviderService>();
+            MainHeroHolderService mainHeroHolderService = _container.Resolve<MainHeroHolderService>();
 
             ICompositeCondition coreLoopToWinStateCondition = new CompositeCondition()
                 .Add(new FuncCondition(() => preparationTriggerService.HasMainHeroContact.Value))
                 .Add(new FuncCondition(() => stageProviderService.CurrentStageResult.Value == StageResults.Completed))
                 .Add(new FuncCondition(() => stageProviderService.HasNextStage() == false));
+
+            ICompositeCondition coreLoopToDefeatStateCondition = new CompositeCondition()
+                .Add(new FuncCondition(() =>
+                {
+                    if (mainHeroHolderService.MainHero != null)
+                        return mainHeroHolderService.MainHero.IsDead.Value;
+
+                    return false;
+                }));
+
+            GameplayStateMachine gameplayCycle = new GameplayStateMachine();
+
+            gameplayCycle.AddState(coreLoopState);
+            gameplayCycle.AddState(winState);
+            gameplayCycle.AddState(defeatState);
+
+            gameplayCycle.AddTransition(coreLoopState, winState, coreLoopToDefeatStateCondition);
 
             return null;
         }
