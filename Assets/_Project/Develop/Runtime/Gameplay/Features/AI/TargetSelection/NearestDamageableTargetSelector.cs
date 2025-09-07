@@ -1,6 +1,8 @@
 ﻿using Assets._Project.Develop.Runtime.Gameplay.EntitiesCore;
 using Assets._Project.Develop.Runtime.Gameplay.Features.ApplyDamage;
+using Assets._Project.Develop.Runtime.Gameplay.Features.TeamsFeature;
 using Assets._Project.Develop.Runtime.Utilities.Conditions;
+using Assets._Project.Develop.Runtime.Utilities.Reactive;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -29,7 +31,13 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Features.AI.TargetSelection
                     result = result && canApplyDamage.Evaluate();
                 }
 
-                result = result && target != _source;
+                if(_source.TryGetTeam(out ReactiveVariable<Teams> sourceTeam)
+                && target.TryGetTeam(out ReactiveVariable<Teams> targetTeam))
+                {
+                    result = result && sourceTeam.Value != targetTeam.Value;
+                }
+
+                result = result && (target != _source);
 
                 return result;
             });

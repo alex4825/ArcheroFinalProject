@@ -42,10 +42,10 @@ namespace Assets._Project.Develop.Runtime.Infrastracture.EntryPoint
 
             bool isPlayerDataSaveExists = false;
 
-            yield return playerDataProvider.Exists(result => isPlayerDataSaveExists = result);
+            yield return playerDataProvider.ExistsAcync(result => isPlayerDataSaveExists = result);
 
             if (isPlayerDataSaveExists)
-                yield return playerDataProvider.Load();
+                yield return playerDataProvider.LoadAcync();
             else
                 playerDataProvider.Reset();
 
@@ -55,7 +55,7 @@ namespace Assets._Project.Develop.Runtime.Infrastracture.EntryPoint
 
             loadingScreen.Hide();
 
-            yield return sceneSwitcherService.ProcesSwitchTo(Scenes.Gameplay, new GameplayInputArgs(1));
+            yield return sceneSwitcherService.ProcesSwitchTo(Scenes.MainMenu);
 
         }
 
