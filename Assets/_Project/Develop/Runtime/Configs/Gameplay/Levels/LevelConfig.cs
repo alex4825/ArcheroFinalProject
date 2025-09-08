@@ -1,9 +1,6 @@
 ﻿using Assets._Project.Develop.Runtime.Configs.Gameplay.Stages;
-using System;
+using Assets._Project.Develop.Runtime.Gameplay.Environment;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
 
 namespace Assets._Project.Develop.Runtime.Configs.Gameplay.Levels
@@ -12,7 +9,12 @@ namespace Assets._Project.Develop.Runtime.Configs.Gameplay.Levels
     public class LevelConfig : ScriptableObject
     {
         [SerializeField] private List<StageConfig> _stageConfigs;
+        [SerializeField] private List<WaveConfig> _waveConfigs;
 
         public IReadOnlyList<StageConfig> StageConfigs => _stageConfigs;
+        public IReadOnlyList<WaveConfig> WaveConfigs => _waveConfigs;
+
+        [field: SerializeField] public int FortressHP { get; private set; } = 500;
+        [field: SerializeField] public LevelEnvironment LevelEnvironment { get; private set; }
     }
 }
