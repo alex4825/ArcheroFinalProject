@@ -11,6 +11,7 @@ using Assets._Project.Develop.Runtime.Utilities.DataManagement.DataProviders;
 using Assets._Project.Develop.Runtime.Utilities.DataManagement.DataRepository;
 using Assets._Project.Develop.Runtime.Utilities.DataManagement.KeysStorage;
 using Assets._Project.Develop.Runtime.Utilities.DataManagement.Serializers;
+using Assets._Project.Develop.Runtime.Utilities.DataManipulation;
 using Assets._Project.Develop.Runtime.Utilities.LoadingScreen;
 using Assets._Project.Develop.Runtime.Utilities.Reactive;
 using Assets._Project.Develop.Runtime.Utilities.SceneManagement;
@@ -52,7 +53,12 @@ namespace Assets._Project.Develop.Runtime.Infrastracture.EntryPoint
             container.RegisterAsSingle(CreateLevelsProgressionService).NonLazy();
 
             container.RegisterAsSingle(CreateTimerService);
+
+            container.RegisterAsSingle(CreateVictoryDefeatCounter).NonLazy();
         }
+
+        private static VictoryDefeatCounter CreateVictoryDefeatCounter(DIContainer container)
+            => new VictoryDefeatCounter(container.Resolve<PlayerDataProvider>());
 
         private static TimerServiceFactory CreateTimerService(DIContainer container)
             => new TimerServiceFactory(container);

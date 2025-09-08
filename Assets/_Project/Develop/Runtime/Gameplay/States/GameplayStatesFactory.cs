@@ -8,6 +8,7 @@ using Assets._Project.Develop.Runtime.Meta.Features.LevelsProgression;
 using Assets._Project.Develop.Runtime.Utilities.Conditions;
 using Assets._Project.Develop.Runtime.Utilities.CoroutinesManagement;
 using Assets._Project.Develop.Runtime.Utilities.DataManagement.DataProviders;
+using Assets._Project.Develop.Runtime.Utilities.DataManipulation;
 using Assets._Project.Develop.Runtime.Utilities.SceneManagement;
 
 namespace Assets._Project.Develop.Runtime.Gameplay.States
@@ -39,7 +40,8 @@ namespace Assets._Project.Develop.Runtime.Gameplay.States
                 gameplayInputArgs,
                 _container.Resolve<PlayerDataProvider>(),
                 _container.Resolve<SceneSwitcherService>(),
-                _container.Resolve<ICoroutinesPerformer>());
+                _container.Resolve<ICoroutinesPerformer>(),
+                _container.Resolve<VictoryDefeatCounter>());
         }
 
         public DefeatState CreateDefeatState()
@@ -47,7 +49,8 @@ namespace Assets._Project.Develop.Runtime.Gameplay.States
             return new DefeatState(
                 _container.Resolve<IInputService>(),
                 _container.Resolve<SceneSwitcherService>(),
-                _container.Resolve<ICoroutinesPerformer>());
+                _container.Resolve<ICoroutinesPerformer>(),
+                _container.Resolve<VictoryDefeatCounter>());
         }
 
         public GameplayStateMachine CreateGameplayStateMachine(GameplayInputArgs gameplayInputArgs)

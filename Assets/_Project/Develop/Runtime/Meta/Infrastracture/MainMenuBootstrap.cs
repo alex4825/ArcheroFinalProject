@@ -1,13 +1,9 @@
 ﻿using Assets._Project.Develop.Runtime.Infrastracture.DI;
 using Assets._Project.Develop.Runtime.Infrastracture.Gameplay.Infrastracture;
 using Assets._Project.Develop.Runtime.Infrastracture.Meta.Features.Wallet;
-using Assets._Project.Develop.Runtime.UI;
-using Assets._Project.Develop.Runtime.UI.CommonViews;
-using Assets._Project.Develop.Runtime.UI.Core;
-using Assets._Project.Develop.Runtime.UI.Wallet;
 using Assets._Project.Develop.Runtime.Utilities.CoroutinesManagement;
-using Assets._Project.Develop.Runtime.Utilities.DataManagement;
 using Assets._Project.Develop.Runtime.Utilities.DataManagement.DataProviders;
+using Assets._Project.Develop.Runtime.Utilities.DataManipulation;
 using Assets._Project.Develop.Runtime.Utilities.SceneManagement;
 using System.Collections;
 using UnityEngine;
@@ -77,8 +73,6 @@ namespace Assets._Project.Develop.Runtime.Infrastracture.Meta.Infrastracture
                 _coroutinesPerformer.StartPerform(_playerDataProvider.SaveAcync());
                 Debug.Log("Сохранение было вызвано");
             }
-
-
         }
     }
 }
