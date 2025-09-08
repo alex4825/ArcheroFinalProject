@@ -8,23 +8,25 @@ namespace Assets._Project.Develop.Runtime.UI.MainMenu
 {
     public class MainMenuScreenView : MonoBehaviour, IView
     {
-        public event Action OpenLevelsMenuButtonClicked;
+        public event Action PlayRandomLevelButtonClicked;
 
         [field: SerializeField] public IconTextListView WalletView { get; private set; }
+        [field: SerializeField] public IconTextView VictoryView { get; private set; }
+        [field: SerializeField] public IconTextView DefeatView { get; private set; }
 
-        [SerializeField] private Button _openLevelsMenuButton;
+        [SerializeField] private Button _playRandomLevelButton;
 
         private void OnEnable()
         {
-            _openLevelsMenuButton.onClick.AddListener(OnOpenLevelsMenuButtonClicked);
+            _playRandomLevelButton.onClick.AddListener(OnOpenLevelsMenuButtonClicked);
         }
 
         private void OnDisable()
         {
 
-            _openLevelsMenuButton.onClick.RemoveListener(OnOpenLevelsMenuButtonClicked);
+            _playRandomLevelButton.onClick.RemoveListener(OnOpenLevelsMenuButtonClicked);
         }
 
-        private void OnOpenLevelsMenuButtonClicked() => OpenLevelsMenuButtonClicked?.Invoke();
+        private void OnOpenLevelsMenuButtonClicked() => PlayRandomLevelButtonClicked?.Invoke();
     }
 }

@@ -1,6 +1,6 @@
 ﻿using Assets._Project.Develop.Runtime.UI.Core;
+using Assets._Project.Develop.Runtime.UI.Statistics;
 using Assets._Project.Develop.Runtime.UI.Wallet;
-using System;
 using System.Collections.Generic;
 
 namespace Assets._Project.Develop.Runtime.UI.MainMenu
@@ -11,22 +11,21 @@ namespace Assets._Project.Develop.Runtime.UI.MainMenu
 
         private readonly ProjectPresentersFactory _projectPresentersFactory;
 
-        private readonly MainMenuPopupService _popupService;
-
         private readonly List<IPresenter> _childPresenters = new();
 
-        public MainMenuScreenPresenter(MainMenuScreenView screen, ProjectPresentersFactory projectPresentersFactory, MainMenuPopupService popupService)
+        public MainMenuScreenPresenter(MainMenuScreenView screen, ProjectPresentersFactory projectPresentersFactory)
         {
             _screen = screen;
             _projectPresentersFactory = projectPresentersFactory;
-            _popupService = popupService;
         }
 
         public void Initialize()
         {
-            _screen.OpenLevelsMenuButtonClicked += OnOpenLevelsMenuButtonClicked;
+            _screen.PlayRandomLevelButtonClicked += OnPlayRandomLevelButtonClicked;
 
             CreateWallet();
+            CreateDefeatPresenter();
+            CreateVictoryPresenter();
 
             foreach (IPresenter childPresenter in _childPresenters)
                 childPresenter.Initialize();
@@ -34,7 +33,7 @@ namespace Assets._Project.Develop.Runtime.UI.MainMenu
 
         public void Dispose()
         {
-            _screen.OpenLevelsMenuButtonClicked -= OnOpenLevelsMenuButtonClicked;
+            _screen.PlayRandomLevelButtonClicked -= OnPlayRandomLevelButtonClicked;
 
             foreach (IPresenter childPresenter in _childPresenters)
                 childPresenter.Dispose();
@@ -45,13 +44,24 @@ namespace Assets._Project.Develop.Runtime.UI.MainMenu
         private void CreateWallet()
         {
             WalletPresenter walletPresenter = _projectPresentersFactory.CreateWalletPresenter(_screen.WalletView);
-
             _childPresenters.Add(walletPresenter);
         }
 
-        private void OnOpenLevelsMenuButtonClicked()
+        private void CreateDefeatPresenter()
         {
-            _popupService.OpenLevelsMenuPopup();
+            DefeatPresenter defeatPresenter = _projectPresentersFactory.CreateDefeatPresenter(_screen.DefeatView);
+            _childPresenters.Add(defeatPresenter);
+        }
+
+        private void CreateVictoryPresenter()
+        {
+            VictoryPresenter victoryPresenter = _projectPresentersFactory.CreateVictoryPresenter(_screen.VictoryView);
+            _childPresenters.Add(victoryPresenter);
+        }
+
+        private void OnPlayRandomLevelButtonClicked()
+        {
+            //_popupService.OpenLevelsMenuPopup();
         }
     }
 }

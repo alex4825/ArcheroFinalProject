@@ -6,9 +6,11 @@ using Assets._Project.Develop.Runtime.UI.CommonViews;
 using Assets._Project.Develop.Runtime.UI.Core;
 using Assets._Project.Develop.Runtime.UI.Core.TestPopup;
 using Assets._Project.Develop.Runtime.UI.LevelsMenuPopup;
+using Assets._Project.Develop.Runtime.UI.Statistics;
 using Assets._Project.Develop.Runtime.UI.Wallet;
 using Assets._Project.Develop.Runtime.Utilities.ConfigsManagement;
 using Assets._Project.Develop.Runtime.Utilities.CoroutinesManagement;
+using Assets._Project.Develop.Runtime.Utilities.DataManipulation;
 using Assets._Project.Develop.Runtime.Utilities.Reactive;
 using Assets._Project.Develop.Runtime.Utilities.SceneManagement;
 
@@ -65,6 +67,16 @@ namespace Assets._Project.Develop.Runtime.UI
         public WalletPresenter CreateWalletPresenter(IconTextListView view)
         {
             return new WalletPresenter(_container.Resolve<WalletService>(), this, _container.Resolve<ViewsFactory>(), view);
+        }
+
+        public VictoryPresenter CreateVictoryPresenter(IconTextView victoryView)
+        {
+            return new VictoryPresenter(_container.Resolve<VictoryDefeatCounter>(), victoryView);
+        }
+
+        public DefeatPresenter CreateDefeatPresenter(IconTextView defeatView)
+        {
+            return new DefeatPresenter(_container.Resolve<VictoryDefeatCounter>(), defeatView);
         }
     }
 }
