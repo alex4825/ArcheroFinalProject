@@ -1,22 +1,36 @@
-﻿using Assets._Project.Develop.Runtime.UI.Core;
+﻿using Assets._Project.Develop.Runtime.Infrastracture.Gameplay.Infrastracture;
+using Assets._Project.Develop.Runtime.UI.Core;
 using Assets._Project.Develop.Runtime.UI.Statistics;
 using Assets._Project.Develop.Runtime.UI.Wallet;
+using Assets._Project.Develop.Runtime.Utilities.CoroutinesManagement;
+using Assets._Project.Develop.Runtime.Utilities.SceneManagement;
 using System.Collections.Generic;
+using UnityEngine;
 
 namespace Assets._Project.Develop.Runtime.UI.MainMenu
 {
     public class MainMenuScreenPresenter : IPresenter
     {
         private readonly MainMenuScreenView _screen;
-
         private readonly ProjectPresentersFactory _projectPresentersFactory;
+        private readonly SceneSwitcherService _sceneSwitcherService;
+        private readonly ICoroutinesPerformer _coroutinesPerformer;
+        private int _levelsCount;
 
         private readonly List<IPresenter> _childPresenters = new();
 
-        public MainMenuScreenPresenter(MainMenuScreenView screen, ProjectPresentersFactory projectPresentersFactory)
+        public MainMenuScreenPresenter(
+            MainMenuScreenView screen,
+            ProjectPresentersFactory projectPresentersFactory,
+            SceneSwitcherService sceneSwitcherService,
+            ICoroutinesPerformer coroutinesPerformer,
+            int levelsCount)
         {
             _screen = screen;
             _projectPresentersFactory = projectPresentersFactory;
+            _sceneSwitcherService = sceneSwitcherService;
+            _coroutinesPerformer = coroutinesPerformer;
+            _levelsCount = levelsCount;
         }
 
         public void Initialize()
@@ -61,7 +75,10 @@ namespace Assets._Project.Develop.Runtime.UI.MainMenu
 
         private void OnPlayRandomLevelButtonClicked()
         {
-            //_popupService.OpenLevelsMenuPopup();
+            _coroutinesPerformer.StartPerform(
+                _sceneSwitcherService.ProcesSwitchTo
+                (Scenes.Gameplay,
+                new GameplayInputArgs(Random.Range(1, _levelsCount + 1))));
         }
     }
 }

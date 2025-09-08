@@ -28,12 +28,13 @@ namespace Assets._Project.Develop.Runtime.Infrastracture.Gameplay.Infrastracture
         {
             _container = container;
 
-            if (sceneArgs is not GameplayInputArgs gameplayInputArgs)
+            if (sceneArgs is GameplayInputArgs gameplayInputArgs)
+                _inputArgs = gameplayInputArgs;
+            else if (sceneArgs != null)
                 throw new ArgumentException($"{nameof(sceneArgs)} is not match with {typeof(GameplayInputArgs)} type");
 
-            _inputArgs = gameplayInputArgs;
 
-            GameplayContextRegistrations.Process(_container, gameplayInputArgs);
+            GameplayContextRegistrations.Process(_container, _inputArgs);
         }
 
         public override IEnumerator Initialize()
