@@ -13,6 +13,7 @@ using Assets._Project.Develop.Runtime.Gameplay.Features.Attack;
 using Assets._Project.Develop.Runtime.Gameplay.Features.Attack.Shoot;
 using Assets._Project.Develop.Runtime.Configs.Gameplay.Entities;
 using Assets._Project.Develop.Runtime.Gameplay.Features.TeamsFeature;
+using Assets._Project.Develop.Runtime.Gameplay.Features.CurrencyFeature;
 
 namespace Assets._Project.Develop.Runtime.Gameplay.EntitiesCore
 {

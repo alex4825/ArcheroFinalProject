@@ -2,6 +2,7 @@ using Assets._Project.Develop.Runtime.Configs.Gameplay.Entities;
 using Assets._Project.Develop.Runtime.Gameplay.EntitiesCore;
 using Assets._Project.Develop.Runtime.Gameplay.Features.AI;
 using Assets._Project.Develop.Runtime.Gameplay.Features.AI.States;
+using Assets._Project.Develop.Runtime.Gameplay.Features.AI.TargetSelection;
 using Assets._Project.Develop.Runtime.Gameplay.Features.TeamsFeature;
 using Assets._Project.Develop.Runtime.Infrastracture.DI;
 using Assets._Project.Develop.Runtime.Utilities.ConfigsManagement;
@@ -35,7 +36,7 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Features.MainHero
             Entity entity = _entitiesFactory.CreateHero(position, config);
 
             entity
-                .AddIsMainHero()
+                //.AddIsMainHero()
                 .AddTeam(new ReactiveVariable<Teams>(Teams.MainHero));
 
             entity.AddCurrentTarget();
