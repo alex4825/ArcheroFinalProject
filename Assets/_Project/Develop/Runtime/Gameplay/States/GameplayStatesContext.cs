@@ -1,8 +1,9 @@
+using Assets._Project.Develop.Runtime.Infrastracture.DI;
 using System;
 
 namespace Assets._Project.Develop.Runtime.Gameplay.States
 {
-    public class GameplayStatesContext: IDisposable
+    public class GameplayStatesContext: IDisposable, IUpdatable
     {
         private GameplayStateMachine _gameplayStateMachine;
 

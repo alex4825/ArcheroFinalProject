@@ -32,12 +32,10 @@ namespace Assets._Project.Develop.Runtime.Gameplay.States
             return new StageProcessState(_container.Resolve<StageProviderService>());
         }
 
-        public WinState CreateWinState(GameplayInputArgs gameplayInputArgs)
+        public WinState CreateWinState()
         {
             return new WinState(
                 _container.Resolve<IInputService>(),
-                _container.Resolve<LevelsProgressionService>(),
-                gameplayInputArgs,
                 _container.Resolve<PlayerDataProvider>(),
                 _container.Resolve<SceneSwitcherService>(),
                 _container.Resolve<ICoroutinesPerformer>(),
@@ -53,12 +51,12 @@ namespace Assets._Project.Develop.Runtime.Gameplay.States
                 _container.Resolve<VictoryDefeatCounter>());
         }
 
-        public GameplayStateMachine CreateGameplayStateMachine(GameplayInputArgs gameplayInputArgs)
+        public GameplayStateMachine CreateGameplayStateMachine()
         {
             GameplayStateMachine coreLoopState = CreateCoreLoopState();
 
             DefeatState defeatState = CreateDefeatState();
-            WinState winState = CreateWinState(gameplayInputArgs);
+            WinState winState = CreateWinState();
 
             PreparationTriggerService preparationTriggerService = _container.Resolve<PreparationTriggerService>();
             StageProviderService stageProviderService = _container.Resolve<StageProviderService>();
