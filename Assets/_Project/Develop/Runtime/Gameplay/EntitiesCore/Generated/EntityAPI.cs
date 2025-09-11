@@ -1369,6 +1369,25 @@ namespace Assets._Project.Develop.Runtime.Gameplay.EntitiesCore
 			return AddComponent(new Assets._Project.Develop.Runtime.Gameplay.Common.TransformComponent() {Value = value}); 
 		}
 
+		public Assets._Project.Develop.Runtime.Gameplay.Common.GameObjectComponent GameObjectC => GetComponent<Assets._Project.Develop.Runtime.Gameplay.Common.GameObjectComponent>();
+
+		public UnityEngine.GameObject GameObject => GameObjectC.Value;
+
+		public bool TryGetGameObject(out UnityEngine.GameObject value)
+		{
+			bool result = TryGetComponent(out Assets._Project.Develop.Runtime.Gameplay.Common.GameObjectComponent component);
+			if(result)
+				value = component.Value;
+			else
+				value = default(UnityEngine.GameObject);
+			return result;
+		}
+
+		public Assets._Project.Develop.Runtime.Gameplay.EntitiesCore.Entity AddGameObject(UnityEngine.GameObject value)
+		{
+			return AddComponent(new Assets._Project.Develop.Runtime.Gameplay.Common.GameObjectComponent() {Value = value}); 
+		}
+
 		public Assets._Project.Develop.Runtime.Gameplay.Common.NavMeshAgentComponent NavMeshAgentC => GetComponent<Assets._Project.Develop.Runtime.Gameplay.Common.NavMeshAgentComponent>();
 
 		public UnityEngine.AI.NavMeshAgent NavMeshAgent => NavMeshAgentC.Value;

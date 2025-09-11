@@ -14,6 +14,11 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Common
         public Transform Value;
     }
 
+    public class GameObjectComponent : IEntityComponent
+    {
+        public GameObject Value;
+    }
+
     public class NavMeshAgentComponent : IEntityComponent
     {
         public NavMeshAgent Value;
