@@ -9,6 +9,7 @@ using Assets._Project.Develop.Runtime.Gameplay.Features.InputFeature;
 using Assets._Project.Develop.Runtime.Gameplay.Features.MainHero;
 using Assets._Project.Develop.Runtime.Gameplay.Features.StagesFeature;
 using Assets._Project.Develop.Runtime.Gameplay.States;
+using Assets._Project.Develop.Runtime.Gameplay.Waves;
 using Assets._Project.Develop.Runtime.Infrastracture.DI;
 using Assets._Project.Develop.Runtime.Utilities.AssetsManagement;
 using Assets._Project.Develop.Runtime.Utilities.ConfigsManagement;
@@ -57,15 +58,23 @@ namespace Assets._Project.Develop.Runtime.Infrastracture.Gameplay.Infrastracture
             container.RegisterAsSingle(CreateGameplayStatesContext);
 
             container.RegisterAsSingle(CreateFortressHolderService).NonLazy();
+
+            container.RegisterAsSingle(CreateGameplayWaveContext);
         }
+
+        private static GameplayWaveContext CreateGameplayWaveContext(DIContainer container)
+            => new GameplayWaveContext();
+
         private static FortressHolderService CreateFortressHolderService(DIContainer container)
             => new FortressHolderService(container.Resolve<EntitiesLifeContext>());
 
         private static GameplayStatesContext CreateGameplayStatesContext(DIContainer container)
-            => new GameplayStatesContext(container.Resolve<GameplayStatesFactory>().CreateGameplayStateMachine(/*_inputArgs*/));
+            => new GameplayStatesContext(container.Resolve<GameplayStatesFactory>().CreateGameplayStateMachine());
 
         private static GameplayStatesFactory CreateGameplayStatesFactory(DIContainer container)
-            => new GameplayStatesFactory(container);
+            => new GameplayStatesFactory(
+                container, 
+                container.Resolve<ConfigsProviderService>().GetConfig<LevelsListConfig>().GetBy(_inputArgs.LevelNumber));
 
         private static MainHeroHolderService CreateMainHeroHolderService(DIContainer container)
             => new MainHeroHolderService(container.Resolve<EntitiesLifeContext>());

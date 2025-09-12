@@ -26,7 +26,7 @@ namespace Assets._Project.Develop.Runtime.Configs.Gameplay.Stages
         public IReadonlyVariable<int> CurrentStageNumber => _currentStageNumber;
         public IReadonlyVariable<StageResults> CurrentStageResult => _currentStageResult;
 
-        public int StagesCount => _levelConfig.StageConfigs.Count;
+        public int StagesCount => 1;//_levelConfig.StageConfigs.Count;
 
         public bool HasNextStage() => _currentStageNumber.Value < StagesCount;
 
@@ -41,7 +41,7 @@ namespace Assets._Project.Develop.Runtime.Configs.Gameplay.Stages
             _currentStageNumber.Value++;
             _currentStageResult.Value = StageResults.Uncompleted;
 
-            _currentStage = _stagesFactory.Create(_levelConfig.StageConfigs[_currentStageNumber.Value - 1]);
+            //_currentStage = _stagesFactory.Create(_levelConfig.StageConfigs[_currentStageNumber.Value - 1]);
         }
 
         public void StartCurrent()

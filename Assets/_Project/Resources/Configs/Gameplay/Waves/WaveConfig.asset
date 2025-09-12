@@ -12,8 +12,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 23805ed16d1e89e4e98cb9f2fdf67726, type: 3}
   m_Name: WaveConfig
   m_EditorClassIdentifier: 
-  _enemyConfigsToCount:
-  - <Key>k__BackingField: {fileID: 0}
-    <Value>k__BackingField: 0
-  - <Key>k__BackingField: {fileID: 0}
-    <Value>k__BackingField: 0
+  _enemyConfigs:
+  - {fileID: 11400000, guid: 6f48ae7642c684e44a05bc21e0d7045c, type: 2}
+  - {fileID: 11400000, guid: 6f48ae7642c684e44a05bc21e0d7045c, type: 2}
+  - {fileID: 11400000, guid: 6f48ae7642c684e44a05bc21e0d7045c, type: 2}
+  - {fileID: 11400000, guid: 6f48ae7642c684e44a05bc21e0d7045c, type: 2}
+  - {fileID: 11400000, guid: 6f48ae7642c684e44a05bc21e0d7045c, type: 2}
+  <EnemiesGenerationMode>k__BackingField: 0
+  <MinSpawnDelayTime>k__BackingField: 2
+  <MaxSpawnDelayTime>k__BackingField: 3
+  <MinSpawnRadius>k__BackingField: 15
+  <MaxSpawnRadius>k__BackingField: 18

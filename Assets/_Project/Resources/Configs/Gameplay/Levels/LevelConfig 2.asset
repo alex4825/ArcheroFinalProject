@@ -12,11 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eed67a809b088034fbb7390be92f750a, type: 3}
   m_Name: LevelConfig 2
   m_EditorClassIdentifier: 
-  _stageConfigs:
-  - {fileID: 11400000, guid: e768bab1614418449b5bb1831930dceb, type: 2}
-  - {fileID: 11400000, guid: e768bab1614418449b5bb1831930dceb, type: 2}
-  - {fileID: 11400000, guid: e768bab1614418449b5bb1831930dceb, type: 2}
-  _waveConfigs: []
+  _waveConfigs:
+  - {fileID: 11400000, guid: e81f08fe46bb6964695af242cf03dea0, type: 2}
+  - {fileID: 11400000, guid: e81f08fe46bb6964695af242cf03dea0, type: 2}
+  - {fileID: 11400000, guid: e81f08fe46bb6964695af242cf03dea0, type: 2}
+  <DelayBetweenWaves>k__BackingField: 5
   <FortressHP>k__BackingField: 500
   <LevelEnvironment>k__BackingField: {fileID: 124691657050534622, guid: 81b845120b2227341963483930779e2b,
     type: 3}
