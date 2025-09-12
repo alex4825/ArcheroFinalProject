@@ -16,3 +16,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: e768bab1614418449b5bb1831930dceb, type: 2}
   - {fileID: 11400000, guid: e768bab1614418449b5bb1831930dceb, type: 2}
   - {fileID: 11400000, guid: e768bab1614418449b5bb1831930dceb, type: 2}
+  _waveConfigs: []
+  <FortressHP>k__BackingField: 500
+  <LevelEnvironment>k__BackingField: {fileID: 124691657050534622, guid: 81b845120b2227341963483930779e2b,
+    type: 3}

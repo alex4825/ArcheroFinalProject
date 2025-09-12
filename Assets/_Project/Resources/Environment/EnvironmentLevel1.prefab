@@ -184,6 +184,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6415936448752834ea763e6da15fa111, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  <Fortress>k__BackingField: {fileID: 969602670953644814}
   <FortressCollider>k__BackingField: {fileID: 3349686284531101103}
 --- !u!1001 &8961021022470383543
 PrefabInstance:
@@ -253,6 +254,18 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d56a39f1a4a45294bacb70ec83e13baa, type: 3}
+--- !u!114 &969602670953644814 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8155818098978579641, guid: d56a39f1a4a45294bacb70ec83e13baa,
+    type: 3}
+  m_PrefabInstance: {fileID: 8961021022470383543}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe733e7e8918ac942a54d94b5edbbb91, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!136 &3349686284531101103 stripped
 CapsuleCollider:
   m_CorrespondingSourceObject: {fileID: 5919850635819141656, guid: d56a39f1a4a45294bacb70ec83e13baa,

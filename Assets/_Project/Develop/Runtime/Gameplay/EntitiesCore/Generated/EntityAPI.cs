@@ -1331,6 +1331,13 @@ namespace Assets._Project.Develop.Runtime.Gameplay.EntitiesCore
 			return AddComponent(new Assets._Project.Develop.Runtime.Gameplay.Features.AI.CurrentTarget() {Value = value}); 
 		}
 
+		public Assets._Project.Develop.Runtime.Gameplay.Environment.IsFortress IsFortressC => GetComponent<Assets._Project.Develop.Runtime.Gameplay.Environment.IsFortress>();
+
+		public Assets._Project.Develop.Runtime.Gameplay.EntitiesCore.Entity AddIsFortress()
+		{
+			return AddComponent(new Assets._Project.Develop.Runtime.Gameplay.Environment.IsFortress() ); 
+		}
+
 		public Assets._Project.Develop.Runtime.Gameplay.Common.RigidbodyComponent RigidbodyC => GetComponent<Assets._Project.Develop.Runtime.Gameplay.Common.RigidbodyComponent>();
 
 		public UnityEngine.Rigidbody Rigidbody => RigidbodyC.Value;

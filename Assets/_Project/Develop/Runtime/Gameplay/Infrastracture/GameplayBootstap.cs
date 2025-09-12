@@ -10,6 +10,9 @@ using Assets._Project.Develop.Runtime.Gameplay.EntitiesCore;
 using Assets._Project.Develop.Runtime.Gameplay.Features.AI;
 using Assets._Project.Develop.Runtime.Gameplay.States;
 using Assets._Project.Develop.Runtime.Gameplay.Features.MainHero;
+using Assets._Project.Develop.Runtime.Configs.Gameplay.Levels;
+using Assets._Project.Develop.Runtime.Utilities.ConfigsManagement;
+using Assets._Project.Develop.Runtime.Gameplay.Environment;
 
 namespace Assets._Project.Develop.Runtime.Infrastracture.Gameplay.Infrastracture
 {
@@ -49,7 +52,8 @@ namespace Assets._Project.Develop.Runtime.Infrastracture.Gameplay.Infrastracture
             _brainsContext = _container.Resolve<AIBrainsContext>();
             _gameplayStatesContext = _container.Resolve<GameplayStatesContext>();
 
-            _container.Resolve<MainHeroFactory>().Create(Vector3.zero);
+            //_container.Resolve<MainHeroFactory>().Create(Vector3.zero);
+            CreateEnvironment();
 
             yield break;
         }
@@ -72,6 +76,14 @@ namespace Assets._Project.Develop.Runtime.Infrastracture.Gameplay.Infrastracture
 
                 coroutinesPerformer.StartPerform(sceneSwitcherService.ProcesSwitchTo(Scenes.MainMenu));
             }
+        }
+
+        private void CreateEnvironment()
+        {
+            LevelConfig currentLevel = _container.Resolve<ConfigsProviderService>().GetConfig<LevelsListConfig>().GetBy(_inputArgs.LevelNumber);
+            LevelEnvironment levelEnvironment = Instantiate(currentLevel.LevelEnvironment);
+
+            _container.Resolve<EntitiesFactory>().CreateFortress(levelEnvironment.Fortress);
         }
     }
 }

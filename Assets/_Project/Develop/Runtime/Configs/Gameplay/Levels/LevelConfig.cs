@@ -16,5 +16,6 @@ namespace Assets._Project.Develop.Runtime.Configs.Gameplay.Levels
 
         [field: SerializeField] public int FortressHP { get; private set; } = 500;
         [field: SerializeField] public LevelEnvironment LevelEnvironment { get; private set; }
+        public Vector3 FortressPosition => LevelEnvironment.Fortress.transform.position;
     }
 }

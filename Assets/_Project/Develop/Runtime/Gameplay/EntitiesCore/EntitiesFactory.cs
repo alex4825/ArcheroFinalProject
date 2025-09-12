@@ -310,6 +310,49 @@ namespace Assets._Project.Develop.Runtime.Gameplay.EntitiesCore
             return entity;
         }
 
+        public Entity CreateFortress(MonoEntity fortress)
+        {
+            Entity entity = CreateEmpty();
+
+            _monoEntitiesFactory.AddExisting(entity, fortress);
+
+            entity.AddIsFortress()
+                  .AddMaxHealth(new ReactiveVariable<float>(400))
+                  .AddCurrentHealth(new ReactiveVariable<float>(400))
+                  .AddIsDead()
+                  .AddInDeadProcess()
+                  .AddDeathProcessInitialTime(new ReactiveVariable<float>(2))
+                  .AddDeathProcessCurrentTime()
+                  .AddDisableCollidersOnDeath()
+                  .AddTakeDamageRequest()
+                  .AddTakeDamageEvent();
+
+            ICompositeCondition mustDie = new CompositeCondition()
+                .Add(new FuncCondition(() => entity.CurrentHealth.Value <= 0));
+
+            ICompositeCondition mustSelfRelease = new CompositeCondition()
+                .Add(new FuncCondition(() => entity.IsDead.Value))
+                .Add(new FuncCondition(() => entity.InDeadProcess.Value == false));
+
+            ICompositeCondition canApplyDamage = new CompositeCondition()
+                .Add(new FuncCondition(() => entity.IsDead.Value == false));
+
+            entity
+                .AddMustDie(mustDie)
+                .AddMustSelfRelease(mustSelfRelease)
+                .AddCanApplyDamage(canApplyDamage);
+
+            entity.AddSystem(new ApplyDamageSystem())
+                  .AddSystem(new DeathSystem())
+                  .AddSystem(new DisableCollidersOnDeathSystem())
+                  .AddSystem(new DeathProcessTimerSystem())
+                  .AddSystem(new SelfReleaseSystem(_entitiesLifeContext));
+
+            _entitiesLifeContext.Add(entity);
+
+            return entity;
+        }
+
         public Entity CreateContactTrigger(Vector3 position)
         {
             Entity entity = CreateEmpty();

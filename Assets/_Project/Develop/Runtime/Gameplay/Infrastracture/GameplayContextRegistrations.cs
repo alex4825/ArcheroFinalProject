@@ -2,6 +2,7 @@
 using Assets._Project.Develop.Runtime.Configs.Gameplay.Stages;
 using Assets._Project.Develop.Runtime.Gameplay.EntitiesCore;
 using Assets._Project.Develop.Runtime.Gameplay.EntitiesCore.Mono;
+using Assets._Project.Develop.Runtime.Gameplay.Environment;
 using Assets._Project.Develop.Runtime.Gameplay.Features.AI;
 using Assets._Project.Develop.Runtime.Gameplay.Features.Enemies;
 using Assets._Project.Develop.Runtime.Gameplay.Features.InputFeature;
@@ -54,10 +55,14 @@ namespace Assets._Project.Develop.Runtime.Infrastracture.Gameplay.Infrastracture
             container.RegisterAsSingle(CreateGameplayStatesFactory);
 
             container.RegisterAsSingle(CreateGameplayStatesContext);
+
+            container.RegisterAsSingle(CreateFortressHolderService).NonLazy();
         }
+        private static FortressHolderService CreateFortressHolderService(DIContainer container)
+            => new FortressHolderService(container.Resolve<EntitiesLifeContext>());
 
         private static GameplayStatesContext CreateGameplayStatesContext(DIContainer container)
-            => new GameplayStatesContext(container.Resolve<GameplayStatesFactory>().CreateGameplayStateMachine(_inputArgs));
+            => new GameplayStatesContext(container.Resolve<GameplayStatesFactory>().CreateGameplayStateMachine(/*_inputArgs*/));
 
         private static GameplayStatesFactory CreateGameplayStatesFactory(DIContainer container)
             => new GameplayStatesFactory(container);

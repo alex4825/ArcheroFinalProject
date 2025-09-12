@@ -39,6 +39,15 @@ namespace Assets._Project.Develop.Runtime.Gameplay.EntitiesCore.Mono
             return viewInstance;
         }
 
+        public void AddExisting(Entity entity, MonoEntity monoEntity)
+        {
+            monoEntity.Initialize(_collidersRegistryService);
+
+            monoEntity.Link(entity);
+
+            _entityToMono.Add(entity, monoEntity);
+        }
+
         public void Initialize()
         {
             _entitiesLifeContext.Released += OnEntityReleased;
