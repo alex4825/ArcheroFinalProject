@@ -13,7 +13,7 @@ namespace Assets._Project.Develop.Runtime.Gameplay.States
         public override void Enter()
         {
             base.Enter();
-            Debug.Log("Вход в состояние расстановки мин");
+            Debug.Log("Расстановка мин: ВХОД");
         }
 
         public void Update(float deltaTime)
@@ -24,6 +24,7 @@ namespace Assets._Project.Develop.Runtime.Gameplay.States
         public override void Exit()
         {
             base.Exit();
+            Debug.Log("Расстановка мин: ВЫХОД");
 
         }
     }

@@ -80,7 +80,7 @@ namespace Assets._Project.Develop.Runtime.Gameplay.States
                     return false;
                 }));
 
-            GameplayStateMachine gameplayCycle = new GameplayStateMachine();
+            GameplayStateMachine gameplayCycle = new GameplayStateMachine(new List<IDisposable> { coreLoopState });
 
             gameplayCycle.AddState(coreLoopState);
             gameplayCycle.AddState(winState);
@@ -100,23 +100,27 @@ namespace Assets._Project.Develop.Runtime.Gameplay.States
 
             PlacementMinesState placementMinesState = new PlacementMinesState();
 
-            GameplayStateMachine waveCycleState = CreateWaveCycleState();
-            disposables.Add(waveCycleState);
-
-            disposables.Add(startDelayTimer);
-            disposables.Add(placementMinesState.Entered.Subscribe(startDelayTimer.Restart));
+            GameplayParallelState waveCycleState = CreateWaveCycleState();
 
             bool isWaveWin = false;
+
+            disposables.Add(startDelayTimer);
+
+            disposables.Add(placementMinesState.Entered.Subscribe(() => startDelayTimer.Restart()));
+
+            disposables.Add(waveCycleState.Entered.Subscribe(() => isWaveWin = false));
+
             disposables.Add(_gameplayWaveContext.CurrentWaveEnded.Subscribe((waveResult) => isWaveWin = waveResult.IsWin));
 
-            FuncCondition placementMinesToWaveCycleCondition = new FuncCondition(() => startDelayTimer.IsOver);
+            _gameplayWaveContext.CurrentWaveEnded.Subscribe((waveResult) => isWaveWin = waveResult.IsWin);
 
+            FuncCondition placementMinesToWaveCycleCondition = new FuncCondition(() => startDelayTimer.IsOver);
             FuncCondition waveCycleToPlacementMinesCondition = new FuncCondition(() => isWaveWin);
 
             GameplayStateMachine coreLoopState = new GameplayStateMachine(disposables);
 
-            coreLoopState.AddState(placementMinesState);
             coreLoopState.AddState(waveCycleState);
+            coreLoopState.AddState(placementMinesState);
 
             coreLoopState.AddTransition(placementMinesState, waveCycleState, placementMinesToWaveCycleCondition);
             coreLoopState.AddTransition(waveCycleState, placementMinesState, waveCycleToPlacementMinesCondition);
@@ -124,7 +128,7 @@ namespace Assets._Project.Develop.Runtime.Gameplay.States
             return coreLoopState;
         }
 
-        private GameplayStateMachine CreateWaveCycleState()
+        private GameplayParallelState CreateWaveCycleState()
         {
             List<IDisposable> disposables = new List<IDisposable>();
 
@@ -141,7 +145,7 @@ namespace Assets._Project.Develop.Runtime.Gameplay.States
 
             disposables.Add(waitingForExplodePointState.PointFound.Subscribe(point =>
             {
-                needExplode = true; 
+                needExplode = true;
                 explodePoint = point;
             }));
 
@@ -153,7 +157,7 @@ namespace Assets._Project.Develop.Runtime.Gameplay.States
                 Layers.CharactersMask
                 );
 
-            GameplayStateMachine explodeBehavior = new GameplayStateMachine();
+            GameplayStateMachine explodeBehavior = new GameplayStateMachine(disposables);
 
             explodeBehavior.AddState(waitingForExplodePointState);
             explodeBehavior.AddState(explodeState);
@@ -165,11 +169,7 @@ namespace Assets._Project.Develop.Runtime.Gameplay.States
                 return true;
             }));
 
-            GameplayStateMachine waveCycleState = new GameplayStateMachine(disposables);
-
-            waveCycleState.AddState(new GameplayParallelState(waveGenerationState, explodeBehavior));
-
-            return waveCycleState;
+            return new GameplayParallelState(waveGenerationState, explodeBehavior);
         }
     }
 }

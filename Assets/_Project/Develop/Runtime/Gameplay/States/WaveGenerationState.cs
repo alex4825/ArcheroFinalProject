@@ -34,7 +34,7 @@ namespace Assets._Project.Develop.Runtime.Gameplay.States
         public override void Enter()
         {
             base.Enter();
-            Debug.Log("Вход в состояние генерации врагов");
+            Debug.Log("Генерация врагов: ВХОД");
 
             _currentWave = new Wave(_enemiesFactory, _levelConfig, _currentWaveIndex, _fortressHolderService.Fortress);
             _gameplayWaveContext.Set(_currentWave);
@@ -49,6 +49,7 @@ namespace Assets._Project.Develop.Runtime.Gameplay.States
         public override void Exit()
         {
             base.Exit();
+            Debug.Log("Генерация врагов: ВЫХОД");
 
             _currentWave?.Dispose();
 

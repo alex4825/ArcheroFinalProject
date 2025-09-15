@@ -24,7 +24,7 @@ namespace Assets._Project.Develop.Runtime.Gameplay.States
         public override void Enter()
         {
             base.Enter();
-            Debug.Log("Вход в состояние атаки врагов игроком");
+            Debug.Log("Процесс атаки врагов: ВХОД");
 
             _pointedDisposable = _inputService.Pointed.Subscribe(OnPointed);
         }
@@ -37,6 +37,7 @@ namespace Assets._Project.Develop.Runtime.Gameplay.States
         public override void Exit()
         {
             base.Exit();
+            Debug.Log("Процесс атаки врагов: ВЫХОД");
 
             _pointedDisposable.Dispose();
         }

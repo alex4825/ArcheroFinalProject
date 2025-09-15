@@ -56,6 +56,7 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Features.AI.States
         public override void Enter()
         {
             base.Enter();
+            Debug.Log("Âçğûâ: ÂÕÎÄ");
 
             DetectContacts();
 
@@ -69,6 +70,12 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Features.AI.States
 
         public void Update(float deltaTime)
         {
+        }
+
+        public override void Exit()
+        {
+            base.Exit();
+            Debug.Log("Âçğûâ: ÂÛÕÎÄ");
         }
 
         private void DetectContacts()

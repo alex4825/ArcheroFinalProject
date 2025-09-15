@@ -10,7 +10,7 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Waves
 
         private ReactiveEvent<WaveResult> _currentWaveEnded = new();
 
-        private IDisposable _waveEndedisposable;
+        private IDisposable _waveEndedDisposable;
 
         public IReadonlyEvent<WaveResult> CurrentWaveEnded => _currentWaveEnded;
 
@@ -21,7 +21,7 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Waves
 
             _currentWave = wave;
 
-            _waveEndedisposable = _currentWave.Ended.Subscribe(OnCurrentWaveEnded);
+            _waveEndedDisposable = _currentWave.Ended.Subscribe(OnCurrentWaveEnded);
         }
 
         public void Update(float deltaTime)
@@ -31,7 +31,7 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Waves
 
         public void Dispose()
         {
-            _waveEndedisposable?.Dispose();
+            _waveEndedDisposable?.Dispose();
             _currentWave?.Dispose();
             _currentWave = null;
         }
@@ -41,6 +41,7 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Waves
             _currentWave.Dispose();
             _currentWave = null;
             _currentWaveEnded?.Invoke(result);
+            _waveEndedDisposable?.Dispose();
         }
     }
 }
