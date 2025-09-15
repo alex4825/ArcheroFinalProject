@@ -16,6 +16,8 @@ namespace Assets._Project.Develop.Runtime.Configs.Gameplay.Levels
 
         public Vector3 FortressPosition => LevelEnvironment.Fortress.transform.position;
 
+        public int WavesCount => _waveConfigs.Count;
+
         public WaveConfig GetWaveConfigBy(int index) => _waveConfigs[index];
     }
 }

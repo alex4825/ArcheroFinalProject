@@ -67,9 +67,7 @@ namespace Assets._Project.Develop.Runtime.Gameplay.States
             StageProviderService stageProviderService = _container.Resolve<StageProviderService>();
             FortressHolderService fortressHolderService = _container.Resolve<FortressHolderService>();
 
-            ICompositeCondition coreLoopToWinStateCondition = new CompositeCondition()
-                .Add(new FuncCondition(() => stageProviderService.CurrentStageResult.Value == StageResults.Completed))
-                .Add(new FuncCondition(() => stageProviderService.HasNextStage() == false));
+            FuncCondition coreLoopToWinStateCondition = new FuncCondition(() => _gameplayWaveContext.WavesCount == _levelConfig.WavesCount);
 
             ICompositeCondition coreLoopToDefeatStateCondition = new CompositeCondition()
                 .Add(new FuncCondition(() =>

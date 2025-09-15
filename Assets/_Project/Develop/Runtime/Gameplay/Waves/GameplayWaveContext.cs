@@ -13,6 +13,7 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Waves
         private IDisposable _waveEndedDisposable;
 
         public IReadonlyEvent<WaveResult> CurrentWaveEnded => _currentWaveEnded;
+        public int WavesCount { get; private set; }
 
         public void Set(Wave wave)
         {
@@ -34,6 +35,8 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Waves
             _waveEndedDisposable?.Dispose();
             _currentWave?.Dispose();
             _currentWave = null;
+
+            WavesCount = 0;
         }
 
         private void OnCurrentWaveEnded(WaveResult result)
@@ -42,6 +45,8 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Waves
             _currentWave = null;
             _currentWaveEnded?.Invoke(result);
             _waveEndedDisposable?.Dispose();
+
+            WavesCount++;
         }
     }
 }

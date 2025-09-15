@@ -76,8 +76,8 @@ namespace Assets._Project.Develop.Runtime.Infrastracture.DI
 
         public void Update(float deltaTime)
         {
-            foreach (IUpdatable updatable in _updatables)
-                updatable?.Update(deltaTime);
+            for(int i = 0; i < _updatables.Count; i++)
+                _updatables[i]?.Update(deltaTime);
         }
 
         public void Dispose()

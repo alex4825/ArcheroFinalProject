@@ -38,14 +38,12 @@ namespace Assets._Project.Develop.Runtime.Gameplay.States.EndGame
             Debug.Log("Победа!");
 
             _coroutinesPerformer.StartPerform(_playerDataProvider.SaveAcync());
+            _coroutinesPerformer.StartPerform(_sceneSwitcherService.ProcesSwitchTo(Scenes.MainMenu));
         }
 
         public void Update(float deltaTime)
         {
-            if (Input.GetKeyDown(KeyCode.Q))
-            {
-                _coroutinesPerformer.StartPerform(_sceneSwitcherService.ProcesSwitchTo(Scenes.MainMenu));
-            }
+            
         }
     }
 }
