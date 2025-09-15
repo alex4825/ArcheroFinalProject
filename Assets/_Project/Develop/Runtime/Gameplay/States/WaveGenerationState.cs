@@ -51,6 +51,8 @@ namespace Assets._Project.Develop.Runtime.Gameplay.States
             base.Exit();
 
             _currentWave?.Dispose();
+
+            _currentWaveIndex++;
         }
     }
 }

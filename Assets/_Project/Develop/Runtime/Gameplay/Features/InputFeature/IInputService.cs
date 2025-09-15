@@ -12,5 +12,7 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Features.InputFeature
         Vector3 RotationDirection { get; }
 
         IReadonlyEvent Attacked { get; }
+
+        IReadonlyEvent<Vector3> Pointed { get; }
     }
 }

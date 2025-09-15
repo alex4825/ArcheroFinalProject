@@ -15,6 +15,11 @@ using System;
 using Assets._Project.Develop.Runtime.Gameplay.Waves;
 using Assets._Project.Develop.Runtime.Configs.Gameplay.Levels;
 using Assets._Project.Develop.Runtime.Gameplay.Features.Enemies;
+using Assets._Project.Develop.Runtime.Gameplay.Features.AI.States;
+using Assets._Project.Develop.Runtime.Gameplay.EntitiesCore;
+using Assets._Project.Develop.Runtime.Utilities.Reactive;
+using UnityEngine;
+using Assets._Project.Develop.Runtime.Utilities;
 
 namespace Assets._Project.Develop.Runtime.Gameplay.States
 {
@@ -95,7 +100,8 @@ namespace Assets._Project.Develop.Runtime.Gameplay.States
 
             PlacementMinesState placementMinesState = new PlacementMinesState();
 
-            GameplayParallelState waveCycleState = CreateWaveCycleState();
+            GameplayStateMachine waveCycleState = CreateWaveCycleState();
+            disposables.Add(waveCycleState);
 
             disposables.Add(startDelayTimer);
             disposables.Add(placementMinesState.Entered.Subscribe(startDelayTimer.Restart));
@@ -118,17 +124,52 @@ namespace Assets._Project.Develop.Runtime.Gameplay.States
             return coreLoopState;
         }
 
-        private GameplayParallelState CreateWaveCycleState()
+        private GameplayStateMachine CreateWaveCycleState()
         {
+            List<IDisposable> disposables = new List<IDisposable>();
+
             WaveGenerationState waveGenerationState = new WaveGenerationState(
                 _gameplayWaveContext,
                 _container.Resolve<EnemiesFactory>(),
                 _levelConfig,
                 _container.Resolve<FortressHolderService>());
 
-            AttackEnemiesState attackEnemiesState = new AttackEnemiesState();
+            WaitingForExplodePointState waitingForExplodePointState = new WaitingForExplodePointState(_container.Resolve<IInputService>());
 
-            return new GameplayParallelState(waveGenerationState, attackEnemiesState);
+            bool needExplode = false;
+            Vector3 explodePoint = new();
+
+            disposables.Add(waitingForExplodePointState.PointFound.Subscribe(point =>
+            {
+                needExplode = true; 
+                explodePoint = point;
+            }));
+
+            ExplodeState explodeState = new(
+                _container.Resolve<CollidersRegistryService>(),
+                () => explodePoint,
+                5,
+                40,
+                Layers.CharactersMask
+                );
+
+            GameplayStateMachine explodeBehavior = new GameplayStateMachine();
+
+            explodeBehavior.AddState(waitingForExplodePointState);
+            explodeBehavior.AddState(explodeState);
+
+            explodeBehavior.AddTransition(waitingForExplodePointState, explodeState, new FuncCondition(() => needExplode));
+            explodeBehavior.AddTransition(explodeState, waitingForExplodePointState, new FuncCondition(() =>
+            {
+                needExplode = false;
+                return true;
+            }));
+
+            GameplayStateMachine waveCycleState = new GameplayStateMachine(disposables);
+
+            waveCycleState.AddState(new GameplayParallelState(waveGenerationState, explodeBehavior));
+
+            return waveCycleState;
         }
     }
 }

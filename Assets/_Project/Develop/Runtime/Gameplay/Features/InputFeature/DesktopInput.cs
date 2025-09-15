@@ -2,7 +2,6 @@
 using Assets._Project.Develop.Runtime.Utilities.Reactive;
 using System;
 using UnityEngine;
-using static UnityEngine.GraphicsBuffer;
 
 namespace Assets._Project.Develop.Runtime.Gameplay.Features.InputFeature
 {
@@ -13,14 +12,17 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Features.InputFeature
         private const int LeftMouseButton = 0;
         private readonly Vector3 ScreenCenter = new Vector3(Screen.width / 2, 0, Screen.height / 2);
 
+        private LayerMask _environmentMask;
         private ReactiveVariable<Vector3> _mousePosition = new();
 
         private ReactiveEvent _attacked = new();
+        private ReactiveEvent<Vector3> _pointed = new();
 
         private IDisposable _mousePositionDisposable;
 
-        public DesktopInput()
+        public DesktopInput(LayerMask environmentMask)
         {
+            _environmentMask = environmentMask;
             _mousePositionDisposable = _mousePosition.Subscribe(OnMousePositionChanged);
         }
 
@@ -41,12 +43,17 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Features.InputFeature
 
         public IReadonlyEvent Attacked => _attacked;
 
+        public IReadonlyEvent<Vector3> Pointed => _pointed;
+
         public void Update(float deltaTime)
         {
             _mousePosition.Value = GetMousePosition();
 
             if (Input.GetMouseButtonDown(LeftMouseButton))
+            {
                 _attacked.Invoke();
+                _pointed.Invoke(GetMousePosition());
+            }
         }
 
         public void Dispose()
@@ -55,11 +62,15 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Features.InputFeature
         }
 
         private Vector3 GetMousePosition()
-            => new Vector3(Input.mousePosition.x, 0, Input.mousePosition.y);
+        {
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            Physics.Raycast(ray, out RaycastHit hit, float.PositiveInfinity, _environmentMask);
+            return hit.point;
+        }
 
         private void OnMousePositionChanged(Vector3 lastPosition, Vector3 currentPosition)
         {
-            Vector3 cursorMoveVector = currentPosition - ScreenCenter;
+            Vector3 cursorMoveVector = currentPosition - lastPosition;
 
             RotationDirection = cursorMoveVector.normalized;
         }

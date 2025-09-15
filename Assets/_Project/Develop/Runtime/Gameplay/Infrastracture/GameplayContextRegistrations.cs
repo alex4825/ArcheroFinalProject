@@ -11,6 +11,7 @@ using Assets._Project.Develop.Runtime.Gameplay.Features.StagesFeature;
 using Assets._Project.Develop.Runtime.Gameplay.States;
 using Assets._Project.Develop.Runtime.Gameplay.Waves;
 using Assets._Project.Develop.Runtime.Infrastracture.DI;
+using Assets._Project.Develop.Runtime.Utilities;
 using Assets._Project.Develop.Runtime.Utilities.AssetsManagement;
 using Assets._Project.Develop.Runtime.Utilities.ConfigsManagement;
 using UnityEngine;
@@ -97,7 +98,7 @@ namespace Assets._Project.Develop.Runtime.Infrastracture.Gameplay.Infrastracture
             => new MainHeroFactory(container);
 
         private static DesktopInput CreateDesktopInput(DIContainer container)
-            => new DesktopInput();
+            => new DesktopInput(Layers.EnvironmentMask);
 
         private static AIBrainsContext CreateAIBrainsContext(DIContainer container)
             => new AIBrainsContext();

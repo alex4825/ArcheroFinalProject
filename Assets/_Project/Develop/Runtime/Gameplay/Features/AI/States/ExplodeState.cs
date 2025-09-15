@@ -16,40 +16,47 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Features.AI.States
         private LayerMask _mask;
         private ReactiveVariable<float> _radius;
         private ReactiveVariable<float> _damage;
-        private ReactiveEvent<Vector3> _teleportedEvent;
+        private Func<Vector3> _explodePoint;
 
         private readonly CollidersRegistryService _colllidersRegistryService;
-
-        private IDisposable _teleportedDisposable;
 
         public ExplodeState(Entity entity, CollidersRegistryService colllidersRegistryService)
         {
             _contactsColliders = entity.ContactCollidersBuffer;
-            _contactsEntities = entity.ContactEntitiesBuffer; 
+            _contactsEntities = entity.ContactEntitiesBuffer;
             _body = entity.BodyCollider;
             _mask = entity.ContactsDetectingMask;
             _radius = entity.OnTeleportExplodeRadius;
             _damage = entity.BodyContactDamage;
-            _teleportedEvent = entity.TeleportedEvent;
+            _explodePoint = () => _body.transform.position;
 
             _colllidersRegistryService = colllidersRegistryService;
-
-            _teleportedDisposable = _teleportedEvent.Subscribe(OnTeleported);
         }
 
-        public void Update(float deltaTime)
+        public ExplodeState(
+            CollidersRegistryService colllidersRegistryService,
+            Func<Vector3> getPoint,
+            float radius,
+            float damage,
+            LayerMask mask,
+            CapsuleCollider selfCollider = null)
         {
+            _colllidersRegistryService = colllidersRegistryService;
+
+            _radius = new(radius);
+            _damage = new(damage);
+            _mask = mask;
+            _body = selfCollider;
+            _explodePoint = () => getPoint.Invoke();
+
+            _contactsColliders = new(64);
+            _contactsEntities = new(64);
         }
 
-        public override void Exit()
+        public override void Enter()
         {
-            base.Exit();
+            base.Enter();
 
-            _teleportedDisposable.Dispose();
-        }
-
-        private void OnTeleported(Vector3 position)
-        {
             DetectContacts();
 
             InitEntitiesFromContacts();
@@ -60,16 +67,21 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Features.AI.States
             _contactsEntities.Clear();
         }
 
+        public void Update(float deltaTime)
+        {
+        }
+
         private void DetectContacts()
         {
             _contactsColliders.Count = Physics.OverlapSphereNonAlloc(
-                 _body.transform.position,
+                 _explodePoint.Invoke(),
                  _radius.Value,
                  _contactsColliders.Items,
                  _mask,
                  QueryTriggerInteraction.Ignore);
 
-            _contactsColliders.TryRemove(_body);
+            if (_body != null)
+                _contactsColliders.TryRemove(_body);
         }
 
         private void InitEntitiesFromContacts()
@@ -95,9 +107,11 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Features.AI.States
             for (int i = 0; i < _contactsEntities.Count; i++)
             {
                 Entity contactEntity = _contactsEntities.Items[i];
-                
+
                 if (contactEntity.CanApplyDamage.Evaluate())
                     contactEntity.TakeDamageRequest.Invoke(_damage.Value);
+
+                Debug.Log($"Урон нанесён. HP осталось: {contactEntity.CurrentHealth.Value}");
             }
         }
     }

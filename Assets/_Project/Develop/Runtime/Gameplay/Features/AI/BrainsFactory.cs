@@ -112,18 +112,27 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Features.AI
             RandomTeleportState randomTeleportState = new RandomTeleportState(entity);
             TargetOrientedTeleportState targetOrientedTeleportState = new TargetOrientedTeleportState(entity, targetSelector, _entitiesLifeContext);
 
-            AIStateMachine teleportBehavior = new AIStateMachine();
+            Entity targetEntity = entity.CurrentTarget.Value;
 
-            teleportBehavior.AddState(targetOrientedTeleportState);
-            teleportBehavior.AddState(randomTeleportState);
+            AIStateMachine teleportMoveBehavior = new AIStateMachine();
 
-            teleportBehavior.AddTransition(targetOrientedTeleportState, randomTeleportState, new FuncCondition(() => entity.CurrentTarget.Value == null));
-            teleportBehavior.AddTransition(randomTeleportState, targetOrientedTeleportState, new FuncCondition(() => entity.CurrentTarget.Value != null));
+            teleportMoveBehavior.AddState(targetOrientedTeleportState);
+            teleportMoveBehavior.AddState(randomTeleportState);
 
-            AIParallelState parallelState = new AIParallelState(teleportBehavior, explodeState, findTargetState);
+            teleportMoveBehavior.AddTransition(targetOrientedTeleportState, randomTeleportState, new FuncCondition(() => targetEntity == null));
+            teleportMoveBehavior.AddTransition(randomTeleportState, targetOrientedTeleportState, new FuncCondition(() => targetEntity != null));
+
+            AIParallelState moveToTargetBehavior = new AIParallelState(teleportMoveBehavior, findTargetState);
 
             AIStateMachine rootStateMachine = new AIStateMachine();
-            rootStateMachine.AddState(parallelState);
+            rootStateMachine.AddState(moveToTargetBehavior);
+            rootStateMachine.AddState(explodeState);
+
+            rootStateMachine.AddTransition(moveToTargetBehavior, explodeState, new CompositeCondition()
+                .Add(new FuncCondition(() => targetEntity != null))
+                .Add(new FuncCondition(() => Vector3.Distance(targetEntity.Transform.position, entity.Transform.position) < entity.OnTeleportExplodeRadius.Value)));
+
+            rootStateMachine.AddTransition(explodeState, moveToTargetBehavior, new FuncCondition(() => true));
 
             StateMachineBrain brain = new StateMachineBrain(rootStateMachine);
 
