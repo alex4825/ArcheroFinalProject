@@ -7,12 +7,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using Random = UnityEngine.Random;
 using System;
+using Assets._Project.Develop.Runtime.Gameplay.Features.TeamsFeature;
 
 namespace Assets._Project.Develop.Runtime.Gameplay.Waves
 {
     public class Wave : IDisposable
     {
-        private readonly EnemiesFactory _enemiesFactory;
+        private readonly EntitiesBrainsFactory _entitiesBrainsFactory;
         private WaveConfig _waveConfig;
 
         private List<EntityConfig> _enemyConfigs;
@@ -31,12 +32,12 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Waves
         private List<IDisposable> _disposables = new();
 
         public Wave(
-            EnemiesFactory enemiesFactory,
+            EntitiesBrainsFactory enemiesFactory,
             LevelConfig levelConfig,
             int waveIndex,
             Entity fortress)
         {
-            _enemiesFactory = enemiesFactory;
+            _entitiesBrainsFactory = enemiesFactory;
             _waveConfig = levelConfig.GetWaveConfigBy(waveIndex);
             _enemyConfigs = new List<EntityConfig>(_waveConfig.EnemyConfigs);
             _fortressPosition = levelConfig.FortressPosition;
@@ -71,7 +72,7 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Waves
 
             if (_time >= _currentSpawnDelay)
             {
-                Entity enemy = _enemiesFactory.Create(GetRandomPosition(), _enemyConfigs[_currentSpawnIndex]);
+                Entity enemy = _entitiesBrainsFactory.Create(GetRandomPosition(), _enemyConfigs[_currentSpawnIndex], Teams.Enemies);
                 _spawnedEnemies++;
                 _disposables.Add(enemy.IsDead.Subscribe(OnEnemyDie));
 

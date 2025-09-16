@@ -15,6 +15,8 @@ using Assets._Project.Develop.Runtime.Configs.Gameplay.Entities;
 using Assets._Project.Develop.Runtime.Gameplay.Features.TeamsFeature;
 using Assets._Project.Develop.Runtime.Gameplay.Features.CurrencyFeature;
 using Unity.VisualScripting.FullSerializer;
+using UnityEngine.UIElements;
+using static UnityEngine.UI.GridLayoutGroup;
 
 namespace Assets._Project.Develop.Runtime.Gameplay.EntitiesCore
 {
@@ -170,7 +172,7 @@ namespace Assets._Project.Develop.Runtime.Gameplay.EntitiesCore
                   .AddSystem(new RigidbodyRotationSystem())
                   .AddSystem(new BodyContactDetectingSystem())
                   .AddSystem(new BodyContactsEntitiesFilterSystem(_collidersRegistryService))
-                  .AddSystem(new DealDamageOnContactSystem())
+                  .AddSystem(new DealDamageOnContactSystem(entity.BodyContactDamage))
                   .AddSystem(new ApplyDamageSystem())
                   .AddSystem(new DeathSystem())
                   .AddSystem(new DisableCollidersOnDeathSystem())
@@ -297,7 +299,7 @@ namespace Assets._Project.Develop.Runtime.Gameplay.EntitiesCore
                   .AddSystem(new RigidbodyRotationSystem())
                   .AddSystem(new BodyContactDetectingSystem())
                   .AddSystem(new BodyContactsEntitiesFilterSystem(_collidersRegistryService))
-                  .AddSystem(new DealDamageOnContactSystem())
+                  .AddSystem(new DealDamageOnContactSystem(entity.BodyContactDamage))
                   .AddSystem(new DeathMaskTouchDetectorSystem())
                   .AddSystem(new AnotherTeamTouchDetectorSystem())
                   .AddSystem(new DeathSystem())
@@ -313,7 +315,7 @@ namespace Assets._Project.Develop.Runtime.Gameplay.EntitiesCore
         {
             Entity entity = CreateEmpty();
 
-            _monoEntitiesFactory.Create(entity, position, "Entities/Explody");
+            _monoEntitiesFactory.Create(entity, position, config.PrefabPath);
 
             entity.AddMaxHealth(new ReactiveVariable<float>(config.MaxHealth))
                   .AddCurrentHealth(new ReactiveVariable<float>(config.MaxHealth))
@@ -328,6 +330,7 @@ namespace Assets._Project.Develop.Runtime.Gameplay.EntitiesCore
                   .AddContactEntitiesBuffer(new Buffer<Entity>(64))
                   .AddExplodeRadius(new ReactiveVariable<float>(config.ExplodeRadius))
                   .AddExplodeDamage(new ReactiveVariable<float>(config.ExplodeDamage))
+                  .AddExplodedEvent()
                   .AddCurrentTarget()
                   .AddDisableCollidersOnDeath();
 
@@ -395,6 +398,36 @@ namespace Assets._Project.Develop.Runtime.Gameplay.EntitiesCore
                   .AddSystem(new DeathProcessTimerSystem());
 
             _entitiesLifeContext.Add(entity);
+
+            return entity;
+        }
+
+        public Entity CreateMine(Vector3 position, MineConfig config)
+        {
+            Entity entity = CreateEmpty();
+
+            _monoEntitiesFactory.Create(entity, position, config.PrefabPath);
+
+            entity
+                .AddIsDead()
+                .AddExplodedEvent()
+                .AddCurrentTarget()
+                .AddDisableCollidersOnDeath()
+                .AddContactsDetectingMask(Layers.EntityMask)
+                .AddContactCollidersBuffer(new Buffer<Collider>(64))
+                .AddContactEntitiesBuffer(new Buffer<Entity>(64))
+                .AddExplodeDamage(new ReactiveVariable<float>(config.ExplodeDamage))
+                .AddExplodeRadius(new ReactiveVariable<float>(config.ExplodeRadius));
+
+            ICompositeCondition musSelfRelease = new CompositeCondition()
+                .Add(new FuncCondition(() => entity.IsDead.Value));
+
+            entity
+                .AddMustSelfRelease(musSelfRelease);
+
+            entity
+                .AddSystem(new DisableCollidersOnDeathSystem())
+                .AddSystem(new SelfReleaseSystem(_entitiesLifeContext));
 
             return entity;
         }

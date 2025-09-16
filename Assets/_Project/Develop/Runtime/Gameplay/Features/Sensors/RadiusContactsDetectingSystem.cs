@@ -3,19 +3,17 @@ using Assets._Project.Develop.Runtime.Gameplay.EntitiesCore.Systems;
 using Assets._Project.Develop.Runtime.Utilities;
 using Assets._Project.Develop.Runtime.Utilities.Reactive;
 using System;
+using System.Drawing;
 using UnityEngine;
 
 namespace Assets._Project.Develop.Runtime.Gameplay.Features.Sensors
 {
-    public class RadiusContactsOnTeleportDetectingSystem : IInitializableSystem, IDisposableSystem
+    public class RadiusContactsDetectingSystem : IInitializableSystem, IUpdatableSystem
     {
         private Buffer<Collider> _contacts;
         private CapsuleCollider _body;
         private LayerMask _mask;
         private ReactiveVariable<float> _radius;
-        private ReactiveEvent<Vector3> _teleportedEvent;
-
-        private IDisposable _teleportedDisposable;
 
         public void OnInit(Entity entity)
         {
@@ -23,31 +21,24 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Features.Sensors
             _body = entity.BodyCollider;
             _mask = entity.ContactsDetectingMask;
             _radius = entity.ExplodeRadius;
-            _teleportedEvent = entity.TeleportedEvent;
-
-            _teleportedDisposable = _teleportedEvent.Subscribe(OnTeleported);
         }
 
-        public void OnDispose(Entity entity)
+        public void OnUpdate(float deltaTime)
         {
-            _teleportedDisposable.Dispose();
+            DetectContactsIn(_body.transform.position);
         }
 
-        private void OnTeleported(Vector3 vector)
-        {
-            DetectContacts();
-        }
-
-        private void DetectContacts()
+        private void DetectContactsIn(Vector3 point)
         {
             _contacts.Count = Physics.OverlapSphereNonAlloc(
-                 _body.transform.position,
+                 point,
                  _radius.Value,
                  _contacts.Items,
                  _mask,
                  QueryTriggerInteraction.Ignore);
 
-            RemoveSelfFromContacts();
+            if (_body != null)
+                RemoveSelfFromContacts();
         }
 
         private void RemoveSelfFromContacts()

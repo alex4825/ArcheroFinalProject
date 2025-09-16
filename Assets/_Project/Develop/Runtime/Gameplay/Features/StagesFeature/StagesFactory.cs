@@ -22,7 +22,7 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Features.StagesFeature
                 case ClearAllEnemiesStageConfig clearAllEnemiesStageConfig:
                     return new ClearAllEnemiesStage(
                         clearAllEnemiesStageConfig,
-                        _container.Resolve<EnemiesFactory>(),
+                        _container.Resolve<EntitiesBrainsFactory>(),
                         _container.Resolve<EntitiesLifeContext>());
 
                 default:

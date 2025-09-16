@@ -6,20 +6,18 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Features.AI.States
 {
     public class DeathState : State, IUpdatableState
     {
-        private ReactiveEvent<float> _takeDamageRequest;
-        private ReactiveVariable<float> _maxHealth;
+        private ReactiveVariable<bool> _isDead;
 
         public DeathState(Entity entity)
         {
-            _takeDamageRequest = entity.TakeDamageRequest;
-            _maxHealth = entity.MaxHealth;
+            _isDead = entity.IsDead;
         }
 
         public override void Enter()
         {
             base.Enter();
 
-            _takeDamageRequest.Invoke(_maxHealth.Value);
+            _isDead.Value = true;
         }
 
         public void Update(float deltaTime)

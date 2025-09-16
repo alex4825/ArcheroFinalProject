@@ -1,4 +1,5 @@
 using Assets._Project.Develop.Runtime.Gameplay.EntitiesCore;
+using Assets._Project.Develop.Runtime.Gameplay.Features.Attack.Explode;
 using Assets._Project.Develop.Runtime.Gameplay.Features.TeamsFeature;
 using Assets._Project.Develop.Runtime.Utilities;
 using Assets._Project.Develop.Runtime.Utilities.Reactive;
@@ -19,6 +20,7 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Features.AI.States
         private ReactiveVariable<float> _damage;
         private Func<Vector3> _explodePoint;
         private ReactiveVariable<Teams> _teamToDamage;
+        private ReactiveEvent<Vector3> _exploadedEvent;
 
         private readonly CollidersRegistryService _colllidersRegistryService;
 
@@ -32,6 +34,7 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Features.AI.States
             _damage = entity.ExplodeDamage;
             _explodePoint = () => _body.transform.position;
             _teamToDamage = teamToDamage;
+            _exploadedEvent = entity.ExplodedEvent;
 
             _colllidersRegistryService = colllidersRegistryService;
         }
@@ -127,6 +130,9 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Features.AI.States
                         Debug.Log($"Урон нанесён. HP осталось: {contactEntity.CurrentHealth.Value}");
                     }
             }
+
+            if (_contactsEntities.Count > 0 && _body != null)
+                _exploadedEvent?.Invoke(_body.transform.position);
         }
     }
 }

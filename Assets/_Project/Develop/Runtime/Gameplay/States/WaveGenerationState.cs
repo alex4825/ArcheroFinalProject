@@ -10,7 +10,7 @@ namespace Assets._Project.Develop.Runtime.Gameplay.States
     public class WaveGenerationState : State, IUpdatableState
     {
         private readonly GameplayWaveContext _gameplayWaveContext;
-        private readonly EnemiesFactory _enemiesFactory;
+        private readonly EntitiesBrainsFactory _enemiesFactory;
         private readonly LevelConfig _levelConfig;
         private readonly FortressHolderService _fortressHolderService;
 
@@ -19,7 +19,7 @@ namespace Assets._Project.Develop.Runtime.Gameplay.States
 
         public WaveGenerationState(
             GameplayWaveContext gameplayWaveContext,
-            EnemiesFactory enemiesFactory,
+            EntitiesBrainsFactory enemiesFactory,
             LevelConfig levelConfig,
             FortressHolderService fortressHolderService)
         {

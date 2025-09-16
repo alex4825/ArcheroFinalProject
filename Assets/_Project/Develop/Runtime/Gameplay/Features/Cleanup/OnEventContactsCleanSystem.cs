@@ -7,37 +7,41 @@ using Assets._Project.Develop.Runtime.Gameplay.EntitiesCore.Systems;
 
 namespace Assets._Project.Develop.Runtime.Gameplay.Features.Cleanup
 {
-    public class OnTeleportContactsCleanSystem : IInitializableSystem, IUpdatableSystem, IDisposableSystem
+    public class OnEventContactsCleanSystem : IInitializableSystem, IUpdatableSystem, IDisposableSystem
     {
         private Buffer<Collider> _contacts;
-        private ReactiveEvent<Vector3> _teleportedEvent;
+        private IReadonlyEvent<Vector3> _detectedPointEvent;
 
-        private IDisposable _teleportedDisposable;
+        private IDisposable _detectedDisposable;
 
-        private bool _isTeleported;
+        private bool _isPointDetected;
+
+        public OnEventContactsCleanSystem(IReadonlyEvent<Vector3> detectedPointEvent)
+        {
+            _detectedPointEvent = detectedPointEvent;
+        }
 
         public void OnInit(Entity entity)
         {
             _contacts = entity.ContactCollidersBuffer;
-            _teleportedEvent = entity.TeleportedEvent;
 
-            _teleportedDisposable = _teleportedEvent.Subscribe(OnTeleported);
+            _detectedDisposable = _detectedPointEvent.Subscribe(OnPointDetected);
         }
 
         public void OnUpdate(float deltaTime)
         {
-            if (_isTeleported)
+            if (_isPointDetected)
             {
-                _isTeleported = false;
+                _isPointDetected = false;
                 _contacts.Clear();
             }
         }
 
         public void OnDispose(Entity entity)
         {
-            _teleportedDisposable.Dispose();
+            _detectedDisposable.Dispose();
         }
 
-        private void OnTeleported(Vector3 vector) => _isTeleported = true;
+        private void OnPointDetected(Vector3 vector) => _isPointDetected = true;
     }
 }

@@ -42,7 +42,7 @@ namespace Assets._Project.Develop.Runtime.Infrastracture.Gameplay.Infrastracture
 
             container.RegisterAsSingle<IInputService>(CreateDesktopInput);
 
-            container.RegisterAsSingle(CreateEnemiesFactory);
+            container.RegisterAsSingle(CreateEntitiesBrainsFactory);
 
             container.RegisterAsSingle(CreateMainHeroFactory);
 
@@ -91,8 +91,8 @@ namespace Assets._Project.Develop.Runtime.Infrastracture.Gameplay.Infrastracture
         private static StagesFactory CreateStagesFactory(DIContainer container)
             => new StagesFactory(container);
 
-        private static EnemiesFactory CreateEnemiesFactory(DIContainer container)
-            => new EnemiesFactory(container);
+        private static EntitiesBrainsFactory CreateEntitiesBrainsFactory(DIContainer container)
+            => new EntitiesBrainsFactory(container);
 
         private static MainHeroFactory CreateMainHeroFactory(DIContainer container)
             => new MainHeroFactory(container);

@@ -1,6 +1,7 @@
 using Assets._Project.Develop.Runtime.Configs.Gameplay.Stages;
 using Assets._Project.Develop.Runtime.Gameplay.EntitiesCore;
 using Assets._Project.Develop.Runtime.Gameplay.Features.Enemies;
+using Assets._Project.Develop.Runtime.Gameplay.Features.TeamsFeature;
 using Assets._Project.Develop.Runtime.Utilities.Reactive;
 using System;
 using System.Collections.Generic;
@@ -13,17 +14,17 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Features.StagesFeature
 
         private ReactiveEvent _completed = new();
 
-        private EnemiesFactory _enemiesFactory;
+        private EntitiesBrainsFactory _enemiesBrainsFactory;
         private EntitiesLifeContext _entitiesLifeContext;
 
         private bool _inProcess;
 
         private Dictionary<Entity, IDisposable> _spawnedEnemiesToRemoveReason = new();
 
-        public ClearAllEnemiesStage(ClearAllEnemiesStageConfig config, EnemiesFactory enemiesFactory, EntitiesLifeContext entitiesLifeContext)
+        public ClearAllEnemiesStage(ClearAllEnemiesStageConfig config, EntitiesBrainsFactory enemiesFactory, EntitiesLifeContext entitiesLifeContext)
         {
             _config = config;
-            _enemiesFactory = enemiesFactory;
+            _enemiesBrainsFactory = enemiesFactory;
             _entitiesLifeContext = entitiesLifeContext;
         }
 
@@ -86,7 +87,7 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Features.StagesFeature
 
         private void SpawnEnemy(EnemyItemConfig enemyItemConfig)
         {
-            Entity spawnedEnemy = _enemiesFactory.Create(enemyItemConfig.SpawnPosition, enemyItemConfig.EnemyConfig);
+            Entity spawnedEnemy = _enemiesBrainsFactory.Create(enemyItemConfig.SpawnPosition, enemyItemConfig.EnemyConfig, Teams.Enemies);
 
             IDisposable removeReason = spawnedEnemy.IsDead.Subscribe((oldValue, isDead) =>
             {

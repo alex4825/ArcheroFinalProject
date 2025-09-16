@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace Assets._Project.Develop.Runtime.Gameplay.States
 {
-    public class WaitingForExplodePointState : State, IUpdatableState
+    public class WaitingForPointingState : State, IUpdatableState
     {
         private IInputService _inputService;
 
@@ -14,7 +14,7 @@ namespace Assets._Project.Develop.Runtime.Gameplay.States
 
         private IDisposable _pointedDisposable;
 
-        public WaitingForExplodePointState(IInputService inputService)
+        public WaitingForPointingState(IInputService inputService)
         {
             _inputService = inputService;
         }

@@ -9,14 +9,14 @@ using Assets._Project.Develop.Runtime.Utilities.Reactive;
 
 namespace Assets._Project.Develop.Runtime.Gameplay.Features.Enemies
 {
-    public class EnemiesFactory
+    public class EntitiesBrainsFactory
     {
         private readonly DIContainer _container;
         private readonly EntitiesFactory _entitiesFactory;
         private readonly BrainsFactory _brainsFactory;
         private readonly EntitiesLifeContext _entitiesLifeContext;
 
-        public EnemiesFactory(DIContainer container)
+        public EntitiesBrainsFactory(DIContainer container)
         {
             _container = container;
             _entitiesFactory = _container.Resolve<EntitiesFactory>();
@@ -24,20 +24,25 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Features.Enemies
             _entitiesLifeContext = container.Resolve<EntitiesLifeContext>();
         }
 
-        public Entity Create(Vector3 position, EntityConfig config)
+        public Entity Create(Vector3 position, EntityConfig config, Teams team)
         {
             Entity entity;
 
             switch (config)
             {
                 case GhostConfig ghostConfig:
-                    entity = _entitiesFactory.CreateGhost(position, ghostConfig); 
+                    entity = _entitiesFactory.CreateGhost(position, ghostConfig);
                     _brainsFactory.CreateGhostBrain(entity);
                     break;
-                
+
                 case ExplodyConfig explodyConfig:
-                    entity = _entitiesFactory.CreateExplody(position, explodyConfig); 
+                    entity = _entitiesFactory.CreateExplody(position, explodyConfig);
                     _brainsFactory.CreateExplodyBrain(entity);
+                    break;
+
+                case MineConfig mineConfig:
+                    entity = _entitiesFactory.CreateMine(position, mineConfig);
+                    _brainsFactory.CreateMineBrain(entity);
                     break;
 
                 default:
@@ -45,7 +50,7 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Features.Enemies
             }
 
             entity
-                .AddTeam(new ReactiveVariable<Teams>(Teams.Enemies));
+                .AddTeam(new ReactiveVariable<Teams>(team));
 
             _entitiesLifeContext.Add(entity);
 

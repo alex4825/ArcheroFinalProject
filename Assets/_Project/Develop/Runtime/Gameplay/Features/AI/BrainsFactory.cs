@@ -11,6 +11,7 @@ using Assets._Project.Develop.Runtime.Utilities.Timer;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using static UnityEngine.EventSystems.EventTrigger;
 
 namespace Assets._Project.Develop.Runtime.Gameplay.Features.AI
 {
@@ -134,6 +135,34 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Features.AI
             StateMachineBrain brain = new StateMachineBrain(rootStateMachine);
 
             _brainsContext.SetFor(explody, brain);
+
+            return brain;
+        }
+        
+        public StateMachineBrain CreateMineBrain(Entity mine)
+        {
+            FindTargetState findTargetState = new FindTargetState(new NearestDamageableTargetSelector(mine), _entitiesLifeContext, mine);
+
+            ExplodeState explodeState = new ExplodeState(mine, _container.Resolve<CollidersRegistryService>(), new ReactiveVariable<Teams>(Teams.Enemies));
+
+            DeathState deathState = new DeathState(mine);
+
+            AIStateMachine rootStateMachine = new AIStateMachine();
+            rootStateMachine.AddState(findTargetState);
+            rootStateMachine.AddState(explodeState);
+            rootStateMachine.AddState(deathState);
+
+            rootStateMachine.AddTransition(findTargetState, explodeState, new CompositeCondition()
+                .Add(new FuncCondition(() => mine.IsDead.Value == false))
+                .Add(new FuncCondition(() => 
+                    mine.CurrentTarget.Value != null
+                    && Vector3.Distance(mine.CurrentTarget.Value.Transform.position, mine.Transform.position) <= mine.ExplodeRadius.Value)));
+
+            rootStateMachine.AddTransition(explodeState, deathState, new FuncCondition(() => true));
+
+            StateMachineBrain brain = new StateMachineBrain(rootStateMachine);
+
+            _brainsContext.SetFor(mine, brain);
 
             return brain;
         }

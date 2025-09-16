@@ -29,6 +29,7 @@ namespace Assets._Project.Develop.Runtime.Gameplay.States
     {
         private readonly DIContainer _container;
         private readonly TimerServiceFactory _timerServiceFactory;
+        private readonly EntitiesBrainsFactory _entitiesBrainsFactory;
         private readonly GameplayWaveContext _gameplayWaveContext;
         private readonly LevelConfig _levelConfig;
 
@@ -36,6 +37,7 @@ namespace Assets._Project.Develop.Runtime.Gameplay.States
         {
             _container = container;
             _timerServiceFactory = container.Resolve<TimerServiceFactory>();
+            _entitiesBrainsFactory = container.Resolve<EntitiesBrainsFactory>();
             _gameplayWaveContext = _container.Resolve<GameplayWaveContext>();
             _levelConfig = levelConfig;
         }
@@ -98,7 +100,7 @@ namespace Assets._Project.Develop.Runtime.Gameplay.States
 
             TimerService startDelayTimer = _timerServiceFactory.Create(startDelayTime);
 
-            PlacementMinesState placementMinesState = new PlacementMinesState();
+            GameplayParallelState restPhaseState = CreateRestPhaseState();
 
             GameplayParallelState waveCycleState = CreateWaveCycleState();
 
@@ -106,7 +108,7 @@ namespace Assets._Project.Develop.Runtime.Gameplay.States
 
             disposables.Add(startDelayTimer);
 
-            disposables.Add(placementMinesState.Entered.Subscribe(() => startDelayTimer.Restart()));
+            disposables.Add(restPhaseState.Entered.Subscribe(() => startDelayTimer.Restart()));
 
             disposables.Add(waveCycleState.Entered.Subscribe(() => isWaveWin = false));
 
@@ -119,13 +121,22 @@ namespace Assets._Project.Develop.Runtime.Gameplay.States
 
             GameplayStateMachine coreLoopState = new GameplayStateMachine(disposables);
 
+            coreLoopState.AddState(restPhaseState);
             coreLoopState.AddState(waveCycleState);
-            coreLoopState.AddState(placementMinesState);
 
-            coreLoopState.AddTransition(placementMinesState, waveCycleState, placementMinesToWaveCycleCondition);
-            coreLoopState.AddTransition(waveCycleState, placementMinesState, waveCycleToPlacementMinesCondition);
+            coreLoopState.AddTransition(restPhaseState, waveCycleState, placementMinesToWaveCycleCondition);
+            coreLoopState.AddTransition(waveCycleState, restPhaseState, waveCycleToPlacementMinesCondition);
 
             return coreLoopState;
+        }
+
+        private GameplayParallelState CreateRestPhaseState()
+        {
+            WaitingForPointingState waitingForExplodePointState = new WaitingForPointingState(_container.Resolve<IInputService>());
+
+            PlacementMinesState placementMinesState = new PlacementMinesState(_levelConfig.MineConfig, waitingForExplodePointState.PointFound, _entitiesBrainsFactory);
+
+            return new GameplayParallelState(waitingForExplodePointState, placementMinesState);
         }
 
         private GameplayParallelState CreateWaveCycleState()
@@ -134,11 +145,11 @@ namespace Assets._Project.Develop.Runtime.Gameplay.States
 
             WaveGenerationState waveGenerationState = new WaveGenerationState(
                 _gameplayWaveContext,
-                _container.Resolve<EnemiesFactory>(),
+                _container.Resolve<EntitiesBrainsFactory>(),
                 _levelConfig,
                 _container.Resolve<FortressHolderService>());
 
-            WaitingForExplodePointState waitingForExplodePointState = new WaitingForExplodePointState(_container.Resolve<IInputService>());
+            WaitingForPointingState waitingForExplodePointState = new WaitingForPointingState(_container.Resolve<IInputService>());
 
             bool needExplode = false;
             Vector3 explodePoint = new();

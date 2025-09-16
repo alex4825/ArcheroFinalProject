@@ -14,19 +14,26 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Features.ContactTakeDamage
         private Buffer<Entity> _contacts;
         private ReactiveVariable<float> _damage;
 
+        public DealDamageOnContactSystem(ReactiveVariable<float> damage)
+        {
+            _damage = damage;
+        }
+
         private List<Entity> _processedEntities;
 
         public void OnInit(Entity entity)
         {
             _entity = entity;
             _contacts = entity.ContactEntitiesBuffer;
-            _damage = entity.BodyContactDamage;
 
             _processedEntities = new List<Entity>(_contacts.Items.Length);
         }
 
         public void OnUpdate(float deltaTime)
         {
+            if (_contacts.Count <= 0)
+                return;
+
             for (int i = 0; i < _contacts.Count; i++)
             {
                 Entity contactEntity = _contacts.Items[i];
@@ -38,6 +45,8 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Features.ContactTakeDamage
                     EntitiesHelper.TryTakeDamageFrom(_entity, contactEntity, _damage.Value);
                 }
             }
+
+            _entity.StartAttackEvent.Invoke();
 
             for (int i = _processedEntities.Count - 1; i >= 0; i--)
                 if (ContainInContacts(_processedEntities[i]) == false)
