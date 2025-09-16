@@ -36,7 +36,7 @@ namespace Assets._Project.Develop.Runtime.Infrastracture.Gameplay.Infrastracture
             else if (sceneArgs != null)
                 throw new ArgumentException($"{nameof(sceneArgs)} is not match with {typeof(GameplayInputArgs)} type");
 
-
+            _inputArgs = new GameplayInputArgs(1);
             GameplayContextRegistrations.Process(_container, _inputArgs);
         }
 
