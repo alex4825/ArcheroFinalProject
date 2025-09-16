@@ -1,4 +1,5 @@
 using Assets._Project.Develop.Runtime.Gameplay.EntitiesCore;
+using Assets._Project.Develop.Runtime.Gameplay.Environment;
 using Assets._Project.Develop.Runtime.Gameplay.Features.AI.States;
 using Assets._Project.Develop.Runtime.Gameplay.Features.AI.TargetSelection;
 using Assets._Project.Develop.Runtime.Gameplay.Features.InputFeature;
@@ -99,6 +100,38 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Features.AI
             StateMachineBrain brain = new StateMachineBrain(stateMachine);
 
             _brainsContext.SetFor(entity, brain);
+
+            return brain;
+        }
+
+        public StateMachineBrain CreateExplodyBrain(Entity explody)
+        {
+            Entity fortress = _container.Resolve<FortressHolderService>().Fortress;
+            explody.CurrentTarget.Value = fortress;
+
+            NavMeshMoveToTargetState moveToFortressState = new NavMeshMoveToTargetState(explody);
+
+            ExplodeState explodeState = new ExplodeState(explody, _container.Resolve<CollidersRegistryService>());
+
+            DeathState deathState = new DeathState(explody);
+
+            AIStateMachine rootStateMachine = new AIStateMachine();
+            rootStateMachine.AddState(moveToFortressState);
+            rootStateMachine.AddState(explodeState);
+            rootStateMachine.AddState(deathState);
+
+            rootStateMachine.AddTransition(moveToFortressState, explodeState, new CompositeCondition()
+                .Add(new FuncCondition(() => explody.IsDead.Value == false))
+                .Add(new FuncCondition(() => Vector3.Distance(fortress.Transform.position, explody.Transform.position) <= explody.ExplodeRadius.Value)));
+
+            rootStateMachine.AddTransition(moveToFortressState, deathState, new CompositeCondition()
+                .Add(new FuncCondition(() => explody.IsDead.Value)));
+
+            rootStateMachine.AddTransition(explodeState, deathState, new FuncCondition(() => true));
+
+            StateMachineBrain brain = new StateMachineBrain(rootStateMachine);
+
+            _brainsContext.SetFor(explody, brain);
 
             return brain;
         }

@@ -34,6 +34,11 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Features.Enemies
                     entity = _entitiesFactory.CreateGhost(position, ghostConfig); 
                     _brainsFactory.CreateGhostBrain(entity);
                     break;
+                
+                case ExplodyConfig explodyConfig:
+                    entity = _entitiesFactory.CreateExplody(position, explodyConfig); 
+                    _brainsFactory.CreateExplodyBrain(entity);
+                    break;
 
                 default:
                     throw new ArgumentException($"Not support {config.GetType()} type config");

@@ -6,7 +6,7 @@ namespace Assets._Project.Develop.Runtime.Configs.Gameplay.Entities
     public class ExplodyConfig : EntityConfig
     {
         [field: SerializeField] public string PrefabPath { get; private set; } = "Entities/Explody";
-        [field: SerializeField, Min(0)] public float MoveSpeed { get; private set; } = 9;
+        [field: SerializeField, Min(0)] public float MoveSpeed { get; private set; } = 2;
         [field: SerializeField, Min(0)] public float RotationSpeed { get; private set; } = 900;
         [field: SerializeField, Min(0)] public float ExplodeDamage { get; private set; } = 50;
         [field: SerializeField, Min(0)] public float ExplodeRadius { get; private set; } = 5;

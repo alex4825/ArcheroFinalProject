@@ -328,7 +328,11 @@ namespace Assets._Project.Develop.Runtime.Gameplay.EntitiesCore
                   .AddExplodeDamage(new ReactiveVariable<float>(config.ExplodeDamage))
                   .AddDeathMask(Layers.CharactersMask)
                   .AddIsTouchDeathMask()
-                  .AddCurrentTarget();
+                  .AddCurrentTarget()
+                  .AddDisableCollidersOnDeath();
+
+            entity.NavMeshAgent.speed = config.MoveSpeed;
+            entity.NavMeshAgent.angularSpeed = config.RotationSpeed;
 
             ICompositeCondition canMove = new CompositeCondition()
                 .Add(new FuncCondition(() => entity.IsDead.Value == false));
