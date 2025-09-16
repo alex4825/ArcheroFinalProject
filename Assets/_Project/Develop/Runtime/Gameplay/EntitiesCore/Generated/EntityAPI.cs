@@ -1216,13 +1216,13 @@ namespace Assets._Project.Develop.Runtime.Gameplay.EntitiesCore
 			return AddComponent(new Assets._Project.Develop.Runtime.Gameplay.Features.Attack.InAttackCooldown() {Value = value}); 
 		}
 
-		public Assets._Project.Develop.Runtime.Gameplay.Features.Attack.Explode.OnTeleportExplodeRadius OnTeleportExplodeRadiusC => GetComponent<Assets._Project.Develop.Runtime.Gameplay.Features.Attack.Explode.OnTeleportExplodeRadius>();
+		public Assets._Project.Develop.Runtime.Gameplay.Features.Attack.Explode.ExplodeRadius ExplodeRadiusC => GetComponent<Assets._Project.Develop.Runtime.Gameplay.Features.Attack.Explode.ExplodeRadius>();
 
-		public Assets._Project.Develop.Runtime.Utilities.Reactive.ReactiveVariable<System.Single> OnTeleportExplodeRadius => OnTeleportExplodeRadiusC.Value;
+		public Assets._Project.Develop.Runtime.Utilities.Reactive.ReactiveVariable<System.Single> ExplodeRadius => ExplodeRadiusC.Value;
 
-		public bool TryGetOnTeleportExplodeRadius(out Assets._Project.Develop.Runtime.Utilities.Reactive.ReactiveVariable<System.Single> value)
+		public bool TryGetExplodeRadius(out Assets._Project.Develop.Runtime.Utilities.Reactive.ReactiveVariable<System.Single> value)
 		{
-			bool result = TryGetComponent(out Assets._Project.Develop.Runtime.Gameplay.Features.Attack.Explode.OnTeleportExplodeRadius component);
+			bool result = TryGetComponent(out Assets._Project.Develop.Runtime.Gameplay.Features.Attack.Explode.ExplodeRadius component);
 			if(result)
 				value = component.Value;
 			else
@@ -1230,14 +1230,14 @@ namespace Assets._Project.Develop.Runtime.Gameplay.EntitiesCore
 			return result;
 		}
 
-		public Assets._Project.Develop.Runtime.Gameplay.EntitiesCore.Entity AddOnTeleportExplodeRadius()
+		public Assets._Project.Develop.Runtime.Gameplay.EntitiesCore.Entity AddExplodeRadius()
 		{
-			return AddComponent(new Assets._Project.Develop.Runtime.Gameplay.Features.Attack.Explode.OnTeleportExplodeRadius() { Value = new Assets._Project.Develop.Runtime.Utilities.Reactive.ReactiveVariable<System.Single>() }); 
+			return AddComponent(new Assets._Project.Develop.Runtime.Gameplay.Features.Attack.Explode.ExplodeRadius() { Value = new Assets._Project.Develop.Runtime.Utilities.Reactive.ReactiveVariable<System.Single>() }); 
 		}
 
-		public Assets._Project.Develop.Runtime.Gameplay.EntitiesCore.Entity AddOnTeleportExplodeRadius(Assets._Project.Develop.Runtime.Utilities.Reactive.ReactiveVariable<System.Single> value)
+		public Assets._Project.Develop.Runtime.Gameplay.EntitiesCore.Entity AddExplodeRadius(Assets._Project.Develop.Runtime.Utilities.Reactive.ReactiveVariable<System.Single> value)
 		{
-			return AddComponent(new Assets._Project.Develop.Runtime.Gameplay.Features.Attack.Explode.OnTeleportExplodeRadius() {Value = value}); 
+			return AddComponent(new Assets._Project.Develop.Runtime.Gameplay.Features.Attack.Explode.ExplodeRadius() {Value = value}); 
 		}
 
 		public Assets._Project.Develop.Runtime.Gameplay.Features.ApplyDamage.TakeDamageRequest TakeDamageRequestC => GetComponent<Assets._Project.Develop.Runtime.Gameplay.Features.ApplyDamage.TakeDamageRequest>();

@@ -26,7 +26,7 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Features.AI.States
             _contactsEntities = entity.ContactEntitiesBuffer;
             _body = entity.BodyCollider;
             _mask = entity.ContactsDetectingMask;
-            _radius = entity.OnTeleportExplodeRadius;
+            _radius = entity.ExplodeRadius;
             _damage = entity.BodyContactDamage;
             _explodePoint = () => _body.transform.position;
 

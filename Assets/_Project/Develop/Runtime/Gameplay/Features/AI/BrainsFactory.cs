@@ -130,7 +130,7 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Features.AI
 
             rootStateMachine.AddTransition(moveToTargetBehavior, explodeState, new CompositeCondition()
                 .Add(new FuncCondition(() => targetEntity != null))
-                .Add(new FuncCondition(() => Vector3.Distance(targetEntity.Transform.position, entity.Transform.position) < entity.OnTeleportExplodeRadius.Value)));
+                .Add(new FuncCondition(() => Vector3.Distance(targetEntity.Transform.position, entity.Transform.position) < entity.ExplodeRadius.Value)));
 
             rootStateMachine.AddTransition(explodeState, moveToTargetBehavior, new FuncCondition(() => true));
 

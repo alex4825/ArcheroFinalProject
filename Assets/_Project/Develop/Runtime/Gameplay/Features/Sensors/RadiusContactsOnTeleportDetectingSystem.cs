@@ -22,7 +22,7 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Features.Sensors
             _contacts = entity.ContactCollidersBuffer;
             _body = entity.BodyCollider;
             _mask = entity.ContactsDetectingMask;
-            _radius = entity.OnTeleportExplodeRadius;
+            _radius = entity.ExplodeRadius;
             _teleportedEvent = entity.TeleportedEvent;
 
             _teleportedDisposable = _teleportedEvent.Subscribe(OnTeleported);
