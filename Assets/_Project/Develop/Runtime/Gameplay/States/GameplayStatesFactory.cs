@@ -134,7 +134,11 @@ namespace Assets._Project.Develop.Runtime.Gameplay.States
         {
             WaitingForPointingState waitingForExplodePointState = new WaitingForPointingState(_container.Resolve<IInputService>());
 
-            PlacementMinesState placementMinesState = new PlacementMinesState(_levelConfig.MineConfig, waitingForExplodePointState.PointFound, _entitiesBrainsFactory);
+            PlacementMinesState placementMinesState = new PlacementMinesState(
+                _levelConfig.MineConfig,
+                waitingForExplodePointState.PointFound, 
+                _entitiesBrainsFactory,
+                _container.Resolve<WalletService>());
 
             return new GameplayParallelState(waitingForExplodePointState, placementMinesState);
         }

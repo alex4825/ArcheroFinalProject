@@ -11,6 +11,7 @@ namespace Assets._Project.Develop.Runtime.Configs.Gameplay.Entities
         [field: SerializeField, Min(0)] public float ExplodeRadius { get; private set; } = 5;
         [field: SerializeField, Min(0)] public float ExplodeDuration { get; private set; } = 1;
         [field: SerializeField, Min(0)] public float DeathProcessTime { get; private set; } = 1;
+        [field: SerializeField, Min(0)] public int Cost { get; private set; } = 15;
         [field: SerializeField] public Teams Team { get; private set; } = Teams.MainHero;
     }
 }
