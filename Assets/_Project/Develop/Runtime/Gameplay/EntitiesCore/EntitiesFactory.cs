@@ -208,7 +208,7 @@ namespace Assets._Project.Develop.Runtime.Gameplay.EntitiesCore
                   .AddTeleportedEvent()
                   .AddTeleportDelay(new ReactiveVariable<float>(1f))
                   .AddExplodeRadius(new ReactiveVariable<float>(4))
-                  .AddBodyContactDamage(new ReactiveVariable<float>(60))
+                  .AddExplodeDamage(new ReactiveVariable<float>(60))
                   .AddDeathMask(1 << LayerMask.NameToLayer("Characters"))
                   .AddIsTouchDeathMask()
                   .AddCurrentTarget();
@@ -304,6 +304,56 @@ namespace Assets._Project.Develop.Runtime.Gameplay.EntitiesCore
                   .AddSystem(new SelfReleaseSystem(_entitiesLifeContext));
 
             _entitiesLifeContext.Add(entity);
+
+            return entity;
+        }
+        public Entity CreateExplody(Vector3 position, ExplodyConfig config)
+        {
+            Entity entity = CreateEmpty();
+
+            _monoEntitiesFactory.Create(entity, position, "Entities/Explody");
+
+            entity.AddMaxHealth(new ReactiveVariable<float>(config.MaxHealth))
+                  .AddCurrentHealth(new ReactiveVariable<float>(config.MaxHealth))
+                  .AddIsDead()
+                  .AddInDeadProcess()
+                  .AddDeathProcessInitialTime(new ReactiveVariable<float>(config.DeathProcessTime))
+                  .AddDeathProcessCurrentTime()
+                  .AddTakeDamageRequest()
+                  .AddTakeDamageEvent()
+                  .AddContactsDetectingMask(Layers.CharactersMask)
+                  .AddContactCollidersBuffer(new Buffer<Collider>(64))
+                  .AddContactEntitiesBuffer(new Buffer<Entity>(64))
+                  .AddExplodeRadius(new ReactiveVariable<float>(config.ExplodeRadius))
+                  .AddExplodeDamage(new ReactiveVariable<float>(config.ExplodeDamage))
+                  .AddDeathMask(Layers.CharactersMask)
+                  .AddIsTouchDeathMask()
+                  .AddCurrentTarget();
+
+            ICompositeCondition canMove = new CompositeCondition()
+                .Add(new FuncCondition(() => entity.IsDead.Value == false));
+
+            ICompositeCondition mustDie = new CompositeCondition()
+                .Add(new FuncCondition(() => entity.CurrentHealth.Value <= 0));
+
+            ICompositeCondition mustSelfRelease = new CompositeCondition()
+                .Add(new FuncCondition(() => entity.IsDead.Value))
+                .Add(new FuncCondition(() => entity.InDeadProcess.Value == false));
+
+            ICompositeCondition canApplyDamage = new CompositeCondition()
+                .Add(new FuncCondition(() => entity.IsDead.Value == false));
+
+            entity.AddCanMove(canMove)
+                   .AddMustDie(mustDie)
+                   .AddMustSelfRelease(mustSelfRelease)
+                   .AddCanApplyDamage(canApplyDamage);
+
+            entity.AddSystem(new ApplyDamageSystem())
+                  .AddSystem(new DeathMaskTouchDetectorSystem())
+                  .AddSystem(new DeathSystem())
+                  .AddSystem(new DisableCollidersOnDeathSystem())
+                  .AddSystem(new DeathProcessTimerSystem())
+                  .AddSystem(new SelfReleaseSystem(_entitiesLifeContext));
 
             return entity;
         }

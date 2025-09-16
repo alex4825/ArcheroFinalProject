@@ -7,4 +7,9 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Features.Attack.Explode
     {
         public ReactiveVariable<float> Value;
     }
+
+    public class ExplodeDamage : IEntityComponent
+    {
+        public ReactiveVariable<float> Value;
+    }
 }

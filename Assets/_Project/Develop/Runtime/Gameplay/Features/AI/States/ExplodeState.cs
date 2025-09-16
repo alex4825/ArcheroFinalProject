@@ -27,7 +27,7 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Features.AI.States
             _body = entity.BodyCollider;
             _mask = entity.ContactsDetectingMask;
             _radius = entity.ExplodeRadius;
-            _damage = entity.BodyContactDamage;
+            _damage = entity.ExplodeDamage;
             _explodePoint = () => _body.transform.position;
 
             _colllidersRegistryService = colllidersRegistryService;
