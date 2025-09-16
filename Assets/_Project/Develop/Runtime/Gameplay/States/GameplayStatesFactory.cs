@@ -21,6 +21,7 @@ using Assets._Project.Develop.Runtime.Utilities.Reactive;
 using UnityEngine;
 using Assets._Project.Develop.Runtime.Utilities;
 using Assets._Project.Develop.Runtime.Infrastracture.Meta.Features.Wallet;
+using Assets._Project.Develop.Runtime.Gameplay.Features.TeamsFeature;
 
 namespace Assets._Project.Develop.Runtime.Gameplay.States
 {
@@ -55,6 +56,7 @@ namespace Assets._Project.Develop.Runtime.Gameplay.States
         {
             return new DefeatState(
                 _container.Resolve<IInputService>(),
+                _container.Resolve<PlayerDataProvider>(),
                 _container.Resolve<SceneSwitcherService>(),
                 _container.Resolve<ICoroutinesPerformer>(),
                 _container.Resolve<VictoryDefeatCounter>());
@@ -70,16 +72,13 @@ namespace Assets._Project.Develop.Runtime.Gameplay.States
             StageProviderService stageProviderService = _container.Resolve<StageProviderService>();
             FortressHolderService fortressHolderService = _container.Resolve<FortressHolderService>();
 
-            FuncCondition coreLoopToWinStateCondition = new FuncCondition(() => _gameplayWaveContext.WavesCount == _levelConfig.WavesCount);
+            ICompositeCondition coreLoopToWinStateCondition = new CompositeCondition()
+                .Add(new FuncCondition(() => _gameplayWaveContext.WavesCount == _levelConfig.WavesCount))
+                .Add(new FuncCondition(() => fortressHolderService.Fortress.IsDead.Value == false));
 
-            ICompositeCondition coreLoopToDefeatStateCondition = new CompositeCondition()
-                .Add(new FuncCondition(() =>
-                {
-                    if (fortressHolderService.Fortress != null)
-                        return fortressHolderService.Fortress.IsDead.Value;
-
-                    return false;
-                }));
+            ICompositeCondition coreLoopToDefeatStateCondition = new CompositeCondition(LogicOperations.Or)
+                .Add(new FuncCondition(() => fortressHolderService.Fortress == null))
+                .Add(new FuncCondition(() => fortressHolderService.Fortress.IsDead.Value));
 
             GameplayStateMachine gameplayCycle = new GameplayStateMachine(new List<IDisposable> { coreLoopState });
 
@@ -153,10 +152,10 @@ namespace Assets._Project.Develop.Runtime.Gameplay.States
             ExplodeState explodeState = new(
                 _container.Resolve<CollidersRegistryService>(),
                 () => explodePoint,
-                5,
-                40,
-                Layers.CharactersMask
-                );
+                new ReactiveVariable<float>(5),
+                new ReactiveVariable<float>(40),
+                Layers.EntityMask,
+                new ReactiveVariable<Teams>(Teams.Enemies));
 
             GameplayStateMachine explodeBehavior = new GameplayStateMachine(disposables);
 

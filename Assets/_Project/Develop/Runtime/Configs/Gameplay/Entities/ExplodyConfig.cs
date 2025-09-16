@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Assets._Project.Develop.Runtime.Gameplay.Features.TeamsFeature;
+using UnityEngine;
 
 namespace Assets._Project.Develop.Runtime.Configs.Gameplay.Entities
 {
@@ -12,5 +13,6 @@ namespace Assets._Project.Develop.Runtime.Configs.Gameplay.Entities
         [field: SerializeField, Min(0)] public float ExplodeRadius { get; private set; } = 5;
         [field: SerializeField, Min(0)] public float MaxHealth { get; private set; } = 100;
         [field: SerializeField, Min(0)] public float DeathProcessTime { get; private set; } = 1;
+        [field: SerializeField] public Teams Team { get; private set; } = Teams.Enemies;
     }
 }

@@ -1,4 +1,5 @@
 using Assets._Project.Develop.Runtime.Gameplay.EntitiesCore;
+using Assets._Project.Develop.Runtime.Gameplay.Features.TeamsFeature;
 using Assets._Project.Develop.Runtime.Utilities;
 using Assets._Project.Develop.Runtime.Utilities.Reactive;
 using Assets._Project.Develop.Runtime.Utilities.StateMachineCore;
@@ -17,10 +18,11 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Features.AI.States
         private ReactiveVariable<float> _radius;
         private ReactiveVariable<float> _damage;
         private Func<Vector3> _explodePoint;
+        private ReactiveVariable<Teams> _teamToDamage;
 
         private readonly CollidersRegistryService _colllidersRegistryService;
 
-        public ExplodeState(Entity entity, CollidersRegistryService colllidersRegistryService)
+        public ExplodeState(Entity entity, CollidersRegistryService colllidersRegistryService, ReactiveVariable<Teams> teamToDamage)
         {
             _contactsColliders = entity.ContactCollidersBuffer;
             _contactsEntities = entity.ContactEntitiesBuffer;
@@ -29,6 +31,7 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Features.AI.States
             _radius = entity.ExplodeRadius;
             _damage = entity.ExplodeDamage;
             _explodePoint = () => _body.transform.position;
+            _teamToDamage = teamToDamage;
 
             _colllidersRegistryService = colllidersRegistryService;
         }
@@ -36,18 +39,20 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Features.AI.States
         public ExplodeState(
             CollidersRegistryService colllidersRegistryService,
             Func<Vector3> getPoint,
-            float radius,
-            float damage,
+            ReactiveVariable<float> radius,
+            ReactiveVariable<float> damage,
             LayerMask mask,
+            ReactiveVariable<Teams> teamToDamage,
             CapsuleCollider selfCollider = null)
         {
             _colllidersRegistryService = colllidersRegistryService;
 
-            _radius = new(radius);
-            _damage = new(damage);
+            _radius = radius;
+            _damage = damage;
             _mask = mask;
             _body = selfCollider;
             _explodePoint = () => getPoint.Invoke();
+            _teamToDamage = teamToDamage;
 
             _contactsColliders = new(64);
             _contactsEntities = new(64);
@@ -115,10 +120,12 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Features.AI.States
             {
                 Entity contactEntity = _contactsEntities.Items[i];
 
-                if (contactEntity.CanApplyDamage.Evaluate())
-                    contactEntity.TakeDamageRequest.Invoke(_damage.Value);
-
-                Debug.Log($"Урон нанесён. HP осталось: {contactEntity.CurrentHealth.Value}");
+                if (contactEntity.Team.Value == _teamToDamage.Value)
+                    if (contactEntity.CanApplyDamage.Evaluate())
+                    {
+                        contactEntity.TakeDamageRequest.Invoke(_damage.Value);
+                        Debug.Log($"Урон нанесён. HP осталось: {contactEntity.CurrentHealth.Value}");
+                    }
             }
         }
     }

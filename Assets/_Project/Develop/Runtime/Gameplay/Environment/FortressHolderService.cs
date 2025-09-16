@@ -11,6 +11,8 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Environment
 
         private Entity _fortress;
 
+        private IDisposable _fortressDisposable;
+
         public FortressHolderService(EntitiesLifeContext entitiesLifeContext)
         {
             _entitiesLifeContext = entitiesLifeContext;
@@ -26,6 +28,7 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Environment
         public void Dispose()
         {
             _entitiesLifeContext.Added -= OnEntityAdded;
+            _fortressDisposable?.Dispose();
         }
 
         private void OnEntityAdded(Entity entity)
@@ -34,8 +37,12 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Environment
             {
                 _entitiesLifeContext.Added -= OnEntityAdded;
                 _fortress = entity;
+                _fortressDisposable = _fortress.CurrentHealth.Subscribe(OnFortressHPChanged);
                 Debug.Log("Fortress on the scene");
             }
         }
+
+        private void OnFortressHPChanged(float arg1, float currentHP)
+            => Debug.Log($"Крепость получила урон. Текущий HP: {currentHP}");
     }
 }

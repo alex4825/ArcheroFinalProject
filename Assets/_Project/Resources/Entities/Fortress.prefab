@@ -97,7 +97,7 @@ GameObject:
   - component: {fileID: 799739026738865960}
   - component: {fileID: 5919850635819141656}
   - component: {fileID: 2158989923621044564}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Fortress
   m_TagString: Untagged
   m_Icon: {fileID: 0}

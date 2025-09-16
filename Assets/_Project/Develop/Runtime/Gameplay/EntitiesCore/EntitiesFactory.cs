@@ -14,6 +14,7 @@ using Assets._Project.Develop.Runtime.Gameplay.Features.Attack.Shoot;
 using Assets._Project.Develop.Runtime.Configs.Gameplay.Entities;
 using Assets._Project.Develop.Runtime.Gameplay.Features.TeamsFeature;
 using Assets._Project.Develop.Runtime.Gameplay.Features.CurrencyFeature;
+using Unity.VisualScripting.FullSerializer;
 
 namespace Assets._Project.Develop.Runtime.Gameplay.EntitiesCore
 {
@@ -137,7 +138,7 @@ namespace Assets._Project.Develop.Runtime.Gameplay.EntitiesCore
                   .AddDeathProcessCurrentTime()
                   .AddTakeDamageRequest()
                   .AddTakeDamageEvent()
-                  .AddContactsDetectingMask(Layers.CharactersMask)
+                  .AddContactsDetectingMask(Layers.EntityMask)
                   .AddContactCollidersBuffer(new Buffer<Collider>(64))
                   .AddContactEntitiesBuffer(new Buffer<Entity>(64))
                   .AddBodyContactDamage(new ReactiveVariable<float>(config.BodyContactDamage));
@@ -264,7 +265,7 @@ namespace Assets._Project.Develop.Runtime.Gameplay.EntitiesCore
                   .AddRotationDirection(new ReactiveVariable<Vector3>(direction))
                   .AddRotationSpeed(new ReactiveVariable<float>(9999))
                   .AddIsDead()
-                  .AddContactsDetectingMask(Layers.CharactersMask | Layers.EnvironmentMask)
+                  .AddContactsDetectingMask(Layers.EntityMask | Layers.EnvironmentMask)
                   .AddContactCollidersBuffer(new Buffer<Collider>(64))
                   .AddContactEntitiesBuffer(new Buffer<Entity>(64))
                   .AddBodyContactDamage(new ReactiveVariable<float>(damage))
@@ -307,6 +308,7 @@ namespace Assets._Project.Develop.Runtime.Gameplay.EntitiesCore
 
             return entity;
         }
+
         public Entity CreateExplody(Vector3 position, ExplodyConfig config)
         {
             Entity entity = CreateEmpty();
@@ -321,13 +323,11 @@ namespace Assets._Project.Develop.Runtime.Gameplay.EntitiesCore
                   .AddDeathProcessCurrentTime()
                   .AddTakeDamageRequest()
                   .AddTakeDamageEvent()
-                  .AddContactsDetectingMask(Layers.CharactersMask)
+                  .AddContactsDetectingMask(Layers.EntityMask)
                   .AddContactCollidersBuffer(new Buffer<Collider>(64))
                   .AddContactEntitiesBuffer(new Buffer<Entity>(64))
                   .AddExplodeRadius(new ReactiveVariable<float>(config.ExplodeRadius))
                   .AddExplodeDamage(new ReactiveVariable<float>(config.ExplodeDamage))
-                  .AddDeathMask(Layers.CharactersMask)
-                  .AddIsTouchDeathMask()
                   .AddCurrentTarget()
                   .AddDisableCollidersOnDeath();
 
@@ -353,7 +353,6 @@ namespace Assets._Project.Develop.Runtime.Gameplay.EntitiesCore
                    .AddCanApplyDamage(canApplyDamage);
 
             entity.AddSystem(new ApplyDamageSystem())
-                  .AddSystem(new DeathMaskTouchDetectorSystem())
                   .AddSystem(new DeathSystem())
                   .AddSystem(new DisableCollidersOnDeathSystem())
                   .AddSystem(new DeathProcessTimerSystem())
@@ -377,28 +376,23 @@ namespace Assets._Project.Develop.Runtime.Gameplay.EntitiesCore
                   .AddDeathProcessCurrentTime()
                   .AddDisableCollidersOnDeath()
                   .AddTakeDamageRequest()
-                  .AddTakeDamageEvent();
+                  .AddTakeDamageEvent()
+                  .AddTeam(new ReactiveVariable<Teams>(Teams.MainHero));
 
             ICompositeCondition mustDie = new CompositeCondition()
                 .Add(new FuncCondition(() => entity.CurrentHealth.Value <= 0));
-
-            ICompositeCondition mustSelfRelease = new CompositeCondition()
-                .Add(new FuncCondition(() => entity.IsDead.Value))
-                .Add(new FuncCondition(() => entity.InDeadProcess.Value == false));
 
             ICompositeCondition canApplyDamage = new CompositeCondition()
                 .Add(new FuncCondition(() => entity.IsDead.Value == false));
 
             entity
                 .AddMustDie(mustDie)
-                .AddMustSelfRelease(mustSelfRelease)
                 .AddCanApplyDamage(canApplyDamage);
 
             entity.AddSystem(new ApplyDamageSystem())
                   .AddSystem(new DeathSystem())
                   .AddSystem(new DisableCollidersOnDeathSystem())
-                  .AddSystem(new DeathProcessTimerSystem())
-                  .AddSystem(new SelfReleaseSystem(_entitiesLifeContext));
+                  .AddSystem(new DeathProcessTimerSystem());
 
             _entitiesLifeContext.Add(entity);
 
@@ -411,7 +405,7 @@ namespace Assets._Project.Develop.Runtime.Gameplay.EntitiesCore
 
             _monoEntitiesFactory.Create(entity, position, "Entities/ContactTrigger");
 
-            entity.AddContactsDetectingMask(Layers.CharactersMask)
+            entity.AddContactsDetectingMask(Layers.EntityMask)
                   .AddContactCollidersBuffer(new Buffer<Collider>(64))
                   .AddContactEntitiesBuffer(new Buffer<Entity>(64));
 

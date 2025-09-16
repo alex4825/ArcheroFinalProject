@@ -12,7 +12,6 @@ namespace Assets._Project.Develop.Runtime.Gameplay.States.EndGame
 {
     public class WinState : EndGameState, IUpdatableState
     {
-        private readonly GameplayInputArgs _gameplayInputArgs;
         private readonly PlayerDataProvider _playerDataProvider;
         private readonly SceneSwitcherService _sceneSwitcherService;
         private readonly ICoroutinesPerformer _coroutinesPerformer;

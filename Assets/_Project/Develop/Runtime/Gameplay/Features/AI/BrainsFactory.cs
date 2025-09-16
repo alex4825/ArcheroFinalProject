@@ -3,6 +3,7 @@ using Assets._Project.Develop.Runtime.Gameplay.Environment;
 using Assets._Project.Develop.Runtime.Gameplay.Features.AI.States;
 using Assets._Project.Develop.Runtime.Gameplay.Features.AI.TargetSelection;
 using Assets._Project.Develop.Runtime.Gameplay.Features.InputFeature;
+using Assets._Project.Develop.Runtime.Gameplay.Features.TeamsFeature;
 using Assets._Project.Develop.Runtime.Infrastracture.DI;
 using Assets._Project.Develop.Runtime.Utilities.Conditions;
 using Assets._Project.Develop.Runtime.Utilities.Reactive;
@@ -111,7 +112,7 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Features.AI
 
             NavMeshMoveToTargetState moveToFortressState = new NavMeshMoveToTargetState(explody);
 
-            ExplodeState explodeState = new ExplodeState(explody, _container.Resolve<CollidersRegistryService>());
+            ExplodeState explodeState = new ExplodeState(explody, _container.Resolve<CollidersRegistryService>(), new ReactiveVariable<Teams>(Teams.MainHero));
 
             DeathState deathState = new DeathState(explody);
 
@@ -121,6 +122,7 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Features.AI
             rootStateMachine.AddState(deathState);
 
             rootStateMachine.AddTransition(moveToFortressState, explodeState, new CompositeCondition()
+                .Add(new FuncCondition(() => fortress.IsDead.Value == false))
                 .Add(new FuncCondition(() => explody.IsDead.Value == false))
                 .Add(new FuncCondition(() => Vector3.Distance(fortress.Transform.position, explody.Transform.position) <= explody.ExplodeRadius.Value)));
 
@@ -138,7 +140,7 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Features.AI
 
         public StateMachineBrain CreateMinatoBrain(Entity entity, ITargetSelector targetSelector)
         {
-            ExplodeState explodeState = new ExplodeState(entity, _container.Resolve<CollidersRegistryService>());
+            ExplodeState explodeState = new ExplodeState(entity, _container.Resolve<CollidersRegistryService>(), new ReactiveVariable<Teams>(Teams.Enemies));
 
             FindTargetState findTargetState = new FindTargetState(targetSelector, _entitiesLifeContext, entity);
 
