@@ -20,6 +20,7 @@ using Assets._Project.Develop.Runtime.Gameplay.EntitiesCore;
 using Assets._Project.Develop.Runtime.Utilities.Reactive;
 using UnityEngine;
 using Assets._Project.Develop.Runtime.Utilities;
+using Assets._Project.Develop.Runtime.Infrastracture.Meta.Features.Wallet;
 
 namespace Assets._Project.Develop.Runtime.Gameplay.States
 {
@@ -45,7 +46,9 @@ namespace Assets._Project.Develop.Runtime.Gameplay.States
                 _container.Resolve<PlayerDataProvider>(),
                 _container.Resolve<SceneSwitcherService>(),
                 _container.Resolve<ICoroutinesPerformer>(),
-                _container.Resolve<VictoryDefeatCounter>());
+                _container.Resolve<VictoryDefeatCounter>(),
+                _container.Resolve<WalletService>(),
+                _levelConfig.VictoryCost);
         }
 
         public DefeatState CreateDefeatState()
