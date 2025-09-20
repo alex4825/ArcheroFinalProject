@@ -20,5 +20,18 @@ namespace Assets._Project.Develop.Runtime.Gameplay.EntitiesCore
             takeDamageRequest.Invoke(damage);
             return true;
         }
+
+        public static bool TryTakeDamageFrom(Teams team, Entity damageable, float damage)
+        {
+            if (damageable.TryGetTakeDamageRequest(out ReactiveEvent<float> takeDamageRequest) == false)
+                return false;
+
+            if (damageable.TryGetTeam(out ReactiveVariable<Teams> damageableTeam))
+                if (team == damageableTeam.Value)
+                    return false;
+
+            takeDamageRequest.Invoke(damage);
+            return true;
+        }
     }
 }

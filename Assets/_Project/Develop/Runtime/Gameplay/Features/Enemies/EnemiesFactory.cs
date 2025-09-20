@@ -31,17 +31,17 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Features.Enemies
             switch (config)
             {
                 case GhostConfig ghostConfig:
-                    entity = _entitiesFactory.CreateGhost(position, ghostConfig);
+                    entity = _entitiesFactory.CreateGhost(position, ghostConfig, team);
                     _brainsFactory.CreateGhostBrain(entity);
                     break;
 
                 case ExplodyConfig explodyConfig:
-                    entity = _entitiesFactory.CreateExplody(position, explodyConfig);
+                    entity = _entitiesFactory.CreateExplody(position, explodyConfig, team);
                     _brainsFactory.CreateExplodyBrain(entity);
                     break;
 
                 case MineConfig mineConfig:
-                    entity = _entitiesFactory.CreateMine(position, mineConfig);
+                    entity = _entitiesFactory.CreateMine(position, mineConfig, team);
                     _brainsFactory.CreateMineBrain(entity);
                     break;
 
@@ -49,8 +49,6 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Features.Enemies
                     throw new ArgumentException($"Not support {config.GetType()} type config");
             }
 
-            entity
-                .AddTeam(new ReactiveVariable<Teams>(team));
 
             _entitiesLifeContext.Add(entity);
 

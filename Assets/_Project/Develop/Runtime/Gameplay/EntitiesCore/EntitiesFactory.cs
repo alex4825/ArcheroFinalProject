@@ -121,13 +121,14 @@ namespace Assets._Project.Develop.Runtime.Gameplay.EntitiesCore
             return entity;
         }
 
-        public Entity CreateGhost(Vector3 position, GhostConfig config)
+        public Entity CreateGhost(Vector3 position, GhostConfig config, Teams team)
         {
             Entity entity = CreateEmpty();
 
             _monoEntitiesFactory.Create(entity, position, "Entities/Ghost");
 
-            entity.AddMoveDirection()
+            entity.AddTeam(new ReactiveVariable<Teams>(team))
+                  .AddMoveDirection()
                   .AddMoveSpeed(new ReactiveVariable<float>(config.MoveSpeed))
                   .AddIsMoving()
                   .AddRotationDirection()
@@ -182,13 +183,14 @@ namespace Assets._Project.Develop.Runtime.Gameplay.EntitiesCore
             return entity;
         }
 
-        public Entity CreateMinato(Vector3 position)
+        public Entity CreateMinato(Vector3 position, Teams team)
         {
             Entity entity = CreateEmpty();
 
             _monoEntitiesFactory.Create(entity, position, "Entities/Minato");
 
-            entity.AddMaxHealth(new ReactiveVariable<float>(100))
+            entity.AddTeam(new ReactiveVariable<Teams>(team))
+                  .AddMaxHealth(new ReactiveVariable<float>(100))
                   .AddCurrentHealth(new ReactiveVariable<float>(100))
                   .AddIsDead()
                   .AddInDeadProcess()
@@ -311,13 +313,14 @@ namespace Assets._Project.Develop.Runtime.Gameplay.EntitiesCore
             return entity;
         }
 
-        public Entity CreateExplody(Vector3 position, ExplodyConfig config)
+        public Entity CreateExplody(Vector3 position, ExplodyConfig config, Teams team)
         {
             Entity entity = CreateEmpty();
 
             _monoEntitiesFactory.Create(entity, position, config.PrefabPath);
 
-            entity.AddMaxHealth(new ReactiveVariable<float>(config.MaxHealth))
+            entity.AddTeam(new ReactiveVariable<Teams>(team))
+                  .AddMaxHealth(new ReactiveVariable<float>(config.MaxHealth))
                   .AddCurrentHealth(new ReactiveVariable<float>(config.MaxHealth))
                   .AddIsDead()
                   .AddInDeadProcess()
@@ -402,13 +405,14 @@ namespace Assets._Project.Develop.Runtime.Gameplay.EntitiesCore
             return entity;
         }
 
-        public Entity CreateMine(Vector3 position, MineConfig config)
+        public Entity CreateMine(Vector3 position, MineConfig config, Teams team)
         {
             Entity entity = CreateEmpty();
 
             _monoEntitiesFactory.Create(entity, position, config.PrefabPath);
 
             entity
+                .AddTeam(new ReactiveVariable<Teams>(team))
                 .AddIsDead()
                 .AddExplodedEvent()
                 .AddCurrentTarget()

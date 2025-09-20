@@ -1,7 +1,6 @@
 using Assets._Project.Develop.Runtime.Configs.Gameplay.Stages;
 using Assets._Project.Develop.Runtime.Gameplay.Environment;
 using Assets._Project.Develop.Runtime.Gameplay.Features.InputFeature;
-using Assets._Project.Develop.Runtime.Gameplay.Features.StagesFeature;
 using Assets._Project.Develop.Runtime.Gameplay.States.EndGame;
 using Assets._Project.Develop.Runtime.Infrastracture.DI;
 using Assets._Project.Develop.Runtime.Utilities.Conditions;
@@ -15,13 +14,13 @@ using System;
 using Assets._Project.Develop.Runtime.Gameplay.Waves;
 using Assets._Project.Develop.Runtime.Configs.Gameplay.Levels;
 using Assets._Project.Develop.Runtime.Gameplay.Features.Enemies;
-using Assets._Project.Develop.Runtime.Gameplay.Features.AI.States;
 using Assets._Project.Develop.Runtime.Gameplay.EntitiesCore;
 using Assets._Project.Develop.Runtime.Utilities.Reactive;
 using UnityEngine;
 using Assets._Project.Develop.Runtime.Utilities;
 using Assets._Project.Develop.Runtime.Infrastracture.Meta.Features.Wallet;
 using Assets._Project.Develop.Runtime.Gameplay.Features.TeamsFeature;
+using Assets._Project.Develop.Runtime.Gameplay.Features.Attack.Explode;
 
 namespace Assets._Project.Develop.Runtime.Gameplay.States
 {
@@ -145,8 +144,6 @@ namespace Assets._Project.Develop.Runtime.Gameplay.States
 
         private GameplayParallelState CreateWaveCycleState()
         {
-            List<IDisposable> disposables = new List<IDisposable>();
-
             WaveGenerationState waveGenerationState = new WaveGenerationState(
                 _gameplayWaveContext,
                 _container.Resolve<EnemiesFactory>(),
@@ -155,36 +152,16 @@ namespace Assets._Project.Develop.Runtime.Gameplay.States
 
             WaitingForPointingState waitingForExplodePointState = new WaitingForPointingState(_container.Resolve<IInputService>());
 
-            bool needExplode = false;
-            Vector3 explodePoint = new();
-
-            disposables.Add(waitingForExplodePointState.PointFound.Subscribe(point =>
-            {
-                needExplode = true;
-                explodePoint = point;
-            }));
-
-            ExplodeState explodeState = new(
+            Exploder exploder = new(
                 _container.Resolve<CollidersRegistryService>(),
-                () => explodePoint,
                 new ReactiveVariable<float>(5),
                 new ReactiveVariable<float>(40),
                 Layers.EntityMask,
-                new ReactiveVariable<Teams>(Teams.Enemies));
+                new ReactiveVariable<Teams>(Teams.MainHero));
 
-            GameplayStateMachine explodeBehavior = new GameplayStateMachine(disposables);
+            waitingForExplodePointState.PointFound.Subscribe(exploder.ExplodeIn);
 
-            explodeBehavior.AddState(waitingForExplodePointState);
-            explodeBehavior.AddState(explodeState);
-
-            explodeBehavior.AddTransition(waitingForExplodePointState, explodeState, new FuncCondition(() => needExplode));
-            explodeBehavior.AddTransition(explodeState, waitingForExplodePointState, new FuncCondition(() =>
-            {
-                needExplode = false;
-                return true;
-            }));
-
-            return new GameplayParallelState(waveGenerationState, explodeBehavior);
+            return new GameplayParallelState(waveGenerationState, waitingForExplodePointState);
         }
     }
 }

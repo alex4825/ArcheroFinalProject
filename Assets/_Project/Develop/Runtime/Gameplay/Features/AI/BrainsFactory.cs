@@ -2,15 +2,18 @@ using Assets._Project.Develop.Runtime.Gameplay.EntitiesCore;
 using Assets._Project.Develop.Runtime.Gameplay.Environment;
 using Assets._Project.Develop.Runtime.Gameplay.Features.AI.States;
 using Assets._Project.Develop.Runtime.Gameplay.Features.AI.TargetSelection;
+using Assets._Project.Develop.Runtime.Gameplay.Features.Attack.Explode;
 using Assets._Project.Develop.Runtime.Gameplay.Features.InputFeature;
 using Assets._Project.Develop.Runtime.Gameplay.Features.TeamsFeature;
 using Assets._Project.Develop.Runtime.Infrastracture.DI;
+using Assets._Project.Develop.Runtime.Utilities;
 using Assets._Project.Develop.Runtime.Utilities.Conditions;
 using Assets._Project.Develop.Runtime.Utilities.Reactive;
 using Assets._Project.Develop.Runtime.Utilities.Timer;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Rendering;
 using static UnityEngine.EventSystems.EventTrigger;
 
 namespace Assets._Project.Develop.Runtime.Gameplay.Features.AI
@@ -108,29 +111,33 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Features.AI
 
         public StateMachineBrain CreateExplodyBrain(Entity explody)
         {
+            List<IDisposable> disposables = new List<IDisposable>();
+
             Entity fortress = _container.Resolve<FortressHolderService>().Fortress;
             explody.CurrentTarget.Value = fortress;
 
             NavMeshMoveToTargetState moveToFortressState = new NavMeshMoveToTargetState(explody);
 
-            ExplodeState explodeState = new ExplodeState(explody, _container.Resolve<CollidersRegistryService>(), new ReactiveVariable<Teams>(Teams.MainHero));
-
             DeathState deathState = new DeathState(explody);
 
-            AIStateMachine rootStateMachine = new AIStateMachine();
+            Exploder exploder = new(
+                _container.Resolve<CollidersRegistryService>(),
+                explody.ExplodeRadius,
+                explody.ExplodeDamage,
+                Layers.EntityMask,
+                explody.Team);
+
+            disposables.Add(deathState.Entered.Subscribe(
+                () => exploder.ExplodeIn(explody.Transform.position)));
+
+            AIStateMachine rootStateMachine = new AIStateMachine(disposables);
             rootStateMachine.AddState(moveToFortressState);
-            rootStateMachine.AddState(explodeState);
             rootStateMachine.AddState(deathState);
 
-            rootStateMachine.AddTransition(moveToFortressState, explodeState, new CompositeCondition()
+            rootStateMachine.AddTransition(moveToFortressState, deathState, new CompositeCondition()
                 .Add(new FuncCondition(() => fortress.IsDead.Value == false))
                 .Add(new FuncCondition(() => explody.IsDead.Value == false))
                 .Add(new FuncCondition(() => Vector3.Distance(fortress.Transform.position, explody.Transform.position) <= explody.ExplodeRadius.Value)));
-
-            rootStateMachine.AddTransition(moveToFortressState, deathState, new CompositeCondition()
-                .Add(new FuncCondition(() => explody.IsDead.Value)));
-
-            rootStateMachine.AddTransition(explodeState, deathState, new FuncCondition(() => true));
 
             StateMachineBrain brain = new StateMachineBrain(rootStateMachine);
 
@@ -138,27 +145,34 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Features.AI
 
             return brain;
         }
-        
+
         public StateMachineBrain CreateMineBrain(Entity mine)
         {
-            FindTargetState findTargetState = new FindTargetState(new NearestDamageableTargetSelector(mine), _entitiesLifeContext, mine);
+            List<IDisposable> disposables = new List<IDisposable>();
 
-            ExplodeState explodeState = new ExplodeState(mine, _container.Resolve<CollidersRegistryService>(), new ReactiveVariable<Teams>(Teams.Enemies));
+            FindTargetState findTargetState = new FindTargetState(new NearestDamageableTargetSelector(mine), _entitiesLifeContext, mine);
 
             DeathState deathState = new DeathState(mine);
 
+            Exploder exploder = new(
+                _container.Resolve<CollidersRegistryService>(),
+                mine.ExplodeRadius,
+                mine.ExplodeDamage,
+                Layers.EntityMask,
+                mine.Team);
+
+            disposables.Add(deathState.Entered.Subscribe(
+                () => exploder.ExplodeIn(mine.Transform.position)));
+
             AIStateMachine rootStateMachine = new AIStateMachine();
             rootStateMachine.AddState(findTargetState);
-            rootStateMachine.AddState(explodeState);
             rootStateMachine.AddState(deathState);
 
-            rootStateMachine.AddTransition(findTargetState, explodeState, new CompositeCondition()
+            rootStateMachine.AddTransition(findTargetState, deathState, new CompositeCondition()
                 .Add(new FuncCondition(() => mine.IsDead.Value == false))
-                .Add(new FuncCondition(() => 
+                .Add(new FuncCondition(() =>
                     mine.CurrentTarget.Value != null
                     && Vector3.Distance(mine.CurrentTarget.Value.Transform.position, mine.Transform.position) <= mine.ExplodeRadius.Value)));
-
-            rootStateMachine.AddTransition(explodeState, deathState, new FuncCondition(() => true));
 
             StateMachineBrain brain = new StateMachineBrain(rootStateMachine);
 
@@ -167,40 +181,37 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Features.AI
             return brain;
         }
 
-        public StateMachineBrain CreateMinatoBrain(Entity entity, ITargetSelector targetSelector)
+        public StateMachineBrain CreateMinatoBrain(Entity minato, ITargetSelector targetSelector)
         {
-            ExplodeState explodeState = new ExplodeState(entity, _container.Resolve<CollidersRegistryService>(), new ReactiveVariable<Teams>(Teams.Enemies));
+            List<IDisposable> disposables = new List<IDisposable>();
 
-            FindTargetState findTargetState = new FindTargetState(targetSelector, _entitiesLifeContext, entity);
+            FindTargetState findTargetState = new FindTargetState(targetSelector, _entitiesLifeContext, minato);
 
-            RandomTeleportState randomTeleportState = new RandomTeleportState(entity);
-            TargetOrientedTeleportState targetOrientedTeleportState = new TargetOrientedTeleportState(entity, targetSelector, _entitiesLifeContext);
+            RandomTeleportState randomTeleportState = new RandomTeleportState(minato);
+            TargetOrientedTeleportState targetOrientedTeleportState = new TargetOrientedTeleportState(minato, targetSelector, _entitiesLifeContext);
 
-            Entity targetEntity = entity.CurrentTarget.Value;
-
-            AIStateMachine teleportMoveBehavior = new AIStateMachine();
-
-            teleportMoveBehavior.AddState(targetOrientedTeleportState);
-            teleportMoveBehavior.AddState(randomTeleportState);
-
-            teleportMoveBehavior.AddTransition(targetOrientedTeleportState, randomTeleportState, new FuncCondition(() => targetEntity == null));
-            teleportMoveBehavior.AddTransition(randomTeleportState, targetOrientedTeleportState, new FuncCondition(() => targetEntity != null));
-
-            AIParallelState moveToTargetBehavior = new AIParallelState(teleportMoveBehavior, findTargetState);
+            Entity targetEntity = minato.CurrentTarget.Value;
 
             AIStateMachine rootStateMachine = new AIStateMachine();
-            rootStateMachine.AddState(moveToTargetBehavior);
-            rootStateMachine.AddState(explodeState);
 
-            rootStateMachine.AddTransition(moveToTargetBehavior, explodeState, new CompositeCondition()
-                .Add(new FuncCondition(() => targetEntity != null))
-                .Add(new FuncCondition(() => Vector3.Distance(targetEntity.Transform.position, entity.Transform.position) < entity.ExplodeRadius.Value)));
+            rootStateMachine.AddState(targetOrientedTeleportState);
+            rootStateMachine.AddState(randomTeleportState);
 
-            rootStateMachine.AddTransition(explodeState, moveToTargetBehavior, new FuncCondition(() => true));
+            rootStateMachine.AddTransition(targetOrientedTeleportState, randomTeleportState, new FuncCondition(() => targetEntity == null));
+            rootStateMachine.AddTransition(randomTeleportState, targetOrientedTeleportState, new FuncCondition(() => targetEntity != null));
+
+            Exploder exploder = new(
+                _container.Resolve<CollidersRegistryService>(),
+                minato.ExplodeRadius,
+                minato.ExplodeDamage,
+                Layers.EntityMask,
+                minato.Team);
+
+            minato.TeleportedEvent.Subscribe(exploder.ExplodeIn);
 
             StateMachineBrain brain = new StateMachineBrain(rootStateMachine);
 
-            _brainsContext.SetFor(entity, brain);
+            _brainsContext.SetFor(minato, brain);
 
             return brain;
         }
