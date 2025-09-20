@@ -129,6 +129,10 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 8095099702414605286}
+    - targetCorrespondingSourceObject: {fileID: -927199367670048503, guid: 82a2914d8f86c62488456950c8330e38,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 5404351099413247497}
   m_SourcePrefab: {fileID: 100100000, guid: 82a2914d8f86c62488456950c8330e38, type: 3}
 --- !u!95 &1135162192039149374 stripped
 Animator:
@@ -186,6 +190,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d21c692733a7aba4aa2ca62581d8b41b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _animator: {fileID: 1135162192039149374}
+--- !u!114 &5404351099413247497
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6274004553917538391}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2a53dde4029379049b05f9fe90282d6a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _animationClip: {fileID: 7400000, guid: 8df3c6e79b7ebc74ebff1f0dee0da794, type: 2}
   _animator: {fileID: 1135162192039149374}
 --- !u!4 &7010666726990205508 stripped
 Transform:
@@ -292,6 +310,10 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 266402945828919954}
+    - targetCorrespondingSourceObject: {fileID: 1984429777253870840, guid: f56f13c73f77b364a9ab0b51249b291a,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1938598297527654230}
   m_SourcePrefab: {fileID: 100100000, guid: f56f13c73f77b364a9ab0b51249b291a, type: 3}
 --- !u!4 &4534397410088049001 stripped
 Transform:
@@ -413,6 +435,27 @@ CapsuleCollider:
   m_Height: 1.8700798
   m_Direction: 1
   m_Center: {x: 0, y: 0.6850399, z: 0}
+--- !u!95 &1938598297527654230
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6479515039863217915}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 0}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1001 &6183583843310876371
 PrefabInstance:
   m_ObjectHideFlags: 0
