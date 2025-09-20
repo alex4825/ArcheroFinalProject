@@ -6,14 +6,14 @@ namespace Assets._Project.Develop.Runtime.Gameplay.EntitiesCore.Mono
     {
         public void Link(Entity entity)
         {
-            entity.Initialized += OnEntityStartedWOrk;
+            entity.Initialized += OnEntityStartedWork;
         }
 
-        public virtual void CleanUp(Entity entity)
+        public virtual void Cleanup(Entity entity)
         {
-            entity.Initialized -= OnEntityStartedWOrk;
+            entity.Initialized -= OnEntityStartedWork;
         }
 
-        protected abstract void OnEntityStartedWOrk(Entity entity);
+        protected abstract void OnEntityStartedWork(Entity entity);
     }
 }
