@@ -14,17 +14,17 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Features.StagesFeature
 
         private ReactiveEvent _completed = new();
 
-        private EntitiesBrainsFactory _enemiesBrainsFactory;
+        private EnemiesFactory _enemiesFactory;
         private EntitiesLifeContext _entitiesLifeContext;
 
         private bool _inProcess;
 
         private Dictionary<Entity, IDisposable> _spawnedEnemiesToRemoveReason = new();
 
-        public ClearAllEnemiesStage(ClearAllEnemiesStageConfig config, EntitiesBrainsFactory enemiesFactory, EntitiesLifeContext entitiesLifeContext)
+        public ClearAllEnemiesStage(ClearAllEnemiesStageConfig config, EnemiesFactory enemiesFactory, EntitiesLifeContext entitiesLifeContext)
         {
             _config = config;
-            _enemiesBrainsFactory = enemiesFactory;
+            _enemiesFactory = enemiesFactory;
             _entitiesLifeContext = entitiesLifeContext;
         }
 
@@ -87,7 +87,7 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Features.StagesFeature
 
         private void SpawnEnemy(EnemyItemConfig enemyItemConfig)
         {
-            Entity spawnedEnemy = _enemiesBrainsFactory.Create(enemyItemConfig.SpawnPosition, enemyItemConfig.EnemyConfig, Teams.Enemies);
+            Entity spawnedEnemy = _enemiesFactory.Create(enemyItemConfig.SpawnPosition, enemyItemConfig.EnemyConfig, Teams.Enemies);
 
             IDisposable removeReason = spawnedEnemy.IsDead.Subscribe((oldValue, isDead) =>
             {

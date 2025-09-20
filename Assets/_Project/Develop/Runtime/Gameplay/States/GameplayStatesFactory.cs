@@ -29,7 +29,7 @@ namespace Assets._Project.Develop.Runtime.Gameplay.States
     {
         private readonly DIContainer _container;
         private readonly TimerServiceFactory _timerServiceFactory;
-        private readonly EntitiesBrainsFactory _entitiesBrainsFactory;
+        private readonly EnemiesFactory _entitiesBrainsFactory;
         private readonly GameplayWaveContext _gameplayWaveContext;
         private readonly LevelConfig _levelConfig;
 
@@ -37,7 +37,7 @@ namespace Assets._Project.Develop.Runtime.Gameplay.States
         {
             _container = container;
             _timerServiceFactory = container.Resolve<TimerServiceFactory>();
-            _entitiesBrainsFactory = container.Resolve<EntitiesBrainsFactory>();
+            _entitiesBrainsFactory = container.Resolve<EnemiesFactory>();
             _gameplayWaveContext = _container.Resolve<GameplayWaveContext>();
             _levelConfig = levelConfig;
         }
@@ -149,7 +149,7 @@ namespace Assets._Project.Develop.Runtime.Gameplay.States
 
             WaveGenerationState waveGenerationState = new WaveGenerationState(
                 _gameplayWaveContext,
-                _container.Resolve<EntitiesBrainsFactory>(),
+                _container.Resolve<EnemiesFactory>(),
                 _levelConfig,
                 _container.Resolve<FortressHolderService>());
 

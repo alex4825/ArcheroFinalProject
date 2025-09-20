@@ -9,14 +9,14 @@ using Assets._Project.Develop.Runtime.Utilities.Reactive;
 
 namespace Assets._Project.Develop.Runtime.Gameplay.Features.Enemies
 {
-    public class EntitiesBrainsFactory
+    public class EnemiesFactory
     {
         private readonly DIContainer _container;
         private readonly EntitiesFactory _entitiesFactory;
         private readonly BrainsFactory _brainsFactory;
         private readonly EntitiesLifeContext _entitiesLifeContext;
 
-        public EntitiesBrainsFactory(DIContainer container)
+        public EnemiesFactory(DIContainer container)
         {
             _container = container;
             _entitiesFactory = _container.Resolve<EntitiesFactory>();

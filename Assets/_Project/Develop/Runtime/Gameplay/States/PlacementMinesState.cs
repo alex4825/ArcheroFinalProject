@@ -14,7 +14,7 @@ namespace Assets._Project.Develop.Runtime.Gameplay.States
     {
         private MineConfig _mineConfig;
         private IReadonlyEvent<Vector3> _placeFound;
-        private EntitiesBrainsFactory _entitiesBrainsFactory;
+        private EnemiesFactory _enemiesFactory;
         private WalletService _walletService;
 
         private IDisposable _placeFoundDisposable;
@@ -22,12 +22,12 @@ namespace Assets._Project.Develop.Runtime.Gameplay.States
         public PlacementMinesState(
             MineConfig mineConfig,
             IReadonlyEvent<Vector3> placeFound,
-            EntitiesBrainsFactory entitiesBrainsFactory,
+            EnemiesFactory entitiesBrainsFactory,
             WalletService walletService)
         {
             _mineConfig = mineConfig;
             _placeFound = placeFound;
-            _entitiesBrainsFactory = entitiesBrainsFactory;
+            _enemiesFactory = entitiesBrainsFactory;
             _walletService = walletService;
         }
 
@@ -56,7 +56,7 @@ namespace Assets._Project.Develop.Runtime.Gameplay.States
         {
             if (_walletService.GetCurrency(CurrencyTypes.Gold).Value > _mineConfig.Cost)
             {
-                _entitiesBrainsFactory.Create(position, _mineConfig, Teams.MainHero);
+                _enemiesFactory.Create(position, _mineConfig, Teams.MainHero);
                 _walletService.Spend(CurrencyTypes.Gold, _mineConfig.Cost);
             }
         }

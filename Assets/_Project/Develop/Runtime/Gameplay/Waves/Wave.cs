@@ -13,7 +13,7 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Waves
 {
     public class Wave : IDisposable
     {
-        private readonly EntitiesBrainsFactory _entitiesBrainsFactory;
+        private readonly EnemiesFactory _enemiesFactory;
         private WaveConfig _waveConfig;
 
         private List<EntityConfig> _enemyConfigs;
@@ -32,12 +32,12 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Waves
         private List<IDisposable> _disposables = new();
 
         public Wave(
-            EntitiesBrainsFactory enemiesFactory,
+            EnemiesFactory enemiesFactory,
             LevelConfig levelConfig,
             int waveIndex,
             Entity fortress)
         {
-            _entitiesBrainsFactory = enemiesFactory;
+            _enemiesFactory = enemiesFactory;
             _waveConfig = levelConfig.GetWaveConfigBy(waveIndex);
             _enemyConfigs = new List<EntityConfig>(_waveConfig.EnemyConfigs);
             _fortressPosition = levelConfig.FortressPosition;
@@ -72,7 +72,7 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Waves
 
             if (_time >= _currentSpawnDelay)
             {
-                Entity enemy = _entitiesBrainsFactory.Create(GetRandomPosition(), _enemyConfigs[_currentSpawnIndex], Teams.Enemies);
+                Entity enemy = _enemiesFactory.Create(GetRandomPosition(), _enemyConfigs[_currentSpawnIndex], Teams.Enemies);
                 _spawnedEnemies++;
                 _disposables.Add(enemy.IsDead.Subscribe(OnEnemyDie));
 
