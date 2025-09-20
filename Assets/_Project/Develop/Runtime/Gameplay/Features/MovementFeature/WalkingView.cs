@@ -9,7 +9,7 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Features.MovementFeature
     [RequireComponent(typeof(Animator))]
     public class WalkingView : EntityView
     {
-        private readonly int IsMovingKey = Animator.StringToHash("IsWalking");
+        private readonly int IsMovingKey = Animator.StringToHash("IsMoving");
 
         [SerializeField] private Animator _animator;
 
