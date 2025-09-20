@@ -101,7 +101,7 @@ namespace Assets._Project.Develop.Runtime.Gameplay.States
 
             GameplayParallelState restPhaseState = CreateRestPhaseState();
 
-            GameplayParallelState waveCycleState = CreateWaveCycleState();
+            GameplayParallelState waveCycleState = CreateWaveCycleState(disposables);
 
             bool isWaveWin = false;
 
@@ -135,14 +135,14 @@ namespace Assets._Project.Develop.Runtime.Gameplay.States
 
             PlacementMinesState placementMinesState = new PlacementMinesState(
                 _levelConfig.MineConfig,
-                waitingForExplodePointState.PointFound, 
+                waitingForExplodePointState.PointFound,
                 _entitiesBrainsFactory,
                 _container.Resolve<WalletService>());
 
             return new GameplayParallelState(waitingForExplodePointState, placementMinesState);
         }
 
-        private GameplayParallelState CreateWaveCycleState()
+        private GameplayParallelState CreateWaveCycleState(List<IDisposable> disposables)
         {
             WaveGenerationState waveGenerationState = new WaveGenerationState(
                 _gameplayWaveContext,
@@ -159,7 +159,7 @@ namespace Assets._Project.Develop.Runtime.Gameplay.States
                 Layers.EntityMask,
                 new ReactiveVariable<Teams>(Teams.MainHero));
 
-            waitingForExplodePointState.PointFound.Subscribe(exploder.ExplodeIn);
+            disposables.Add(waitingForExplodePointState.PointFound.Subscribe(exploder.ExplodeIn));
 
             return new GameplayParallelState(waveGenerationState, waitingForExplodePointState);
         }

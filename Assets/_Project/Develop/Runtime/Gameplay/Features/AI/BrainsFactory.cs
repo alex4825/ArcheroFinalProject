@@ -164,7 +164,7 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Features.AI
             disposables.Add(deathState.Entered.Subscribe(
                 () => exploder.ExplodeIn(mine.Transform.position)));
 
-            AIStateMachine rootStateMachine = new AIStateMachine();
+            AIStateMachine rootStateMachine = new AIStateMachine(disposables);
             rootStateMachine.AddState(findTargetState);
             rootStateMachine.AddState(deathState);
 
@@ -192,14 +192,6 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Features.AI
 
             Entity targetEntity = minato.CurrentTarget.Value;
 
-            AIStateMachine rootStateMachine = new AIStateMachine();
-
-            rootStateMachine.AddState(targetOrientedTeleportState);
-            rootStateMachine.AddState(randomTeleportState);
-
-            rootStateMachine.AddTransition(targetOrientedTeleportState, randomTeleportState, new FuncCondition(() => targetEntity == null));
-            rootStateMachine.AddTransition(randomTeleportState, targetOrientedTeleportState, new FuncCondition(() => targetEntity != null));
-
             Exploder exploder = new(
                 _container.Resolve<CollidersRegistryService>(),
                 minato.ExplodeRadius,
@@ -207,7 +199,15 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Features.AI
                 Layers.EntityMask,
                 minato.Team);
 
-            minato.TeleportedEvent.Subscribe(exploder.ExplodeIn);
+            disposables.Add(minato.TeleportedEvent.Subscribe(exploder.ExplodeIn));
+
+            AIStateMachine rootStateMachine = new AIStateMachine(disposables);
+
+            rootStateMachine.AddState(targetOrientedTeleportState);
+            rootStateMachine.AddState(randomTeleportState);
+
+            rootStateMachine.AddTransition(targetOrientedTeleportState, randomTeleportState, new FuncCondition(() => targetEntity == null));
+            rootStateMachine.AddTransition(randomTeleportState, targetOrientedTeleportState, new FuncCondition(() => targetEntity != null));
 
             StateMachineBrain brain = new StateMachineBrain(rootStateMachine);
 
