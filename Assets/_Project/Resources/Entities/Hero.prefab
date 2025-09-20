@@ -31,6 +31,37 @@ Transform:
   m_Children: []
   m_Father: {fileID: 5967874968898287417}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &6449147594535088382
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8476511475265798650}
+  m_Layer: 6
+  m_Name: DamagedEffectPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: -964228994112308473, guid: 0000000000000000d000000000000000, type: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8476511475265798650
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6449147594535088382}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0.8, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 5967874968898287417}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &2607673180222880094
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -133,6 +164,10 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 5404351099413247497}
+    - targetCorrespondingSourceObject: {fileID: -927199367670048503, guid: 82a2914d8f86c62488456950c8330e38,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 6811220384190843804}
   m_SourcePrefab: {fileID: 100100000, guid: 82a2914d8f86c62488456950c8330e38, type: 3}
 --- !u!95 &1135162192039149374 stripped
 Animator:
@@ -205,6 +240,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _animationClip: {fileID: 7400000, guid: 8df3c6e79b7ebc74ebff1f0dee0da794, type: 2}
   _animator: {fileID: 1135162192039149374}
+--- !u!114 &6811220384190843804
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6274004553917538391}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d597a3c229fdd02499b0ba4bd1bf3606, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _applyDamageEffectPrefab: {fileID: 19801142, guid: c83fb3ef04bb383408bb2064b89690b2,
+    type: 3}
+  _effectSpawnPoint: {fileID: 8476511475265798650}
 --- !u!4 &7010666726990205508 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -4216859302048453862, guid: 82a2914d8f86c62488456950c8330e38,
@@ -281,6 +331,10 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 680363046952752326}
+    - targetCorrespondingSourceObject: {fileID: 1203558882741650746, guid: f56f13c73f77b364a9ab0b51249b291a,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 8476511475265798650}
     - targetCorrespondingSourceObject: {fileID: 8974735815494757226, guid: f56f13c73f77b364a9ab0b51249b291a,
         type: 3}
       insertIndex: -1
