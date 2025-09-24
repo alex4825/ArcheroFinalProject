@@ -1,7 +1,10 @@
 using Assets._Project.Develop.Runtime.Configs.Gameplay.Stages;
+using Assets._Project.Develop.Runtime.Gameplay.EntitiesCore;
 using Assets._Project.Develop.Runtime.Infrastracture.DI;
 using Assets._Project.Develop.Runtime.Infrastracture.Gameplay.Infrastracture;
 using Assets._Project.Develop.Runtime.UI.CommonViews;
+using Assets._Project.Develop.Runtime.UI.Core;
+using Assets._Project.Develop.Runtime.UI.Gameplay.HealthDisplay;
 using Assets._Project.Develop.Runtime.UI.Gameplay.ResultsPopups;
 using Assets._Project.Develop.Runtime.UI.Gameplay.Stages;
 using Assets._Project.Develop.Runtime.Utilities.CoroutinesManagement;
@@ -18,6 +21,20 @@ namespace Assets._Project.Develop.Runtime.UI.Gameplay
         {
             _container = container;
             _gameplayInputArgs = gameplayInputArgs;
+        }
+
+        public EntitiesHealthDisplayPresenter CreateEntitiesHealthDisplayPresenter(EntitiesHealthDisplay view)
+        {
+            return new EntitiesHealthDisplayPresenter(
+                _container.Resolve<EntitiesLifeContext>(),
+                view,
+                _container.Resolve<ViewsFactory>(),
+                this);
+        }
+
+        public EntityHealthPresenter CreateEntityHealthPresenter(Entity entity, BarWithText view)
+        {
+            return new EntityHealthPresenter(entity, view);
         }
 
         public StagePresenter CreateStagePresenter(IconTextView view)

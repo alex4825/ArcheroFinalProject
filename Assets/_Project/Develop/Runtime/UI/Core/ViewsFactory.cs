@@ -19,6 +19,8 @@ namespace Assets._Project.Develop.Runtime.UI.Core
             {ViewIDs.GameplayScreen, "UI/Gameplay/GameplayScreenView" },
             {ViewIDs.WinPopup, "UI/Gameplay/WinPopup" },
             {ViewIDs.DefeatPopup, "UI/Gameplay/DefeatPopup" },
+            {ViewIDs.SimpleHealthBar, "UI/Gameplay/HealthBars/SimpleHealthBar" },
+            {ViewIDs.MainHeroHealthBar, "UI/Gameplay/HealthBars/HeroHealthBar" },
         };
 
         public ViewsFactory(ResourcesAssetsLoader resourcesAssetsLoader)
