@@ -103,7 +103,7 @@ namespace Assets._Project.Develop.Runtime.Infrastracture.Gameplay.Infrastracture
 
         private static GameplayPresentersFactory CreateGameplayPresentersFactory(DIContainer container)
         {
-            return new GameplayPresentersFactory(container);
+            return new GameplayPresentersFactory(container, _inputArgs);
         }
 
         private static GameplayStatesContext CreateGameplayStatesContext(DIContainer container)
