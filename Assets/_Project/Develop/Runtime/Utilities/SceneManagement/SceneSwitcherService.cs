@@ -22,7 +22,7 @@ namespace Assets._Project.Develop.Runtime.Utilities.SceneManagement
             _projectContainer = projectContainer;
         }
 
-        public IEnumerator ProcesSwitchTo(string sceneName, IInputSceneArgs sceneArgs = null)
+        public IEnumerator ProcessSwitchTo(string sceneName, IInputSceneArgs sceneArgs = null)
         {
             _loadingScreen.Show();
 

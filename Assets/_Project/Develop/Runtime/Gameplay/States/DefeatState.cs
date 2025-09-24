@@ -31,7 +31,7 @@ namespace Assets._Project.Develop.Runtime.Gameplay.States
         {
             if (Input.GetKeyDown(KeyCode.Q))
             {
-                _coroutinesPerformer.StartPerform(_sceneSwitcherService.ProcesSwitchTo(Scenes.MainMenu));
+                _coroutinesPerformer.StartPerform(_sceneSwitcherService.ProcessSwitchTo(Scenes.MainMenu));
             }
         }
     }

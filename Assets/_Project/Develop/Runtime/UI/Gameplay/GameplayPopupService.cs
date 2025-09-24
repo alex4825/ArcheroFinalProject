@@ -1,4 +1,6 @@
 using Assets._Project.Develop.Runtime.UI.Core;
+using Assets._Project.Develop.Runtime.UI.Gameplay.ResultsPopups;
+using System;
 using UnityEngine;
 
 namespace Assets._Project.Develop.Runtime.UI.Gameplay
@@ -20,5 +22,27 @@ namespace Assets._Project.Develop.Runtime.UI.Gameplay
         }
 
         protected override Transform PopupLayer => _uiRoot.PopupsLayer;
+
+        public WinPopupPresenter OpenWinPopup(Action closedCallback = null)
+        {
+            WinPopupView view = ViewsFactory.Create<WinPopupView>(ViewIDs.WinPopup, PopupLayer);
+
+            WinPopupPresenter popup = _gameplayPresentersFactory.CreateWinPopupPresenter(view);
+
+            OnPopupCreated(popup, view, closedCallback);
+
+            return popup;
+        }
+
+        public DefeatPopupPresenter OpenDefeatPopup(Action closedCallback = null)
+        {
+            DefeatPopupView view = ViewsFactory.Create<DefeatPopupView>(ViewIDs.DefeatPopup, PopupLayer);
+
+            DefeatPopupPresenter popup = _gameplayPresentersFactory.CreateDefeatPopupPresenter(view);
+
+            OnPopupCreated(popup, view, closedCallback);
+
+            return popup;
+        }
     }
 }
