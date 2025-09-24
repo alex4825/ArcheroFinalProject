@@ -73,7 +73,7 @@ namespace Assets._Project.Develop.Runtime.Infrastracture.Gameplay.Infrastracture
                 SceneSwitcherService sceneSwitcherService = _container.Resolve<SceneSwitcherService>();
                 ICoroutinesPerformer coroutinesPerformer = _container.Resolve<ICoroutinesPerformer>();
 
-                coroutinesPerformer.StartPerform(sceneSwitcherService.ProcesSwitchTo(Scenes.MainMenu));
+                coroutinesPerformer.StartPerform(sceneSwitcherService.ProcessSwitchTo(Scenes.MainMenu));
             }
         }
 

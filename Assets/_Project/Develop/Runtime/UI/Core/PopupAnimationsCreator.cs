@@ -10,9 +10,9 @@ namespace Assets._Project.Develop.Runtime.UI.Core
     {
         public static Sequence CreateShowAnimation(
             CanvasGroup body,
-            Image anticklicker,
+            Image anticlicker,
             PopupAnimationTypes popupAnimationType,
-            float anticklickerMaxAlpha)
+            float anticlickerMaxAlpha)
         {
             switch (popupAnimationType)
             {
@@ -21,12 +21,21 @@ namespace Assets._Project.Develop.Runtime.UI.Core
 
                 case PopupAnimationTypes.Expand:
                     return DOTween.Sequence()
-                        .Append(anticklicker
-                            .DOFade(anticklickerMaxAlpha, 0.2f)
+                        .Append(anticlicker
+                            .DOFade(anticlickerMaxAlpha, 0.2f)
                             .From(0))   
                         .Join(body.transform
                             .DOScale(1, 0.5f)
                             .From(0).SetEase(Ease.OutBack));
+
+                case PopupAnimationTypes.Fade:
+                    return DOTween.Sequence()
+                        .Append(anticlicker
+                            .DOFade(anticlickerMaxAlpha, 0.2f)
+                            .From(0))
+                        .Join(body
+                            .DOFade(1, 0.3f)
+                            .From(0));
 
                 default:
                    throw new ArgumentException(nameof(popupAnimationType));
