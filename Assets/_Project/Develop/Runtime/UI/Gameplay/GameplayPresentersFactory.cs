@@ -1,9 +1,11 @@
+using Assets._Project.Develop.Runtime.Configs.Gameplay.Stages;
 using Assets._Project.Develop.Runtime.Infrastracture.DI;
 using Assets._Project.Develop.Runtime.Infrastracture.Gameplay.Infrastracture;
+using Assets._Project.Develop.Runtime.UI.CommonViews;
 using Assets._Project.Develop.Runtime.UI.Gameplay.ResultsPopups;
+using Assets._Project.Develop.Runtime.UI.Gameplay.Stages;
 using Assets._Project.Develop.Runtime.Utilities.CoroutinesManagement;
 using Assets._Project.Develop.Runtime.Utilities.SceneManagement;
-using System;
 
 namespace Assets._Project.Develop.Runtime.UI.Gameplay
 {
@@ -18,9 +20,14 @@ namespace Assets._Project.Develop.Runtime.UI.Gameplay
             _gameplayInputArgs = gameplayInputArgs;
         }
 
+        public StagePresenter CreateStagePresenter(IconTextView view)
+        {
+            return new StagePresenter(view, _container.Resolve<StageProviderService>());
+        }
+
         public GameplayScreenPresenter CreateGameplayScreenPresenter(GameplayScreenView view)
         {
-            return new GameplayScreenPresenter(view);
+            return new GameplayScreenPresenter(view, _container.Resolve<GameplayPresentersFactory>());
         }
 
         public WinPopupPresenter CreateWinPopupPresenter(WinPopupView view)
