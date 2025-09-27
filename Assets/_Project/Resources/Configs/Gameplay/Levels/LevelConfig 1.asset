@@ -19,7 +19,7 @@ MonoBehaviour:
   <MineConfig>k__BackingField: {fileID: 11400000, guid: c23580ad74dd76547a8b4bb84504b7e0,
     type: 2}
   <DelayBetweenWaves>k__BackingField: 5
-  <FortressHP>k__BackingField: 200
+  <FortressHP>k__BackingField: 300
   <VictoryCost>k__BackingField: 50
   <LevelEnvironment>k__BackingField: {fileID: 124691657050534622, guid: 81b845120b2227341963483930779e2b,
     type: 3}

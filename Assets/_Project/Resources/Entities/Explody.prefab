@@ -359,6 +359,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Explody
       objectReference: {fileID: 0}
+    - target: {fileID: 8974735815494757226, guid: f56f13c73f77b364a9ab0b51249b291a,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0.12
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:
