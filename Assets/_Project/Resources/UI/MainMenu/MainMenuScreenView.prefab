@@ -402,7 +402,7 @@ GameObject:
   - component: {fileID: 234007957981082111}
   - component: {fileID: 1760211900428028031}
   m_Layer: 5
-  m_Name: ButtonOpenLevelsMenu
+  m_Name: ButtonPlay
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -687,7 +687,7 @@ PrefabInstance:
     - target: {fileID: 1545596875255315726, guid: 414ba174d9db16341bd271bb8b2a56a2,
         type: 3}
       propertyPath: m_SizeDelta.x
-      value: 187.9375
+      value: 29
       objectReference: {fileID: 0}
     - target: {fileID: 1545596875255315726, guid: 414ba174d9db16341bd271bb8b2a56a2,
         type: 3}
@@ -732,7 +732,7 @@ PrefabInstance:
     - target: {fileID: 1545596875255315726, guid: 414ba174d9db16341bd271bb8b2a56a2,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 301.90625
+      value: 63.5
       objectReference: {fileID: 0}
     - target: {fileID: 1545596875255315726, guid: 414ba174d9db16341bd271bb8b2a56a2,
         type: 3}
