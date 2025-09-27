@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Assets._Project.Develop.Runtime.Utilities.StateMachineCore
 {
-    public abstract class ParallelState<TState> : State where TState : class, IState
+    public abstract class ParallelState<TState> : State, IDisposable where TState : class, IState
     {
         private List<TState> _states;
 
@@ -28,6 +28,13 @@ namespace Assets._Project.Develop.Runtime.Utilities.StateMachineCore
 
             foreach (TState state in _states)
                 state.Exit();
+        }
+
+        public void Dispose()
+        {
+            foreach (TState state in _states)
+                if (state is IDisposable disposable)
+                    disposable.Dispose();
         }
     }
 }
