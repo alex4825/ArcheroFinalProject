@@ -21,6 +21,7 @@ using Assets._Project.Develop.Runtime.Utilities;
 using Assets._Project.Develop.Runtime.Infrastracture.Meta.Features.Wallet;
 using Assets._Project.Develop.Runtime.Gameplay.Features.TeamsFeature;
 using Assets._Project.Develop.Runtime.Gameplay.Features.Attack.Explode;
+using Assets._Project.Develop.Runtime.UI.Gameplay;
 
 namespace Assets._Project.Develop.Runtime.Gameplay.States
 {
@@ -46,10 +47,10 @@ namespace Assets._Project.Develop.Runtime.Gameplay.States
             return new WinState(
                 _container.Resolve<IInputService>(),
                 _container.Resolve<PlayerDataProvider>(),
-                _container.Resolve<SceneSwitcherService>(),
                 _container.Resolve<ICoroutinesPerformer>(),
                 _container.Resolve<VictoryDefeatCounter>(),
                 _container.Resolve<WalletService>(),
+                _container.Resolve<GameplayPopupService>(),
                 _levelConfig.VictoryCost);
         }
 
@@ -58,9 +59,9 @@ namespace Assets._Project.Develop.Runtime.Gameplay.States
             return new DefeatState(
                 _container.Resolve<IInputService>(),
                 _container.Resolve<PlayerDataProvider>(),
-                _container.Resolve<SceneSwitcherService>(),
                 _container.Resolve<ICoroutinesPerformer>(),
-                _container.Resolve<VictoryDefeatCounter>());
+                _container.Resolve<VictoryDefeatCounter>(),
+                _container.Resolve<GameplayPopupService>());
         }
 
         public GameplayStateMachine CreateGameplayStateMachine()

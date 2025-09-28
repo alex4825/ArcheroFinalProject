@@ -11,6 +11,7 @@ using Assets._Project.Develop.Runtime.Gameplay.Features.StagesFeature;
 using Assets._Project.Develop.Runtime.Gameplay.States;
 using Assets._Project.Develop.Runtime.Gameplay.Waves;
 using Assets._Project.Develop.Runtime.Infrastracture.DI;
+using Assets._Project.Develop.Runtime.UI;
 using Assets._Project.Develop.Runtime.UI.Core;
 using Assets._Project.Develop.Runtime.UI.Gameplay;
 using Assets._Project.Develop.Runtime.UI.MainMenu;
@@ -70,10 +71,19 @@ namespace Assets._Project.Develop.Runtime.Infrastracture.Gameplay.Infrastracture
             container.RegisterAsSingle(CreateGameplayPresentersFactory);
 
             container.RegisterAsSingle(CreateGameplayScreenPresenter).NonLazy();
+
+            container.RegisterAsSingle(CreateGameplayPopupService);
         }
 
+        private static GameplayPopupService CreateGameplayPopupService(DIContainer container)
+            => new GameplayPopupService(
+                container.Resolve<ViewsFactory>(),
+                container.Resolve<ProjectPresentersFactory>(),
+                container.Resolve<GameplayUIRoot>(),
+                container.Resolve<GameplayPresentersFactory>()); 
+
         private static GameplayPresentersFactory CreateGameplayPresentersFactory(DIContainer container)
-            => new GameplayPresentersFactory(container);
+            => new GameplayPresentersFactory(container, _inputArgs);
 
         private static GameplayScreenPresenter CreateGameplayScreenPresenter(DIContainer container)
         {
@@ -81,7 +91,7 @@ namespace Assets._Project.Develop.Runtime.Infrastracture.Gameplay.Infrastracture
             GameplayScreenView view = container.Resolve<ViewsFactory>().Create<GameplayScreenView>(ViewIDs.GameplayScreen, uiRoot.HUDLayer);
 
             GameplayScreenPresenter presenter = container.Resolve<GameplayPresentersFactory>().CreateGameplayScreenPresenter(
-                view, 
+                view,
                 container.Resolve<ConfigsProviderService>().GetConfig<LevelsListConfig>().GetBy(_inputArgs.LevelNumber));
 
             return presenter;

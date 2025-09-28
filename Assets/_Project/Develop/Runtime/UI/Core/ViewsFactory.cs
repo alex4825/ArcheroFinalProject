@@ -17,8 +17,8 @@ namespace Assets._Project.Develop.Runtime.UI.Core
             {ViewIDs.LevelTile, "UI/LevelsMenuPopup/LevelTile" },
             {ViewIDs.LevelsMenuPopup, "UI/LevelsMenuPopup/LevelsMenuPopup" },
             {ViewIDs.GameplayScreen, "UI/Gameplay/GameplayScreenView" },
-            {ViewIDs.WinPopup, "UI/Gameplay/ResultsPopup/WinPopup" },
-            {ViewIDs.DefeatPopup, "UI/Gameplay/ResultsPopup/DefeatPopup" },
+            {ViewIDs.WinPopup, "UI/Gameplay/WinPopup" },
+            {ViewIDs.DefeatPopup, "UI/Gameplay/DefeatPopup" },
         };
 
         public ViewsFactory(ResourcesAssetsLoader resourcesAssetsLoader)

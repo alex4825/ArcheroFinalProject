@@ -76,7 +76,7 @@ namespace Assets._Project.Develop.Runtime.UI.MainMenu
         private void OnPlayRandomLevelButtonClicked()
         {
             _coroutinesPerformer.StartPerform(
-                _sceneSwitcherService.ProcesSwitchTo
+                _sceneSwitcherService.ProcessSwitchTo
                 (Scenes.Gameplay,
                 new GameplayInputArgs(Random.Range(1, _levelsCount + 1))));
         }

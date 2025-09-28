@@ -5,12 +5,6 @@ using Assets._Project.Develop.Runtime.Infrastracture.Gameplay.Infrastracture;
 using Assets._Project.Develop.Runtime.UI.Gameplay.ResultsPopups;
 using Assets._Project.Develop.Runtime.Utilities.CoroutinesManagement;
 using Assets._Project.Develop.Runtime.Utilities.SceneManagement;
-using System;
-using Assets._Project.Develop.Runtime.UI.MainMenu;
-using Assets._Project.Develop.Runtime.Utilities.ConfigsManagement;
-using Assets._Project.Develop.Runtime.Utilities.CoroutinesManagement;
-using Assets._Project.Develop.Runtime.Utilities.SceneManagement;
-using System;
 
 namespace Assets._Project.Develop.Runtime.UI.Gameplay
 {

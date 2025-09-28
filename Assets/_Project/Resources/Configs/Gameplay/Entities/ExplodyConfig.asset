@@ -15,7 +15,8 @@ MonoBehaviour:
   <PrefabPath>k__BackingField: Entities/Explody
   <MoveSpeed>k__BackingField: 3
   <RotationSpeed>k__BackingField: 900
-  <ExplodeDamage>k__BackingField: 50
-  <ExplodeRadius>k__BackingField: 5
+  <ExplodeDamage>k__BackingField: 100
+  <ExplodeRadius>k__BackingField: 7
   <MaxHealth>k__BackingField: 100
   <DeathProcessTime>k__BackingField: 1
+  <Team>k__BackingField: 1

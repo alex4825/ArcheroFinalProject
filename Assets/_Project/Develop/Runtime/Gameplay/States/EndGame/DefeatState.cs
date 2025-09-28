@@ -1,4 +1,5 @@
 ﻿using Assets._Project.Develop.Runtime.Gameplay.Features.InputFeature;
+using Assets._Project.Develop.Runtime.UI.Gameplay;
 using Assets._Project.Develop.Runtime.Utilities.CoroutinesManagement;
 using Assets._Project.Develop.Runtime.Utilities.DataManagement.DataProviders;
 using Assets._Project.Develop.Runtime.Utilities.DataManipulation;
@@ -10,22 +11,22 @@ namespace Assets._Project.Develop.Runtime.Gameplay.States.EndGame
 {
     public class DefeatState : EndGameState, IUpdatableState
     {
-        private readonly SceneSwitcherService _sceneSwitcherService;
         private readonly ICoroutinesPerformer _coroutinesPerformer;
         private readonly VictoryDefeatCounter _victoryDefeatCounter;
         private readonly PlayerDataProvider _playerDataProvider;
+        private readonly GameplayPopupService _gameplayPopupService;
 
         public DefeatState(
             IInputService inputService,
             PlayerDataProvider playerDataProvider,
-            SceneSwitcherService sceneSwitcherService,
             ICoroutinesPerformer coroutinesPerformer,
-            VictoryDefeatCounter victoryDefeatCounter) : base(inputService)
+            VictoryDefeatCounter victoryDefeatCounter,
+            GameplayPopupService gameplayPopupService) : base(inputService)
         {
             _playerDataProvider = playerDataProvider;
-            _sceneSwitcherService = sceneSwitcherService;
             _coroutinesPerformer = coroutinesPerformer;
             _victoryDefeatCounter = victoryDefeatCounter;
+            _gameplayPopupService = gameplayPopupService;
         }
 
         public override void Enter()
@@ -36,7 +37,7 @@ namespace Assets._Project.Develop.Runtime.Gameplay.States.EndGame
             _victoryDefeatCounter.AddDefeat();
 
             _coroutinesPerformer.StartPerform(_playerDataProvider.SaveAcync());
-            _coroutinesPerformer.StartPerform(_sceneSwitcherService.ProcesSwitchTo(Scenes.MainMenu));
+            _gameplayPopupService.OpenDefeatPopup();
         }
 
         public void Update(float deltaTime)
