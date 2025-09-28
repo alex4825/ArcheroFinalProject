@@ -16,6 +16,7 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Features.Attack.Explode
         private ReactiveVariable<float> _radius;
         private ReactiveVariable<float> _damage;
         private ReactiveVariable<Teams> _attackerTeam;
+        private ReactiveEvent<Vector3> _explodedEvent;
 
         private readonly CollidersRegistryService _colllidersRegistryService;
 
@@ -25,6 +26,7 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Features.Attack.Explode
             ReactiveVariable<float> damage,
             LayerMask mask,
             ReactiveVariable<Teams> attackerTeam,
+            ReactiveEvent<Vector3> explodedEvent = null,
             CapsuleCollider attackerCollider = null)
         {
             _colllidersRegistryService = colllidersRegistryService;
@@ -34,6 +36,7 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Features.Attack.Explode
             _mask = mask;
             _attackerCollider = attackerCollider;
             _attackerTeam = attackerTeam;
+            _explodedEvent = explodedEvent;
 
             _contactsColliders = new(64);
             _contactsEntities = new(64);
@@ -41,6 +44,8 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Features.Attack.Explode
 
         public void ExplodeIn(Vector3 point)
         {
+            _explodedEvent?.Invoke(point);
+
             DetectContactsIn(point);
 
             InitEntitiesFromContacts();

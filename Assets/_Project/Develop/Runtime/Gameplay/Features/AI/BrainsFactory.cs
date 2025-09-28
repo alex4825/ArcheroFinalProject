@@ -125,7 +125,8 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Features.AI
                 explody.ExplodeRadius,
                 explody.ExplodeDamage,
                 Layers.EntityMask,
-                explody.Team);
+                explody.Team,
+                explody.ExplodedEvent);
 
             disposables.Add(deathState.Entered.Subscribe(
                 () => exploder.ExplodeIn(explody.Transform.position)));
@@ -159,7 +160,8 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Features.AI
                 mine.ExplodeRadius,
                 mine.ExplodeDamage,
                 Layers.EntityMask,
-                mine.Team);
+                mine.Team,
+                mine.ExplodedEvent);
 
             disposables.Add(deathState.Entered.Subscribe(
                 () => exploder.ExplodeIn(mine.Transform.position)));
@@ -197,7 +199,8 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Features.AI
                 minato.ExplodeRadius,
                 minato.ExplodeDamage,
                 Layers.EntityMask,
-                minato.Team);
+                minato.Team,
+                minato.ExplodedEvent);
 
             disposables.Add(minato.TeleportedEvent.Subscribe(exploder.ExplodeIn));
 
