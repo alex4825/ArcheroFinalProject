@@ -74,7 +74,7 @@ namespace Assets._Project.Develop.Runtime.Gameplay.States
             FortressHolderService fortressHolderService = _container.Resolve<FortressHolderService>();
 
             ICompositeCondition coreLoopToWinStateCondition = new CompositeCondition()
-                .Add(new FuncCondition(() => _gameplayWaveContext.WavesCount == _levelConfig.WavesCount))
+                .Add(new FuncCondition(() => _gameplayWaveContext.WavesPassed == _levelConfig.WavesCount))
                 .Add(new FuncCondition(() => fortressHolderService.Fortress.IsDead.Value == false));
 
             ICompositeCondition coreLoopToDefeatStateCondition = new CompositeCondition(LogicOperations.Or)

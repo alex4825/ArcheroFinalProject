@@ -9,11 +9,15 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Waves
         private Wave _currentWave;
 
         private ReactiveEvent<WaveResult> _currentWaveEnded = new();
+        private ReactiveVariable<int> _currentWaveNumber = new();
 
         private IDisposable _waveEndedDisposable;
 
         public IReadonlyEvent<WaveResult> CurrentWaveEnded => _currentWaveEnded;
-        public int WavesCount { get; private set; }
+
+        public IReadonlyVariable<int> CurrentWaveNumber => _currentWaveNumber;
+
+        public int WavesPassed { get; private set; }
 
         public void Set(Wave wave)
         {
@@ -21,6 +25,7 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Waves
                 throw new InvalidOperationException("Wave is already running");
 
             _currentWave = wave;
+            _currentWaveNumber.Value++;
 
             _waveEndedDisposable = _currentWave.Ended.Subscribe(OnCurrentWaveEnded);
         }
@@ -36,7 +41,8 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Waves
             _currentWave?.Dispose();
             _currentWave = null;
 
-            WavesCount = 0;
+            WavesPassed = 0;
+            _currentWaveNumber.Value = 0;
         }
 
         private void OnCurrentWaveEnded(WaveResult result)
@@ -46,7 +52,7 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Waves
             _currentWaveEnded?.Invoke(result);
             _waveEndedDisposable?.Dispose();
 
-            WavesCount++;
+            WavesPassed++;
         }
     }
 }

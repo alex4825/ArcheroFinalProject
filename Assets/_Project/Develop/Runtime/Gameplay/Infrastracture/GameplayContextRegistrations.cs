@@ -11,6 +11,9 @@ using Assets._Project.Develop.Runtime.Gameplay.Features.StagesFeature;
 using Assets._Project.Develop.Runtime.Gameplay.States;
 using Assets._Project.Develop.Runtime.Gameplay.Waves;
 using Assets._Project.Develop.Runtime.Infrastracture.DI;
+using Assets._Project.Develop.Runtime.UI.Core;
+using Assets._Project.Develop.Runtime.UI.Gameplay;
+using Assets._Project.Develop.Runtime.UI.MainMenu;
 using Assets._Project.Develop.Runtime.Utilities;
 using Assets._Project.Develop.Runtime.Utilities.AssetsManagement;
 using Assets._Project.Develop.Runtime.Utilities.ConfigsManagement;
@@ -61,6 +64,36 @@ namespace Assets._Project.Develop.Runtime.Infrastracture.Gameplay.Infrastracture
             container.RegisterAsSingle(CreateFortressHolderService).NonLazy();
 
             container.RegisterAsSingle(CreateGameplayWaveContext);
+
+            container.RegisterAsSingle(CreateGameplayUIRoot).NonLazy();
+
+            container.RegisterAsSingle(CreateGameplayPresentersFactory);
+
+            container.RegisterAsSingle(CreateGameplayScreenPresenter).NonLazy();
+        }
+
+        private static GameplayPresentersFactory CreateGameplayPresentersFactory(DIContainer container)
+            => new GameplayPresentersFactory(container);
+
+        private static GameplayScreenPresenter CreateGameplayScreenPresenter(DIContainer container)
+        {
+            GameplayUIRoot uiRoot = container.Resolve<GameplayUIRoot>();
+            GameplayScreenView view = container.Resolve<ViewsFactory>().Create<GameplayScreenView>(ViewIDs.GameplayScreen, uiRoot.HUDLayer);
+
+            GameplayScreenPresenter presenter = container.Resolve<GameplayPresentersFactory>().CreateGameplayScreenPresenter(
+                view, 
+                container.Resolve<ConfigsProviderService>().GetConfig<LevelsListConfig>().GetBy(_inputArgs.LevelNumber));
+
+            return presenter;
+        }
+
+        private static GameplayUIRoot CreateGameplayUIRoot(DIContainer container)
+        {
+            ResourcesAssetsLoader resourcesAssetsLoader = container.Resolve<ResourcesAssetsLoader>();
+
+            GameplayUIRoot gameplayUIRootPrefab = resourcesAssetsLoader.Load<GameplayUIRoot>("UI/Gameplay/GameplayUIRoot");
+
+            return Object.Instantiate(gameplayUIRootPrefab);
         }
 
         private static GameplayWaveContext CreateGameplayWaveContext(DIContainer container)
@@ -74,7 +107,7 @@ namespace Assets._Project.Develop.Runtime.Infrastracture.Gameplay.Infrastracture
 
         private static GameplayStatesFactory CreateGameplayStatesFactory(DIContainer container)
             => new GameplayStatesFactory(
-                container, 
+                container,
                 container.Resolve<ConfigsProviderService>().GetConfig<LevelsListConfig>().GetBy(_inputArgs.LevelNumber));
 
         private static MainHeroHolderService CreateMainHeroHolderService(DIContainer container)
@@ -111,7 +144,7 @@ namespace Assets._Project.Develop.Runtime.Infrastracture.Gameplay.Infrastracture
 
         private static MonoEntitiesFactory CreateMonoEntitiesFactory(DIContainer container)
             => new MonoEntitiesFactory(
-                container.Resolve<ResourcesAssetsLoader>(), 
+                container.Resolve<ResourcesAssetsLoader>(),
                 container.Resolve<EntitiesLifeContext>(),
                 container.Resolve<CollidersRegistryService>());
 
