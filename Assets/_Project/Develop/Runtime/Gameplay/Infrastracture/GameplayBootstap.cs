@@ -1,11 +1,9 @@
 ﻿using Assets._Project.Develop.Runtime.Infrastracture.DI;
-using Assets._Project.Develop.Runtime.Utilities.CoroutinesManagement;
 using Assets._Project.Develop.Runtime.Utilities.SceneManagement;
 using System.Collections;
 using System;
 using UnityEngine;
 using Assets._Project.Develop.Runtime.Infrastracture.Meta.Features.Wallet;
-using Assets._Project.Develop.Runtime.Gameplay;
 using Assets._Project.Develop.Runtime.Gameplay.EntitiesCore;
 using Assets._Project.Develop.Runtime.Gameplay.Features.AI;
 using Assets._Project.Develop.Runtime.Gameplay.States;
@@ -13,6 +11,7 @@ using Assets._Project.Develop.Runtime.Gameplay.Features.MainHero;
 using Assets._Project.Develop.Runtime.Configs.Gameplay.Levels;
 using Assets._Project.Develop.Runtime.Utilities.ConfigsManagement;
 using Assets._Project.Develop.Runtime.Gameplay.Environment;
+using Assets._Project.Develop.Runtime.UI.Gameplay;
 
 namespace Assets._Project.Develop.Runtime.Infrastracture.Gameplay.Infrastracture
 {
@@ -26,6 +25,8 @@ namespace Assets._Project.Develop.Runtime.Infrastracture.Gameplay.Infrastracture
         private GameplayStatesContext _gameplayStatesContext;
         private EntitiesLifeContext _entitiesLifeContext;
         private AIBrainsContext _brainsContext;
+
+        private GameplayScreenPresenter _screenPresenter;
 
         public override void ProcessRegistrations(DIContainer container, IInputSceneArgs sceneArgs = null)
         {
@@ -51,8 +52,9 @@ namespace Assets._Project.Develop.Runtime.Infrastracture.Gameplay.Infrastracture
             _brainsContext = _container.Resolve<AIBrainsContext>();
             _gameplayStatesContext = _container.Resolve<GameplayStatesContext>();
 
-            //_container.Resolve<MainHeroFactory>().Create(Vector3.zero);
             CreateEnvironment();
+            
+            _screenPresenter = _container.Resolve<GameplayScreenPresenter>();
 
             yield break;
         }
@@ -67,14 +69,6 @@ namespace Assets._Project.Develop.Runtime.Infrastracture.Gameplay.Infrastracture
         private void Update()
         {
             _container?.Update(Time.deltaTime);
-
-            if (Input.GetKeyDown(KeyCode.F))
-            {
-                SceneSwitcherService sceneSwitcherService = _container.Resolve<SceneSwitcherService>();
-                ICoroutinesPerformer coroutinesPerformer = _container.Resolve<ICoroutinesPerformer>();
-
-                coroutinesPerformer.StartPerform(sceneSwitcherService.ProcessSwitchTo(Scenes.MainMenu));
-            }
         }
 
         private void CreateEnvironment()
@@ -83,6 +77,11 @@ namespace Assets._Project.Develop.Runtime.Infrastracture.Gameplay.Infrastracture
             LevelEnvironment levelEnvironment = Instantiate(currentLevel.LevelEnvironment);
 
             _container.Resolve<EntitiesFactory>().CreateFortress(levelEnvironment.Fortress);
+        }
+
+        private void LateUpdate()
+        {
+            _screenPresenter?.LateUpdate();
         }
     }
 }
