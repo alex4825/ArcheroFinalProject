@@ -13,12 +13,14 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Features.Attack.Explode
         [SerializeField] private ParticleSystem _explosionDecalPrefab;
 
         private ReactiveEvent<Vector3> _explodedEvent;
+        private ReactiveVariable<float> _explodeRadius;
 
         private IDisposable _explodedDisposable;
 
         protected override void OnEntityStartedWork(Entity entity)
         {
             _explodedEvent = entity.ExplodedEvent;
+            _explodeRadius = entity.ExplodeRadius;
             _explodedDisposable = _explodedEvent.Subscribe(OnEntityExploded);
         }
 
@@ -31,8 +33,11 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Features.Attack.Explode
 
         private void OnEntityExploded(Vector3 point)
         {
-            Instantiate(_explosionPrefab, point, Quaternion.identity, null);
-            Instantiate(_explosionDecalPrefab, point, Quaternion.identity, null);
+            ParticleSystem explosion = Instantiate(_explosionPrefab, point, _explosionPrefab.transform.rotation, null);
+            ParticleSystem explosionDecal = Instantiate(_explosionDecalPrefab, point, _explosionDecalPrefab.transform.rotation, null);
+
+            explosion.transform.localScale *= _explodeRadius.Value / 2;
+            explosionDecal.transform.localScale *= _explodeRadius.Value / 2;
         }
     }
 }
