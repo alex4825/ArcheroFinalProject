@@ -12,6 +12,7 @@ using Assets._Project.Develop.Runtime.Configs.Gameplay.Levels;
 using Assets._Project.Develop.Runtime.Utilities.ConfigsManagement;
 using Assets._Project.Develop.Runtime.Gameplay.Environment;
 using Assets._Project.Develop.Runtime.UI.Gameplay;
+using Assets._Project.Develop.Runtime.Configs.Gameplay.Entities;
 
 namespace Assets._Project.Develop.Runtime.Infrastracture.Gameplay.Infrastracture
 {
@@ -25,6 +26,7 @@ namespace Assets._Project.Develop.Runtime.Infrastracture.Gameplay.Infrastracture
         private GameplayStatesContext _gameplayStatesContext;
         private EntitiesLifeContext _entitiesLifeContext;
         private AIBrainsContext _brainsContext;
+        private EntitiesFactory _entitiesFactory;
 
         private GameplayScreenPresenter _screenPresenter;
 
@@ -51,6 +53,7 @@ namespace Assets._Project.Develop.Runtime.Infrastracture.Gameplay.Infrastracture
             _entitiesLifeContext = _container.Resolve<EntitiesLifeContext>();
             _brainsContext = _container.Resolve<AIBrainsContext>();
             _gameplayStatesContext = _container.Resolve<GameplayStatesContext>();
+            _entitiesFactory = _container.Resolve<EntitiesFactory>();
 
             CreateEnvironment();
             
@@ -76,7 +79,7 @@ namespace Assets._Project.Develop.Runtime.Infrastracture.Gameplay.Infrastracture
             LevelConfig currentLevel = _container.Resolve<ConfigsProviderService>().GetConfig<LevelsListConfig>().GetBy(_inputArgs.LevelNumber);
             LevelEnvironment levelEnvironment = Instantiate(currentLevel.LevelEnvironment);
 
-            _container.Resolve<EntitiesFactory>().CreateFortress(levelEnvironment.Fortress);
+            _entitiesFactory.CreateFortress(levelEnvironment.Fortress);
         }
 
         private void LateUpdate()

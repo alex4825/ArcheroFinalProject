@@ -4,6 +4,7 @@ using Assets._Project.Develop.Runtime.Gameplay.EntitiesCore;
 using Assets._Project.Develop.Runtime.Gameplay.EntitiesCore.Mono;
 using Assets._Project.Develop.Runtime.Gameplay.Environment;
 using Assets._Project.Develop.Runtime.Gameplay.Features.AI;
+using Assets._Project.Develop.Runtime.Gameplay.Features.Attack.Explode;
 using Assets._Project.Develop.Runtime.Gameplay.Features.Enemies;
 using Assets._Project.Develop.Runtime.Gameplay.Features.InputFeature;
 using Assets._Project.Develop.Runtime.Gameplay.Features.MainHero;
@@ -58,10 +59,6 @@ namespace Assets._Project.Develop.Runtime.Infrastracture.Gameplay.Infrastracture
 
             container.RegisterAsSingle(CreateMainHeroHolderService).NonLazy();
 
-            container.RegisterAsSingle(CreateGameplayStatesFactory);
-
-            container.RegisterAsSingle(CreateGameplayStatesContext);
-
             container.RegisterAsSingle(CreateFortressHolderService).NonLazy();
 
             container.RegisterAsSingle(CreateGameplayWaveContext);
@@ -73,6 +70,10 @@ namespace Assets._Project.Develop.Runtime.Infrastracture.Gameplay.Infrastracture
             container.RegisterAsSingle(CreateGameplayScreenPresenter).NonLazy();
 
             container.RegisterAsSingle(CreateGameplayPopupService);
+
+            container.RegisterAsSingle(CreateGameplayStatesFactory);
+
+            container.RegisterAsSingle(CreateGameplayStatesContext);
         }
 
         private static GameplayPopupService CreateGameplayPopupService(DIContainer container)

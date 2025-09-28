@@ -153,6 +153,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <WaveCountView>k__BackingField: {fileID: 4285025382619911347}
   <EntitiesHealthDisplay>k__BackingField: {fileID: 794656327310878344}
+  <FreeExploderView>k__BackingField: {fileID: 0}
 --- !u!222 &6165715429949167747
 CanvasRenderer:
   m_ObjectHideFlags: 0

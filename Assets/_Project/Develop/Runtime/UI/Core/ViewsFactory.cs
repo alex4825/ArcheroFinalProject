@@ -21,6 +21,7 @@ namespace Assets._Project.Develop.Runtime.UI.Core
             {ViewIDs.DefeatPopup, "UI/Gameplay/DefeatPopup" },
             {ViewIDs.SimpleHealthBar, "UI/Gameplay/HealthBars/SimpleHealthBar" },
             {ViewIDs.TextHealthBar, "UI/Gameplay/HealthBars/TextHealthBar" },
+            {ViewIDs.FreeExploderView, "UI/Gameplay/FreeExploderView" },
         };
 
         public ViewsFactory(ResourcesAssetsLoader resourcesAssetsLoader)

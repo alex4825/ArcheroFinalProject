@@ -22,6 +22,10 @@ using Assets._Project.Develop.Runtime.Infrastracture.Meta.Features.Wallet;
 using Assets._Project.Develop.Runtime.Gameplay.Features.TeamsFeature;
 using Assets._Project.Develop.Runtime.Gameplay.Features.Attack.Explode;
 using Assets._Project.Develop.Runtime.UI.Gameplay;
+using Assets._Project.Develop.Runtime.Gameplay.Features.MainHero;
+using Assets._Project.Develop.Runtime.Configs.Gameplay.Entities;
+using Assets._Project.Develop.Runtime.Utilities.ConfigsManagement;
+using Assets._Project.Develop.Runtime.UI.Core;
 
 namespace Assets._Project.Develop.Runtime.Gameplay.States
 {
@@ -153,13 +157,26 @@ namespace Assets._Project.Develop.Runtime.Gameplay.States
 
             WaitingForPointingState waitingForExplodePointState = new WaitingForPointingState(_container.Resolve<IInputService>());
 
+            PlayerConfig playerConfig = _container.Resolve<ConfigsProviderService>().GetConfig<PlayerConfig>();
+
+            ReactiveEvent<Vector3> explodedEvent = new();
+            ReactiveVariable<float> explodeRadius = new ReactiveVariable<float>(playerConfig.ExplodeRadius);
+
             Exploder exploder = new(
                 _container.Resolve<CollidersRegistryService>(),
-                new ReactiveVariable<float>(5),
-                new ReactiveVariable<float>(40),
+                explodeRadius,
+                new ReactiveVariable<float>(playerConfig.ExplodeDamage),
                 Layers.EntityMask,
-                new ReactiveVariable<Teams>(Teams.MainHero));
+                new ReactiveVariable<Teams>(Teams.MainHero),
+                explodedEvent);
 
+            FreeExploderPresenter freeExploderPresenter = new FreeExploderPresenter(
+                _container.Resolve<ViewsFactory>().Create<FreeExploderView>(ViewIDs.FreeExploderView),
+                explodedEvent,
+                explodeRadius
+                );
+
+            disposables.Add(freeExploderPresenter);
             disposables.Add(waitingForExplodePointState.PointFound.Subscribe(exploder.ExplodeIn));
 
             return new GameplayParallelState(waveGenerationState, waitingForExplodePointState);
