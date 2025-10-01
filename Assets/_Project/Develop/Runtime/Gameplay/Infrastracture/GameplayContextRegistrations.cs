@@ -16,6 +16,8 @@ using Assets._Project.Develop.Runtime.Utilities.AssetsManagement;
 using Assets._Project.Develop.Runtime.Utilities.ConfigsManagement;
 using UnityEngine;
 using Assets._Project.Develop.Runtime.Gameplay.Features.AbilitiesFeature;
+using Assets._Project.Develop.Runtime.Configs.Gameplay.Abilities;
+using Assets._Project.Develop.Runtime.Gameplay.Features.AbilitiesDroppingFeature;
 
 namespace Assets._Project.Develop.Runtime.Infrastracture.Gameplay.Infrastracture
 {
@@ -68,6 +70,22 @@ namespace Assets._Project.Develop.Runtime.Infrastracture.Gameplay.Infrastracture
             container.RegisterAsSingle(CreateGameplayPopupService);
 
             container.RegisterAsSingle(CreateAbilityFactory);
+
+            container.RegisterAsSingle(CreateAbilityDropingRulesService);
+
+            container.RegisterAsSingle(CreateAbilityDropService);
+        }
+
+        private static AbilityDropService CreateAbilityDropService(DIContainer c)
+        {
+            return new AbilityDropService(
+                c.Resolve<ConfigsProviderService>().GetConfig<AbilitiesConfigsContainer>(),
+                c.Resolve<AbilityDropingRulesService>());
+        }
+
+        private static AbilityDropingRulesService CreateAbilityDropingRulesService(DIContainer c)
+        {
+            return new AbilityDropingRulesService();
         }
 
         private static AbilityFactory CreateAbilityFactory(DIContainer container)
