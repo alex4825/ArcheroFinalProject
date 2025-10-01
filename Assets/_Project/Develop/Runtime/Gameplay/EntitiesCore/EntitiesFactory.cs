@@ -14,6 +14,8 @@ using Assets._Project.Develop.Runtime.Gameplay.Features.Attack.Shoot;
 using Assets._Project.Develop.Runtime.Configs.Gameplay.Entities;
 using Assets._Project.Develop.Runtime.Gameplay.Features.TeamsFeature;
 using Assets._Project.Develop.Runtime.Gameplay.Features.SpawnFeature;
+using System.Collections.Generic;
+using Assets._Project.Develop.Runtime.Gameplay.Features.StatsFeature;
 
 namespace Assets._Project.Develop.Runtime.Gameplay.EntitiesCore
 {
@@ -38,13 +40,25 @@ namespace Assets._Project.Develop.Runtime.Gameplay.EntitiesCore
 
             _monoEntitiesFactory.Create(entity, position, "Entities/Hero");
 
-            entity.AddMoveDirection()
-                  .AddMoveSpeed(new ReactiveVariable<float>(config.MoveSpeed))
+            Dictionary<StatTypes, float> baseStats = new()
+            {
+                {StatTypes.MoveSpeed, config.MoveSpeed },
+                {StatTypes.MaxHealth, config.MaxHealth },
+                {StatTypes.Damage, config.InstantAttackDamage },
+            };
+
+            Dictionary<StatTypes, float> modifiedStats = new(baseStats);
+
+            entity
+                  .AddBaseStats(baseStats)
+                  .AddModifiedStats(modifiedStats)
+                  .AddMoveDirection()
+                  .AddMoveSpeed(new ReactiveVariable<float>(baseStats[StatTypes.MoveSpeed]))
                   .AddIsMoving()
                   .AddRotationDirection()
                   .AddRotationSpeed(new ReactiveVariable<float>(config.RotationSpeed))
-                  .AddMaxHealth(new ReactiveVariable<float>(config.MaxHealth))
-                  .AddCurrentHealth(new ReactiveVariable<float>(config.MaxHealth))
+                  .AddMaxHealth(new ReactiveVariable<float>(baseStats[StatTypes.MaxHealth]))
+                  .AddCurrentHealth(new ReactiveVariable<float>(baseStats[StatTypes.MaxHealth]))
                   .AddIsDead()
                   .AddInDeadProcess()
                   .AddDeathProcessInitialTime(new ReactiveVariable<float>(config.DeathProcessTime))
@@ -59,7 +73,7 @@ namespace Assets._Project.Develop.Runtime.Gameplay.EntitiesCore
                   .AddEndAttackEvent()
                   .AddAttackDelayTime(new ReactiveVariable<float>(config.AttackDelayTime))
                   .AddAttackDelayEndEvent()
-                  .AddInstantAttackDamage(new ReactiveVariable<float>(config.InstantAttackDamage))
+                  .AddInstantAttackDamage(new ReactiveVariable<float>(baseStats[StatTypes.Damage]))
                   .AddAttackCancelEvent()
                   .AddAttackCooldownInitialTime(new ReactiveVariable<float>(config.AttackCooldown))
                   .AddAttackCooldownCurrentTime()
