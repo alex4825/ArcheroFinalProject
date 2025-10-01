@@ -114,7 +114,11 @@ namespace Assets._Project.Develop.Runtime.Gameplay.EntitiesCore
                 .AddCanStartAttack(canStartAttack)
                 .AddMustCalcelAttack(mustCancelAttack);
 
-            entity.AddSystem(new RigidbodyMovementSystem())
+            entity
+                  .AddSystem(new MoveSpeedStatSynchronizerSystem())
+                  .AddSystem(new DamageStatSynchronizerSystem())
+                  .AddSystem(new MaxHealthStatSynchronizerSystem())
+                  .AddSystem(new RigidbodyMovementSystem())
                   .AddSystem(new RigidbodyRotationSystem())
                   .AddSystem(new AttackCancelSystem())
                   .AddSystem(new StartAttackSystem())
