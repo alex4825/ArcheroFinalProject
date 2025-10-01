@@ -15,6 +15,7 @@ using Assets._Project.Develop.Runtime.UI;
 using Assets._Project.Develop.Runtime.Utilities.AssetsManagement;
 using Assets._Project.Develop.Runtime.Utilities.ConfigsManagement;
 using UnityEngine;
+using Assets._Project.Develop.Runtime.Gameplay.Features.AbilitiesFeature;
 
 namespace Assets._Project.Develop.Runtime.Infrastracture.Gameplay.Infrastracture
 {
@@ -65,7 +66,12 @@ namespace Assets._Project.Develop.Runtime.Infrastracture.Gameplay.Infrastracture
             container.RegisterAsSingle(CreateGameplayPresentersFactory);
 
             container.RegisterAsSingle(CreateGameplayPopupService);
+
+            container.RegisterAsSingle(CreateAbilityFactory);
         }
+
+        private static AbilityFactory CreateAbilityFactory(DIContainer container)
+            => new AbilityFactory(container);
 
         private static GameplayPopupService CreateGameplayPopupService(DIContainer container)
         {

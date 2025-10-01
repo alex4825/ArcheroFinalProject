@@ -17,6 +17,6 @@ MonoBehaviour:
   <Description>k__BackingField: Small increase max health
   <Icon>k__BackingField: {fileID: 21300000, guid: 11a2a20495aa34f1f87fee20d4974929,
     type: 3}
-  <StatType>k__BackingField: 1
+  <StatType>k__BackingField: 2
   _operation: 0
   _value: 1.2
