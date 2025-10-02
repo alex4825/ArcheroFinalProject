@@ -1,4 +1,6 @@
+using Assets._Project.Develop.Runtime.Gameplay.EntitiesCore;
 using Assets._Project.Develop.Runtime.UI.Core;
+using Assets._Project.Develop.Runtime.UI.Gameplay.AbilitySelectPopup;
 using Assets._Project.Develop.Runtime.UI.Gameplay.ResultsPopups;
 using System;
 using UnityEngine;
@@ -22,6 +24,17 @@ namespace Assets._Project.Develop.Runtime.UI.Gameplay
         }
 
         protected override Transform PopupLayer => _uiRoot.PopupsLayer;
+
+        public AbilitySelectPopupPresenter OpenAbilitySelectPopup(Entity entity, Action closedCallback = null)
+        {
+            AbilitySelectPopupView view = ViewsFactory.Create<AbilitySelectPopupView>(ViewIDs.AbilitySelectPopup, PopupLayer);
+
+            AbilitySelectPopupPresenter popup = _gameplayPresentersFactory.CreateAbilitySelectPopupPresenter(view, entity);
+
+            OnPopupCreated(popup, view, closedCallback);
+
+            return popup;
+        }
 
         public WinPopupPresenter OpenWinPopup(Action closedCallback = null)
         {

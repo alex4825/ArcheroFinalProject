@@ -1,9 +1,13 @@
+using Assets._Project.Develop.Runtime.Configs.Gameplay.Abilities;
 using Assets._Project.Develop.Runtime.Configs.Gameplay.Stages;
 using Assets._Project.Develop.Runtime.Gameplay.EntitiesCore;
+using Assets._Project.Develop.Runtime.Gameplay.Features.AbilitiesDroppingFeature;
+using Assets._Project.Develop.Runtime.Gameplay.Features.AbilitiesFeature;
 using Assets._Project.Develop.Runtime.Infrastracture.DI;
 using Assets._Project.Develop.Runtime.Infrastracture.Gameplay.Infrastracture;
 using Assets._Project.Develop.Runtime.UI.CommonViews;
 using Assets._Project.Develop.Runtime.UI.Core;
+using Assets._Project.Develop.Runtime.UI.Gameplay.AbilitySelectPopup;
 using Assets._Project.Develop.Runtime.UI.Gameplay.HealthDisplay;
 using Assets._Project.Develop.Runtime.UI.Gameplay.ResultsPopups;
 using Assets._Project.Develop.Runtime.UI.Gameplay.Stages;
@@ -21,6 +25,27 @@ namespace Assets._Project.Develop.Runtime.UI.Gameplay
         {
             _container = container;
             _gameplayInputArgs = gameplayInputArgs;
+        }
+
+        public SelectableAbilityPresenter CreateSelectableAbilityPresenter(
+            AbilityConfig abilityConfig,
+            SelectableAbilityView view,
+            Entity entity)
+        {
+            return new SelectableAbilityPresenter(abilityConfig, view, _container.Resolve<AbilityFactory>(), entity);
+        }
+
+        public AbilitySelectPopupPresenter CreateAbilitySelectPopupPresenter(
+            AbilitySelectPopupView view,
+            Entity entity)
+        {
+            return new AbilitySelectPopupPresenter(
+                _container.Resolve<ICoroutinesPerformer>(),
+                view,
+                entity,
+                this,
+                _container.Resolve<AbilityDropService>(),
+                _container.Resolve<ViewsFactory>());
         }
 
         public EntitiesHealthDisplayPresenter CreateEntitiesHealthDisplayPresenter(EntitiesHealthDisplay view)
