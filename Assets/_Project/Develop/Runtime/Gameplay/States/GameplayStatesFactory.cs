@@ -1,6 +1,7 @@
 using Assets._Project.Develop.Runtime.Configs.Gameplay.Stages;
 using Assets._Project.Develop.Runtime.Gameplay.Features.InputFeature;
 using Assets._Project.Develop.Runtime.Gameplay.Features.MainHero;
+using Assets._Project.Develop.Runtime.Gameplay.Features.PauseFeature;
 using Assets._Project.Develop.Runtime.Gameplay.Features.StagesFeature;
 using Assets._Project.Develop.Runtime.Infrastracture.DI;
 using Assets._Project.Develop.Runtime.Infrastracture.Gameplay.Infrastracture;
@@ -39,14 +40,16 @@ namespace Assets._Project.Develop.Runtime.Gameplay.States
                 gameplayInputArgs,
                 _container.Resolve<PlayerDataProvider>(),
                 _container.Resolve<ICoroutinesPerformer>(),
-                _container.Resolve<GameplayPopupService>());
+                _container.Resolve<GameplayPopupService>(),
+                _container.Resolve<IPauseService>());
         }
 
         public DefeatState CreateDefeatState()
         {
             return new DefeatState(
                 _container.Resolve<IInputService>(),
-                _container.Resolve<GameplayPopupService>());
+                _container.Resolve<GameplayPopupService>(),
+                _container.Resolve<IPauseService>());
         }
 
         public GameplayStateMachine CreateGameplayStateMachine(GameplayInputArgs gameplayInputArgs)

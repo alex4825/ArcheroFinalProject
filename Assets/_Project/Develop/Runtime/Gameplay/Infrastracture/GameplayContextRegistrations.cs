@@ -20,6 +20,7 @@ using Assets._Project.Develop.Runtime.Configs.Gameplay.Abilities;
 using Assets._Project.Develop.Runtime.Gameplay.Features.AbilitiesDroppingFeature;
 using Assets._Project.Develop.Runtime.Gameplay.Features.LevelUpFeature;
 using Assets._Project.Develop.Runtime.Utilities.CoroutinesManagement;
+using Assets._Project.Develop.Runtime.Gameplay.Features.PauseFeature;
 
 namespace Assets._Project.Develop.Runtime.Infrastracture.Gameplay.Infrastracture
 {
@@ -78,6 +79,13 @@ namespace Assets._Project.Develop.Runtime.Infrastracture.Gameplay.Infrastracture
             container.RegisterAsSingle(CreateAbilityDropService);
 
             container.RegisterAsSingle(CreateDropAbilityOnMainHeroLevelUpService).NonLazy();
+
+            container.RegisterAsSingle<IPauseService>(CreateTimeScalePauseService);
+        }
+
+        private static TimeScalePauseService CreateTimeScalePauseService(DIContainer c)
+        {
+            return new TimeScalePauseService();
         }
 
         private static DropAbilityOnMainHeroLevelUpService CreateDropAbilityOnMainHeroLevelUpService(DIContainer container)
@@ -85,7 +93,8 @@ namespace Assets._Project.Develop.Runtime.Infrastracture.Gameplay.Infrastracture
             return new DropAbilityOnMainHeroLevelUpService(
                 container.Resolve<MainHeroHolderService>(),
                 container.Resolve<GameplayPopupService>(),
-                container.Resolve<ICoroutinesPerformer>());
+                container.Resolve<ICoroutinesPerformer>(),
+                container.Resolve<IPauseService>());
         }
 
         private static AbilityDropService CreateAbilityDropService(DIContainer c)
