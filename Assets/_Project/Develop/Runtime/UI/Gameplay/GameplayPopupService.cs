@@ -25,11 +25,11 @@ namespace Assets._Project.Develop.Runtime.UI.Gameplay
 
         protected override Transform PopupLayer => _uiRoot.PopupsLayer;
 
-        public AbilitySelectPopupPresenter OpenAbilitySelectPopup(Entity entity, Action closedCallback = null)
+        public AbilitySelectPopupPresenter OpenAbilitySelectPopup(Entity entity, int level, Action closedCallback = null)
         {
             AbilitySelectPopupView view = ViewsFactory.Create<AbilitySelectPopupView>(ViewIDs.AbilitySelectPopup, PopupLayer);
 
-            AbilitySelectPopupPresenter popup = _gameplayPresentersFactory.CreateAbilitySelectPopupPresenter(view, entity);
+            AbilitySelectPopupPresenter popup = _gameplayPresentersFactory.CreateAbilitySelectPopupPresenter(view, entity, level);
 
             OnPopupCreated(popup, view, closedCallback);
 

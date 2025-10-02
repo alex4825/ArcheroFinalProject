@@ -18,6 +18,8 @@ using UnityEngine;
 using Assets._Project.Develop.Runtime.Gameplay.Features.AbilitiesFeature;
 using Assets._Project.Develop.Runtime.Configs.Gameplay.Abilities;
 using Assets._Project.Develop.Runtime.Gameplay.Features.AbilitiesDroppingFeature;
+using Assets._Project.Develop.Runtime.Gameplay.Features.LevelUpFeature;
+using Assets._Project.Develop.Runtime.Utilities.CoroutinesManagement;
 
 namespace Assets._Project.Develop.Runtime.Infrastracture.Gameplay.Infrastracture
 {
@@ -74,6 +76,16 @@ namespace Assets._Project.Develop.Runtime.Infrastracture.Gameplay.Infrastracture
             container.RegisterAsSingle(CreateAbilityDropingRulesService);
 
             container.RegisterAsSingle(CreateAbilityDropService);
+
+            container.RegisterAsSingle(CreateDropAbilityOnMainHeroLevelUpService).NonLazy();
+        }
+
+        private static DropAbilityOnMainHeroLevelUpService CreateDropAbilityOnMainHeroLevelUpService(DIContainer container)
+        {
+            return new DropAbilityOnMainHeroLevelUpService(
+                container.Resolve<MainHeroHolderService>(),
+                container.Resolve<GameplayPopupService>(),
+                container.Resolve<ICoroutinesPerformer>());
         }
 
         private static AbilityDropService CreateAbilityDropService(DIContainer c)

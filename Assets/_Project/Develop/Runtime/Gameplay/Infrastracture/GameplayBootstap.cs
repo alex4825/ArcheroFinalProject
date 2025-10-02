@@ -25,6 +25,8 @@ namespace Assets._Project.Develop.Runtime.Infrastracture.Gameplay.Infrastracture
 
         private GameplayScreenPresenter _screenPresenter;
 
+        private MainHeroHolderService _mainHeroHolderService;
+
         public override void ProcessRegistrations(DIContainer container, IInputSceneArgs sceneArgs = null)
         {
             _container = container;
@@ -49,8 +51,9 @@ namespace Assets._Project.Develop.Runtime.Infrastracture.Gameplay.Infrastracture
             _brainsContext = _container.Resolve<AIBrainsContext>();
             _gameplayStatesContext = _container.Resolve<GameplayStatesContext>();
 
-            _container.Resolve<MainHeroFactory>().Create(Vector3.zero); 
-            
+            _container.Resolve<MainHeroFactory>().Create(Vector3.zero);
+            _mainHeroHolderService = _container.Resolve<MainHeroHolderService>();
+
             _screenPresenter = _container.Resolve<GameplayScreenPresenter>();
 
             yield break;
@@ -68,6 +71,11 @@ namespace Assets._Project.Develop.Runtime.Infrastracture.Gameplay.Infrastracture
             _brainsContext?.Update(Time.deltaTime);
             _entitiesLifeContext?.Update(Time.deltaTime);
             _gameplayStatesContext?.Update(Time.deltaTime);
+
+            if (Input.GetKeyDown(KeyCode.Space))
+            {
+                _mainHeroHolderService.MainHero.Experience.Value += 1000;
+            }
         }
 
         private void LateUpdate()
