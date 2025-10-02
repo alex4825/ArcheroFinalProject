@@ -45,7 +45,7 @@ namespace Assets._Project.Develop.Runtime.UI.Gameplay.AbilitySelectPopup
         {
             base.Initialize();
 
-            _view.SetTitle(string.Format(Title, 2));
+            _view.SetTitle(string.Format(Title, _entity.Level.Value));
             _view.SetAdditionalText(SelectAbilityText);
             _view.SelectButtonOff();
 
