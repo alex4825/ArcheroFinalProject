@@ -84,4 +84,14 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Features.Attack
     {
         public ReactiveVariable<bool> Value;
     }
+
+    public class AttackDistance : IEntityComponent
+    {
+        public ReactiveVariable<float> Value;
+    }
+
+    public class AttackCooldownIsOverEvent : IEntityComponent
+    {
+        public ReactiveEvent Value;
+    }
 }
