@@ -2,9 +2,9 @@ using Assets._Project.Develop.Runtime.Gameplay.EntitiesCore;
 using Assets._Project.Develop.Runtime.Gameplay.Environment;
 using Assets._Project.Develop.Runtime.Gameplay.Features.AI.States;
 using Assets._Project.Develop.Runtime.Gameplay.Features.AI.TargetSelection;
+using Assets._Project.Develop.Runtime.Gameplay.Features.Attack;
 using Assets._Project.Develop.Runtime.Gameplay.Features.Attack.Explode;
 using Assets._Project.Develop.Runtime.Gameplay.Features.InputFeature;
-using Assets._Project.Develop.Runtime.Gameplay.Features.TeamsFeature;
 using Assets._Project.Develop.Runtime.Infrastracture.DI;
 using Assets._Project.Develop.Runtime.Utilities;
 using Assets._Project.Develop.Runtime.Utilities.Conditions;
@@ -13,7 +13,6 @@ using Assets._Project.Develop.Runtime.Utilities.Timer;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Rendering;
 using static UnityEngine.EventSystems.EventTrigger;
 
 namespace Assets._Project.Develop.Runtime.Gameplay.Features.AI
@@ -105,6 +104,35 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Features.AI
             StateMachineBrain brain = new StateMachineBrain(stateMachine);
 
             _brainsContext.SetFor(entity, brain);
+
+            return brain;
+        }
+
+        public StateMachineBrain CreateCannonBrain(Entity cannon)
+        {
+            Entity fortress = _container.Resolve<FortressHolderService>().Fortress;
+            cannon.CurrentTarget.Value = fortress;
+
+            NavMeshMoveToTargetState moveToFortressState = new NavMeshMoveToTargetState(cannon);
+
+            AIStateMachine autoAttackState = CreateAutoAttackStateMachine(cannon);
+
+            AIStateMachine rootStateMachine = new AIStateMachine();
+            rootStateMachine.AddState(moveToFortressState);
+            rootStateMachine.AddState(autoAttackState);
+
+            ICompositeCondition moveToFortressToAutoAttackCondition = new CompositeCondition()
+                .Add(new FuncCondition(() => fortress.IsDead.Value == false))
+                .Add(new FuncCondition(() => cannon.IsDead.Value == false))
+                .Add(new FuncCondition(() => Vector3.Distance(fortress.Transform.position, cannon.Transform.position) <= cannon.AttackDistance.Value));
+
+            rootStateMachine.AddTransition(moveToFortressState, autoAttackState, moveToFortressToAutoAttackCondition);
+
+            rootStateMachine.AddTransition(autoAttackState, moveToFortressState, new FuncCondition(() => moveToFortressToAutoAttackCondition.Evaluate() == false));
+
+            StateMachineBrain brain = new StateMachineBrain(rootStateMachine);
+
+            _brainsContext.SetFor(cannon, brain);
 
             return brain;
         }

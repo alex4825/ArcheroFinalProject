@@ -13,6 +13,7 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Features.Attack
         private ReactiveVariable<bool> _inAttackCooldown;
 
         private ReactiveEvent _endAttackEvent;
+        private ReactiveEvent _attackCooldownIsOverEvent;
 
         private IDisposable _endAttackEventDisposable;
 
@@ -22,6 +23,7 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Features.Attack
             _initialTime = entity.AttackCooldownInitialTime;
             _inAttackCooldown = entity.InAttackCooldown;
             _endAttackEvent = entity.EndAttackEvent;
+            _attackCooldownIsOverEvent = entity.AttackCooldownIsOverEvent;
 
             _endAttackEventDisposable = _endAttackEvent.Subscribe(OnEndAttack);
         }
@@ -36,6 +38,7 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Features.Attack
             if (CooldownIsOver())
             {
                 _inAttackCooldown.Value = false;
+                _attackCooldownIsOverEvent.Invoke();
                 Debug.Log(" ”Àƒ¿”Õ «¿ ŒÕ◊»À—ﬂ");
             }
         }

@@ -45,10 +45,14 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Features.Enemies
                     _brainsFactory.CreateMineBrain(entity);
                     break;
 
+                case CannonConfig cannonConfig:
+                    entity = _entitiesFactory.CreateCannon(position, cannonConfig, team);
+                    _brainsFactory.CreateCannonBrain(entity);
+                    break;
+
                 default:
                     throw new ArgumentException($"Not support {config.GetType()} type config");
             }
-
 
             _entitiesLifeContext.Add(entity);
 

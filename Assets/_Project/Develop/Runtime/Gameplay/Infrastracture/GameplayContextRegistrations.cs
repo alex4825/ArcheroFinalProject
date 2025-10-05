@@ -5,6 +5,7 @@ using Assets._Project.Develop.Runtime.Gameplay.EntitiesCore.Mono;
 using Assets._Project.Develop.Runtime.Gameplay.Environment;
 using Assets._Project.Develop.Runtime.Gameplay.Features.AI;
 using Assets._Project.Develop.Runtime.Gameplay.Features.Attack.Explode;
+using Assets._Project.Develop.Runtime.Gameplay.Features.Attack.Shoot;
 using Assets._Project.Develop.Runtime.Gameplay.Features.Enemies;
 using Assets._Project.Develop.Runtime.Gameplay.Features.InputFeature;
 using Assets._Project.Develop.Runtime.Gameplay.Features.MainHero;
@@ -74,7 +75,12 @@ namespace Assets._Project.Develop.Runtime.Infrastracture.Gameplay.Infrastracture
             container.RegisterAsSingle(CreateGameplayStatesFactory);
 
             container.RegisterAsSingle(CreateGameplayStatesContext);
+
+            container.RegisterAsSingle(CreateProjectilesFactory);
         }
+
+        private static ProjectilesFactory CreateProjectilesFactory(DIContainer container)
+            => new ProjectilesFactory(container);
 
         private static GameplayPopupService CreateGameplayPopupService(DIContainer container)
             => new GameplayPopupService(

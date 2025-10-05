@@ -35,8 +35,7 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Features.Attack
         {
             if (_canStartAttack.Evaluate())
             {
-                if (_inAttackProcess != null)
-                    _inAttackProcess.Value = true;
+                _inAttackProcess.Value = true;
 
                 _startAttackEvent.Invoke();
                 Debug.Log("Начало атаки");

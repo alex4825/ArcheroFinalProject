@@ -23,6 +23,7 @@ namespace Assets._Project.Develop.Runtime.Gameplay.EntitiesCore
         private readonly EntitiesLifeContext _entitiesLifeContext;
         private readonly CollidersRegistryService _collidersRegistryService;
         private readonly MonoEntitiesFactory _monoEntitiesFactory;
+        private readonly ProjectilesFactory _projectilesFactory;
 
         public EntitiesFactory(DIContainer container)
         {
@@ -30,6 +31,7 @@ namespace Assets._Project.Develop.Runtime.Gameplay.EntitiesCore
             _entitiesLifeContext = container.Resolve<EntitiesLifeContext>();
             _monoEntitiesFactory = container.Resolve<MonoEntitiesFactory>();
             _collidersRegistryService = container.Resolve<CollidersRegistryService>();
+            _projectilesFactory = container.Resolve<ProjectilesFactory>();
         }
 
         public Entity CreateHero(Vector3 position, HeroConfig config)
@@ -59,7 +61,6 @@ namespace Assets._Project.Develop.Runtime.Gameplay.EntitiesCore
                   .AddEndAttackEvent()
                   .AddAttackDelayTime(new ReactiveVariable<float>(config.AttackDelayTime))
                   .AddAttackDelayEndEvent()
-                  .AddInstantAttackDamage(new ReactiveVariable<float>(config.InstantAttackDamage))
                   .AddAttackCancelEvent()
                   .AddAttackCooldownInitialTime(new ReactiveVariable<float>(config.AttackCooldown))
                   .AddAttackCooldownCurrentTime()
@@ -106,7 +107,7 @@ namespace Assets._Project.Develop.Runtime.Gameplay.EntitiesCore
                   .AddSystem(new StartAttackSystem())
                   .AddSystem(new AttackProcessTimerSystem())
                   .AddSystem(new AttackDelayEndTriggerSystem())
-                  .AddSystem(new InstantShootSystem(this))
+                  .AddSystem(new ArrowShootSystem(_projectilesFactory, config.ArrowConfig))
                   .AddSystem(new EndAttackSystem())
                   .AddSystem(new AttackCooldownTimerSystem())
                   .AddSystem(new ApplyDamageSystem())
@@ -319,6 +320,7 @@ namespace Assets._Project.Develop.Runtime.Gameplay.EntitiesCore
             entity.AddTeam(new ReactiveVariable<Teams>(team))
                   .AddMaxHealth(new ReactiveVariable<float>(config.MaxHealth))
                   .AddCurrentHealth(new ReactiveVariable<float>(config.MaxHealth))
+                  .AddIsMoving()
                   .AddIsDead()
                   .AddInDeadProcess()
                   .AddDeathProcessInitialTime(new ReactiveVariable<float>(config.DeathProcessTime))
@@ -361,6 +363,92 @@ namespace Assets._Project.Develop.Runtime.Gameplay.EntitiesCore
                   .AddSystem(new DisableNavMeshAgentOnDeathSystem())
                   .AddSystem(new DeathProcessTimerSystem())
                   .AddSystem(new SelfReleaseSystem(_entitiesLifeContext));
+
+            return entity;
+        }
+
+        public Entity CreateCannon(Vector3 position, CannonConfig config, Teams team)
+        {
+            Entity entity = CreateEmpty();
+
+            _monoEntitiesFactory.Create(entity, position, config.PrefabPath);
+
+            entity
+                .AddTeam(new ReactiveVariable<Teams>(team))
+                .AddMoveDirection()
+                .AddMoveSpeed(new ReactiveVariable<float>(config.MoveSpeed))
+                .AddIsMoving()
+                .AddRotationDirection()
+                .AddRotationSpeed(new ReactiveVariable<float>(config.RotationSpeed))
+                .AddMaxHealth(new ReactiveVariable<float>(config.MaxHealth))
+                .AddCurrentHealth(new ReactiveVariable<float>(config.MaxHealth))
+                .AddIsDead()
+                .AddInDeadProcess()
+                .AddDeathProcessInitialTime(new ReactiveVariable<float>(config.DeathProcessTime))
+                .AddDeathProcessCurrentTime()
+                .AddTakeDamageRequest()
+                .AddTakeDamageEvent()
+                .AddExplodedEvent()
+                .AddCurrentTarget()
+                .AddAttackProcessInitialTime(new ReactiveVariable<float>(config.AttackProcessTime))
+                .AddAttackProcessCurrentTime()
+                .AddInAttackProcess()
+                .AddStartAttackRequest()
+                .AddStartAttackEvent()
+                .AddEndAttackEvent()
+                .AddAttackCooldownCurrentTime()
+                .AddAttackCooldownInitialTime(new ReactiveVariable<float>(config.AttackCooldown))
+                .AddAttackCooldownIsOverEvent()
+                .AddInAttackCooldown()
+                .AddAttackDistance(new ReactiveVariable<float>(config.MinAttackDistance))
+                .AddDisableCollidersOnDeath();
+
+            entity.NavMeshAgent.speed = config.MoveSpeed;
+            entity.NavMeshAgent.angularSpeed = config.RotationSpeed;
+
+            ICompositeCondition canMove = new CompositeCondition()
+                .Add(new FuncCondition(() => entity.IsDead.Value == false));
+
+            ICompositeCondition canRotate = new CompositeCondition()
+                .Add(new FuncCondition(() => entity.IsDead.Value == false));
+
+            ICompositeCondition mustDie = new CompositeCondition()
+                .Add(new FuncCondition(() => entity.CurrentHealth.Value <= 0));
+
+            ICompositeCondition mustSelfRelease = new CompositeCondition()
+                .Add(new FuncCondition(() => entity.IsDead.Value))
+                .Add(new FuncCondition(() => entity.InDeadProcess.Value == false));
+
+            ICompositeCondition canApplyDamage = new CompositeCondition()
+                .Add(new FuncCondition(() => entity.IsDead.Value == false));
+
+            ICompositeCondition canStartAttack = new CompositeCondition()
+               .Add(new FuncCondition(() => entity.IsDead.Value == false))
+               .Add(new FuncCondition(() => entity.InAttackProcess.Value == false))
+               .Add(new FuncCondition(() => entity.IsMoving.Value == false))
+               .Add(new FuncCondition(() => entity.InAttackCooldown.Value == false));
+
+            entity
+                .AddCanMove(canMove)
+                .AddCanRotate(canRotate)
+                .AddMustDie(mustDie)
+                .AddMustSelfRelease(mustSelfRelease)
+                .AddCanApplyDamage(canApplyDamage)
+                .AddCanStartAttack(canStartAttack);
+
+            entity
+                .AddSystem(new TransformRotationSystem())
+                .AddSystem(new StartAttackSystem())
+                .AddSystem(new AttackProcessTimerSystem())
+                .AddSystem(new CannonballShootSystem(_projectilesFactory, config.CannonballConfig))
+                .AddSystem(new EndAttackSystem())
+                .AddSystem(new AttackCooldownTimerSystem())
+                .AddSystem(new ApplyDamageSystem())
+                .AddSystem(new DeathSystem())
+                .AddSystem(new DisableCollidersOnDeathSystem())
+                .AddSystem(new DisableNavMeshAgentOnDeathSystem())
+                .AddSystem(new DeathProcessTimerSystem())
+                .AddSystem(new SelfReleaseSystem(_entitiesLifeContext));
 
             return entity;
         }

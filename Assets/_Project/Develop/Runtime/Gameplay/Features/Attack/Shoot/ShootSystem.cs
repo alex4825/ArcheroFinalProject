@@ -12,7 +12,7 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Features.Attack.Shoot
         protected Entity Entity;
         protected Transform ShootPoint;
 
-        private IDisposable _attackDelayEndDisposable;
+        private IDisposable _onShootDisposable;
 
         public ShootSystem(ProjectilesFactory projectilesFactory)
         {
@@ -26,12 +26,12 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Features.Attack.Shoot
             Entity = entity;
             ShootPoint = entity.ShootPoint;
 
-            _attackDelayEndDisposable = EventToShoot.Subscribe(OnShoot);
+            _onShootDisposable = EventToShoot.Subscribe(OnShoot);
         }
 
         public void OnDispose(Entity entity)
         {
-            _attackDelayEndDisposable.Dispose();
+            _onShootDisposable.Dispose();
         }
 
         protected abstract void OnShoot();

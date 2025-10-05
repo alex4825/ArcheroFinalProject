@@ -12,6 +12,7 @@ using Assets._Project.Develop.Runtime.Utilities.Reactive;
 using Assets._Project.Develop.Runtime.Utilities;
 using UnityEngine;
 using Assets._Project.Develop.Runtime.Configs.Gameplay.Entities.Projectiles;
+using Assets._Project.Develop.Runtime.Gameplay.Features.Attack.Explode;
 
 namespace Assets._Project.Develop.Runtime.Gameplay.Features.Attack.Shoot
 {
@@ -103,6 +104,7 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Features.Attack.Shoot
                   .AddContactEntitiesBuffer(new Buffer<Entity>(64))
                   .AddExplodeDamage(new ReactiveVariable<float>(config.ExplodeDamage))
                   .AddExplodeRadius(new ReactiveVariable<float>(config.ExplodeRadius))
+                  .AddExplodedEvent()
                   .AddDeathMask(Layers.EnvironmentMask)
                   .AddIsTouchDeathMask()
                   .AddIsTouchAnotherTeam()
@@ -118,22 +120,27 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Features.Attack.Shoot
                 .Add(new FuncCondition(() => entity.IsTouchDeathMask.Value))
                 .Add(new FuncCondition(() => entity.IsTouchAnotherTeam.Value));
 
+            ICompositeCondition mustExplode = new CompositeCondition(LogicOperations.Or)
+                .Add(new FuncCondition(() => entity.IsTouchDeathMask.Value))
+                .Add(new FuncCondition(() => entity.IsTouchAnotherTeam.Value));
+
             ICompositeCondition mustSelfRelease = new CompositeCondition()
                 .Add(new FuncCondition(() => entity.IsDead.Value));
 
             entity
                 .AddCanMove(canMove)
                 .AddCanRotate(canRotate)
+                .AddMustExplode(mustExplode)
                 .AddMustDie(mustDie)
                 .AddMustSelfRelease(mustSelfRelease);
 
             entity.AddSystem(new RigidbodyMovementSystem())
                   .AddSystem(new RigidbodyRotationSystem())
-                  .AddSystem(new RadiusContactsDetectingSystem())
+                  .AddSystem(new BodyContactDetectingSystem())
                   .AddSystem(new BodyContactsEntitiesFilterSystem(_collidersRegistryService))
-                  .AddSystem(new DealDamageOnContactSystem(entity.ExplodeDamage))
                   .AddSystem(new DeathMaskTouchDetectorSystem())
                   .AddSystem(new AnotherTeamTouchDetectorSystem())
+                  .AddSystem(new ExplodeSystem(_collidersRegistryService))
                   .AddSystem(new DeathSystem())
                   .AddSystem(new DisableCollidersOnDeathSystem())
                   .AddSystem(new SelfReleaseSystem(_entitiesLifeContext));
