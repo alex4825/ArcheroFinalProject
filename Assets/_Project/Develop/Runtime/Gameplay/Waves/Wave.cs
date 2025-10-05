@@ -27,7 +27,6 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Waves
         private float _currentSpawnDelay;
         private int _currentSpawnIndex;
         private int _defeatedEnemies;
-        private int _spawnedEnemies;
 
         private List<IDisposable> _disposables = new();
 
@@ -65,7 +64,7 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Waves
                 _isRunning = false;
             }
 
-            if (_spawnedEnemies >= _enemyConfigs.Count)
+            if (_currentSpawnIndex >= _enemyConfigs.Count)
                 return;
 
             _time += deltaTime;
@@ -73,7 +72,7 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Waves
             if (_time >= _currentSpawnDelay)
             {
                 Entity enemy = _enemiesFactory.Create(GetRandomPosition(), _enemyConfigs[_currentSpawnIndex], Teams.Enemies);
-                _spawnedEnemies++;
+                _currentSpawnIndex++;
                 _disposables.Add(enemy.IsDead.Subscribe(OnEnemyDie));
 
                 _time = 0;
