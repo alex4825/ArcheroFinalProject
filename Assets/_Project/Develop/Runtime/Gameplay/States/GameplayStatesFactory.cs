@@ -138,13 +138,13 @@ namespace Assets._Project.Develop.Runtime.Gameplay.States
         {
             WaitingForPointingState waitingForExplodePointState = new WaitingForPointingState(_container.Resolve<IInputService>());
 
-            PlacementMinesState placementMinesState = new PlacementMinesState(
-                _levelConfig.MineConfig,
+            PlacementDefendersState placementDefendersState = new PlacementDefendersState(
+                _levelConfig.DefenderConfig,
                 waitingForExplodePointState.PointFound,
                 _entitiesBrainsFactory,
                 _container.Resolve<WalletService>());
 
-            return new GameplayParallelState(waitingForExplodePointState, placementMinesState);
+            return new GameplayParallelState(waitingForExplodePointState, placementDefendersState);
         }
 
         private GameplayParallelState CreateWaveCycleState(List<IDisposable> disposables)

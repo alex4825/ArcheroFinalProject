@@ -6,6 +6,7 @@ using UnityEngine;
 using System;
 using Assets._Project.Develop.Runtime.Gameplay.Features.TeamsFeature;
 using Assets._Project.Develop.Runtime.Utilities.Reactive;
+using Assets._Project.Develop.Runtime.Configs.Gameplay.Entities.Defenders;
 
 namespace Assets._Project.Develop.Runtime.Gameplay.Features.Enemies
 {
@@ -41,8 +42,13 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Features.Enemies
                     break;
 
                 case MineConfig mineConfig:
-                    entity = _entitiesFactory.CreateMine(position, mineConfig, team);
+                    entity = _entitiesFactory.CreateMine(position, mineConfig);
                     _brainsFactory.CreateMineBrain(entity);
+                    break;
+
+                case FlamingPoolConfig flamingPoolConfig:
+                    entity = _entitiesFactory.CreateFlamingPool(position, flamingPoolConfig);
+                    //_brainsFactory.CreateMineBrain(entity);
                     break;
 
                 case CannonConfig cannonConfig:

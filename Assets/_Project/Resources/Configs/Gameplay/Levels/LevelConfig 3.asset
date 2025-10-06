@@ -16,7 +16,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 77a6347a90546004e9d6993349707a0f, type: 2}
   - {fileID: 11400000, guid: 77a6347a90546004e9d6993349707a0f, type: 2}
   - {fileID: 11400000, guid: 77a6347a90546004e9d6993349707a0f, type: 2}
-  <MineConfig>k__BackingField: {fileID: 11400000, guid: c23580ad74dd76547a8b4bb84504b7e0,
+  <DefenderConfig>k__BackingField: {fileID: 11400000, guid: a093cb20511f9a149a53930385cde5c7,
     type: 2}
   <DelayBetweenWaves>k__BackingField: 2
   <FortressHP>k__BackingField: 100

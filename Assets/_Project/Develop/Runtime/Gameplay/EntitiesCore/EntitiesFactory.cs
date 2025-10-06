@@ -14,6 +14,7 @@ using Assets._Project.Develop.Runtime.Gameplay.Features.Attack.Shoot;
 using Assets._Project.Develop.Runtime.Configs.Gameplay.Entities;
 using Assets._Project.Develop.Runtime.Gameplay.Features.TeamsFeature;
 using Assets._Project.Develop.Runtime.Gameplay.Features.CurrencyFeature;
+using Assets._Project.Develop.Runtime.Configs.Gameplay.Entities.Defenders;
 
 namespace Assets._Project.Develop.Runtime.Gameplay.EntitiesCore
 {
@@ -177,6 +178,57 @@ namespace Assets._Project.Develop.Runtime.Gameplay.EntitiesCore
                   .AddSystem(new DisableCollidersOnDeathSystem())
                   .AddSystem(new DeathProcessTimerSystem())
                   .AddSystem(new SelfReleaseSystem(_entitiesLifeContext));
+
+            return entity;
+        }
+        
+        public Entity CreateFlamingPool(Vector3 position, FlamingPoolConfig config)
+        {
+            Entity entity = CreateEmpty();
+
+            _monoEntitiesFactory.Create(entity, position, config.PrefabPath);
+
+            entity.AddTeam(new ReactiveVariable<Teams>(config.Team))
+                  .AddIsDead()
+                  .AddInDeadProcess()
+                  .AddDeathProcessInitialTime(new ReactiveVariable<float>(config.DeathProcessTime))
+                  .AddDeathProcessCurrentTime()
+                  .AddContactsDetectingMask(Layers.EntityMask)
+                  .AddContactCollidersBuffer(new Buffer<Collider>(64))
+                  .AddContactEntitiesBuffer(new Buffer<Entity>(64))
+                  .AddTimeToDealDamage(new ReactiveVariable<float>(config.TimeToDealDamage))
+                  .AddBodyContactDamage(new ReactiveVariable<float>(config.Damage));
+
+            ICompositeCondition canMove = new CompositeCondition()
+                .Add(new FuncCondition(() => entity.IsDead.Value == false));
+
+            ICompositeCondition canRotate = new CompositeCondition()
+                .Add(new FuncCondition(() => entity.IsDead.Value == false));
+
+            ICompositeCondition mustDie = new CompositeCondition()
+                .Add(new FuncCondition(() => entity.IsDead.Value));
+
+            ICompositeCondition mustSelfRelease = new CompositeCondition()
+                .Add(new FuncCondition(() => entity.IsDead.Value))
+                .Add(new FuncCondition(() => entity.InDeadProcess.Value == false));
+
+            ICompositeCondition canApplyDamage = new CompositeCondition()
+                .Add(new FuncCondition(() => entity.IsDead.Value == false));
+
+            entity
+                .AddCanMove(canMove)
+                .AddCanRotate(canRotate)
+                .AddMustDie(mustDie)
+                .AddMustSelfRelease(mustSelfRelease)
+                .AddCanApplyDamage(canApplyDamage);
+
+            entity
+                .AddSystem(new BodyContactDetectingSystem())
+                .AddSystem(new BodyContactsEntitiesFilterSystem(_collidersRegistryService))
+                .AddSystem(new DealDamageOnContactPerTimeSystem(entity.BodyContactDamage))
+                .AddSystem(new DeathSystem())
+                .AddSystem(new DeathProcessTimerSystem())
+                .AddSystem(new SelfReleaseSystem(_entitiesLifeContext));
 
             return entity;
         }
@@ -491,14 +543,14 @@ namespace Assets._Project.Develop.Runtime.Gameplay.EntitiesCore
             return entity;
         }
 
-        public Entity CreateMine(Vector3 position, MineConfig config, Teams team)
+        public Entity CreateMine(Vector3 position, MineConfig config)
         {
             Entity entity = CreateEmpty();
 
             _monoEntitiesFactory.Create(entity, position, config.PrefabPath);
 
             entity
-                .AddTeam(new ReactiveVariable<Teams>(team))
+                .AddTeam(new ReactiveVariable<Teams>(config.Team))
                 .AddIsDead()
                 .AddExplodedEvent()
                 .AddCurrentTarget()

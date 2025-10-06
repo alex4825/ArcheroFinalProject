@@ -7,4 +7,9 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Features.ContactTakeDamage
     {
         public ReactiveVariable<float> Value;
     }
+
+    public class TimeToDealDamage : IEntityComponent
+    {
+        public ReactiveVariable<float> Value;
+    }
 }
