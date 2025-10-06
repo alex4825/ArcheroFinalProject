@@ -55,4 +55,9 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Features.LifeCycle
     {
         public List<Collider> Value;
     }
+
+    public class IsOneWaveLifetime : IEntityComponent
+    {
+        public ReactiveVariable<bool> Value;
+    }
 }

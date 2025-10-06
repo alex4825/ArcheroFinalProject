@@ -26,6 +26,8 @@ using Assets._Project.Develop.Runtime.Gameplay.Features.MainHero;
 using Assets._Project.Develop.Runtime.Configs.Gameplay.Entities;
 using Assets._Project.Develop.Runtime.Utilities.ConfigsManagement;
 using Assets._Project.Develop.Runtime.UI.Core;
+using static UnityEngine.EventSystems.EventTrigger;
+using Assets._Project.Develop.Runtime.Gameplay.Features.LifeCycle;
 
 namespace Assets._Project.Develop.Runtime.Gameplay.States
 {
@@ -104,9 +106,14 @@ namespace Assets._Project.Develop.Runtime.Gameplay.States
 
             TimerService startDelayTimer = _timerServiceFactory.Create(startDelayTime);
 
-            GameplayParallelState restPhaseState = CreateRestPhaseState();
+            GameplayParallelState restPhaseState = CreateRestPhaseState(out IReadonlyEvent<Entity> entityCreated);
 
             GameplayParallelState waveCycleState = CreateWaveCycleState(disposables);
+
+            Buffer<Entity> createdDefenders = new(64);
+            disposables.Add(entityCreated.Subscribe(entity => createdDefenders.TryAdd(entity)));
+
+            disposables.Add(waveCycleState.Exited.Subscribe(() => KillOneWaveLifetime(createdDefenders)));
 
             bool isWaveWin = false;
 
@@ -134,7 +141,19 @@ namespace Assets._Project.Develop.Runtime.Gameplay.States
             return coreLoopState;
         }
 
-        private GameplayParallelState CreateRestPhaseState()
+        private void KillOneWaveLifetime(Buffer<Entity> defenders)
+        {
+            for (int i = defenders.Count - 1; i >= 0; i--)
+            {
+                if (defenders.Items[i].HasComponent<IsOneWaveLifetime>())
+                {
+                    defenders.Items[i].IsDead.Value = true;
+                    defenders.RemoveItemAt(i);
+                }
+            }
+        }
+
+        private GameplayParallelState CreateRestPhaseState(out IReadonlyEvent<Entity> entityCreated)
         {
             WaitingForPointingState waitingForExplodePointState = new WaitingForPointingState(_container.Resolve<IInputService>());
 
@@ -143,6 +162,8 @@ namespace Assets._Project.Develop.Runtime.Gameplay.States
                 waitingForExplodePointState.PointFound,
                 _entitiesBrainsFactory,
                 _container.Resolve<WalletService>());
+
+            entityCreated = placementDefendersState.Created;
 
             return new GameplayParallelState(waitingForExplodePointState, placementDefendersState);
         }

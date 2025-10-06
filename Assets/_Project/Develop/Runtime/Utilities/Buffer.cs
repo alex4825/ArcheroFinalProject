@@ -8,10 +8,22 @@ namespace Assets._Project.Develop.Runtime.Utilities
         public T[] Items;
         public int Count;
 
+        private int _initialSize;
+
         public Buffer(int initialSize)
         {
             Items = new T[initialSize];
             Count = 0;
+            _initialSize = initialSize;
+        }
+
+        public bool TryAdd(T item)
+        {
+            if (Count >= _initialSize)
+                return false;
+
+            Items[Count++] = item;
+            return true;
         }
 
         public void Clear()

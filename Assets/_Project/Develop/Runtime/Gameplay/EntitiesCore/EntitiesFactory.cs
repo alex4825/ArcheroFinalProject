@@ -188,22 +188,18 @@ namespace Assets._Project.Develop.Runtime.Gameplay.EntitiesCore
 
             _monoEntitiesFactory.Create(entity, position, config.PrefabPath);
 
-            entity.AddTeam(new ReactiveVariable<Teams>(config.Team))
-                  .AddIsDead()
-                  .AddInDeadProcess()
-                  .AddDeathProcessInitialTime(new ReactiveVariable<float>(config.DeathProcessTime))
-                  .AddDeathProcessCurrentTime()
-                  .AddContactsDetectingMask(Layers.EntityMask)
-                  .AddContactCollidersBuffer(new Buffer<Collider>(64))
-                  .AddContactEntitiesBuffer(new Buffer<Entity>(64))
-                  .AddTimeToDealDamage(new ReactiveVariable<float>(config.TimeToDealDamage))
-                  .AddBodyContactDamage(new ReactiveVariable<float>(config.Damage));
-
-            ICompositeCondition canMove = new CompositeCondition()
-                .Add(new FuncCondition(() => entity.IsDead.Value == false));
-
-            ICompositeCondition canRotate = new CompositeCondition()
-                .Add(new FuncCondition(() => entity.IsDead.Value == false));
+            entity
+                .AddTeam(new ReactiveVariable<Teams>(config.Team))
+                .AddIsOneWaveLifetime(new ReactiveVariable<bool>(true))
+                .AddIsDead()
+                .AddInDeadProcess()
+                .AddDeathProcessInitialTime(new ReactiveVariable<float>(config.DeathProcessTime))
+                .AddDeathProcessCurrentTime()
+                .AddContactsDetectingMask(Layers.EntityMask)
+                .AddContactCollidersBuffer(new Buffer<Collider>(64))
+                .AddContactEntitiesBuffer(new Buffer<Entity>(64))
+                .AddTimeToDealDamage(new ReactiveVariable<float>(config.TimeToDealDamage))
+                .AddBodyContactDamage(new ReactiveVariable<float>(config.Damage));
 
             ICompositeCondition mustDie = new CompositeCondition()
                 .Add(new FuncCondition(() => entity.IsDead.Value));
@@ -212,15 +208,9 @@ namespace Assets._Project.Develop.Runtime.Gameplay.EntitiesCore
                 .Add(new FuncCondition(() => entity.IsDead.Value))
                 .Add(new FuncCondition(() => entity.InDeadProcess.Value == false));
 
-            ICompositeCondition canApplyDamage = new CompositeCondition()
-                .Add(new FuncCondition(() => entity.IsDead.Value == false));
-
             entity
-                .AddCanMove(canMove)
-                .AddCanRotate(canRotate)
                 .AddMustDie(mustDie)
-                .AddMustSelfRelease(mustSelfRelease)
-                .AddCanApplyDamage(canApplyDamage);
+                .AddMustSelfRelease(mustSelfRelease);
 
             entity
                 .AddSystem(new BodyContactDetectingSystem())
