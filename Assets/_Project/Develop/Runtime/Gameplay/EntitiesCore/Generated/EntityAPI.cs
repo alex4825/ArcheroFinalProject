@@ -1168,6 +1168,25 @@ namespace Assets._Project.Develop.Runtime.Gameplay.EntitiesCore
 			return AddComponent(new Assets._Project.Develop.Runtime.Gameplay.Features.Attack.ShootPoint() {Value = value}); 
 		}
 
+		public Assets._Project.Develop.Runtime.Gameplay.Features.Attack.TurretGun TurretGunC => GetComponent<Assets._Project.Develop.Runtime.Gameplay.Features.Attack.TurretGun>();
+
+		public UnityEngine.Transform TurretGun => TurretGunC.Value;
+
+		public bool TryGetTurretGun(out UnityEngine.Transform value)
+		{
+			bool result = TryGetComponent(out Assets._Project.Develop.Runtime.Gameplay.Features.Attack.TurretGun component);
+			if(result)
+				value = component.Value;
+			else
+				value = default(UnityEngine.Transform);
+			return result;
+		}
+
+		public Assets._Project.Develop.Runtime.Gameplay.EntitiesCore.Entity AddTurretGun(UnityEngine.Transform value)
+		{
+			return AddComponent(new Assets._Project.Develop.Runtime.Gameplay.Features.Attack.TurretGun() {Value = value}); 
+		}
+
 		public Assets._Project.Develop.Runtime.Gameplay.Features.Attack.MustCalcelAttack MustCalcelAttackC => GetComponent<Assets._Project.Develop.Runtime.Gameplay.Features.Attack.MustCalcelAttack>();
 
 		public Assets._Project.Develop.Runtime.Utilities.Conditions.ICompositeCondition MustCalcelAttack => MustCalcelAttackC.Value;

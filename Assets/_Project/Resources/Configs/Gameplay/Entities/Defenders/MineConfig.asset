@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <Cost>k__BackingField: 15
   <Team>k__BackingField: 0
-  <PrefabPath>k__BackingField: Entities/Mine
+  <PrefabPath>k__BackingField: Entities/Defenders/Mine
   <ExplodeDamage>k__BackingField: 50
   <ExplodeRadius>k__BackingField: 5
   <ExplodeDuration>k__BackingField: 1

@@ -9,14 +9,19 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Features.MovementFeature
     public class TransformRotationSystem : IInitializableSystem, IUpdatableSystem
     {
         private Transform _transform;
+
         private ReactiveVariable<float> _rotationSpeed;
         private ReactiveVariable<Vector3> _direction;
 
         private ICompositeCondition _canRotate;
 
+        public TransformRotationSystem(Transform transform)
+        {
+            _transform = transform;
+        }
+
         public void OnInit(Entity entity)
         {
-            _transform = entity.Transform;
             _rotationSpeed = entity.RotationSpeed;
             _direction = entity.RotationDirection;
             _canRotate = entity.CanRotate;

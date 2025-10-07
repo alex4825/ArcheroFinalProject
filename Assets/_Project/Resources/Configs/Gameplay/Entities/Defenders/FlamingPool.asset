@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <Cost>k__BackingField: 20
   <Team>k__BackingField: 0
-  <PrefabPath>k__BackingField: Entities/FlamingPool
+  <PrefabPath>k__BackingField: Entities/Defenders/FlamingPool
   <Damage>k__BackingField: 10
   <TimeToDealDamage>k__BackingField: 1
   <DeathProcessTime>k__BackingField: 1.5

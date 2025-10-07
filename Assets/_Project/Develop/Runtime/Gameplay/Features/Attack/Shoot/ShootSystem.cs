@@ -19,14 +19,12 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Features.Attack.Shoot
             ProjectilesFactory = projectilesFactory;
         }
 
-        protected abstract ReactiveEvent EventToShoot {  get; }
-
         public void OnInit(Entity entity)
         {
             Entity = entity;
             ShootPoint = entity.ShootPoint;
 
-            _onShootDisposable = EventToShoot.Subscribe(OnShoot);
+            _onShootDisposable = Entity.StartAttackEvent.Subscribe(Shoot);
         }
 
         public void OnDispose(Entity entity)
@@ -34,6 +32,6 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Features.Attack.Shoot
             _onShootDisposable.Dispose();
         }
 
-        protected abstract void OnShoot();
+        protected abstract void Shoot();
     }
 }

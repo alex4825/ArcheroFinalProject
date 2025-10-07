@@ -60,6 +60,11 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Features.Attack
         public Transform Value;
     }
 
+    public class TurretGun : IEntityComponent
+    {
+        public Transform Value;
+    }
+
     public class MustCalcelAttack : IEntityComponent
     {
         public ICompositeCondition Value;

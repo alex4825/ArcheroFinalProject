@@ -34,10 +34,13 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Features.Attack.Explode
         private void OnEntityExploded(Vector3 point)
         {
             ParticleSystem explosion = Instantiate(_explosionPrefab, point, _explosionPrefab.transform.rotation, null);
-            ParticleSystem explosionDecal = Instantiate(_explosionDecalPrefab, point, _explosionDecalPrefab.transform.rotation, null);
-
             explosion.transform.localScale *= _explodeRadius.Value / 2;
-            explosionDecal.transform.localScale *= _explodeRadius.Value / 2;
+
+            if (_explosionDecalPrefab != null)
+            {
+                ParticleSystem explosionDecal = Instantiate(_explosionDecalPrefab, point, _explosionDecalPrefab.transform.rotation, null);
+                explosionDecal.transform.localScale *= _explodeRadius.Value / 2;
+            }
         }
     }
 }

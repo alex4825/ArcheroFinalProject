@@ -6,6 +6,7 @@ using Assets._Project.Develop.Runtime.Utilities.Reactive;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using static Unity.VisualScripting.Member;
 
 namespace Assets._Project.Develop.Runtime.Gameplay.Features.AI.TargetSelection
 {

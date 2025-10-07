@@ -18,6 +18,11 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Features.AI.States
             _transform = entity.Transform;
         }
 
+        public override void Enter()
+        {
+            base.Enter();
+        }
+
         public void Update(float deltaTime)
         {
             if(_currentTarget.Value != null) 

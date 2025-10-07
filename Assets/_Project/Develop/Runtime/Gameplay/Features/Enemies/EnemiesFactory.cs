@@ -48,12 +48,16 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Features.Enemies
 
                 case FlamingPoolConfig flamingPoolConfig:
                     entity = _entitiesFactory.CreateFlamingPool(position, flamingPoolConfig);
-                    //_brainsFactory.CreateMineBrain(entity);
                     break;
 
                 case CannonConfig cannonConfig:
                     entity = _entitiesFactory.CreateCannon(position, cannonConfig, team);
                     _brainsFactory.CreateCannonBrain(entity);
+                    break;
+
+                case TurretConfig turretConfig:
+                    entity = _entitiesFactory.CreateTurret(position, turretConfig, team);
+                    _brainsFactory.CreateTurretBrain(entity);
                     break;
 
                 default:

@@ -24,6 +24,7 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Features.AI
         private readonly AIBrainsContext _brainsContext;
         private readonly IInputService _inputService;
         private readonly EntitiesLifeContext _entitiesLifeContext;
+        private readonly FortressHolderService _fortressHolderService;
 
         public BrainsFactory(DIContainer container)
         {
@@ -32,6 +33,7 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Features.AI
             _brainsContext = container.Resolve<AIBrainsContext>();
             _inputService = container.Resolve<IInputService>();
             _entitiesLifeContext = container.Resolve<EntitiesLifeContext>();
+            _fortressHolderService = container.Resolve<FortressHolderService>();
         }
 
         public StateMachineBrain CreateMainHeroSelfControlShootBrain(Entity entity)
@@ -63,7 +65,7 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Features.AI
 
         public StateMachineBrain CreateMainHeroBrain(Entity entity, ITargetSelector targetSelector)
         {
-            AIStateMachine combatState = CreateAutoAttackStateMachine(entity);
+            AIStateMachine combatState = CreateAutoAttackStateMachine(entity, entity.Transform);
 
             PlayerInputMovementState movementState = new PlayerInputMovementState(entity, _inputService);
 
@@ -115,7 +117,7 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Features.AI
 
             NavMeshMoveToTargetState moveToFortressState = new NavMeshMoveToTargetState(cannon);
 
-            AIStateMachine autoAttackState = CreateAutoAttackStateMachine(cannon);
+            AIStateMachine autoAttackState = CreateAutoAttackStateMachine(cannon, cannon.ShootPoint);
 
             AIStateMachine rootStateMachine = new AIStateMachine();
             rootStateMachine.AddState(moveToFortressState);
@@ -207,6 +209,37 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Features.AI
             StateMachineBrain brain = new StateMachineBrain(rootStateMachine);
 
             _brainsContext.SetFor(mine, brain);
+
+            return brain;
+        }
+
+        public StateMachineBrain CreateTurretBrain(Entity turret)
+        {
+            List<IDisposable> disposables = new List<IDisposable>();
+
+            ITargetSelector targetSelector = new NearestToAimInRadiusTargetSelector(turret, _fortressHolderService.Fortress, turret.AttackDistance);
+
+            FindTargetState findTargetState = new FindTargetState(targetSelector, _entitiesLifeContext, turret);
+
+            AIStateMachine autoAttackState = CreateAutoAttackStateMachine(turret, turret.ShootPoint);
+
+            AIStateMachine rootStateMachine = new AIStateMachine(disposables);
+            rootStateMachine.AddState(findTargetState);
+            rootStateMachine.AddState(autoAttackState);
+
+            Entity targetEntity = turret.CurrentTarget.Value;
+
+            rootStateMachine.AddTransition(findTargetState, autoAttackState, new CompositeCondition()
+            .Add(new FuncCondition(() => turret.IsDead.Value == false))
+            .Add(new FuncCondition(() => turret.CurrentTarget.Value != null)));
+
+            rootStateMachine.AddTransition(autoAttackState, findTargetState, new CompositeCondition(LogicOperations.Or)
+                .Add(new FuncCondition(() => turret.CurrentTarget.Value == null))
+                .Add(new FuncCondition(() => turret.CurrentTarget.Value.IsDead.Value)));
+
+            StateMachineBrain brain = new StateMachineBrain(rootStateMachine);
+
+            _brainsContext.SetFor(turret, brain);
 
             return brain;
         }
@@ -311,14 +344,13 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Features.AI
             return stateMachine;
         }
 
-        private AIStateMachine CreateAutoAttackStateMachine(Entity entity)
+        private AIStateMachine CreateAutoAttackStateMachine(Entity entity, Transform attackPoint)
         {
             RotateToTargetState rotateToTargetState = new RotateToTargetState(entity);
 
             AttackTriggerState attackTriggerState = new AttackTriggerState(entity);
 
             ICondition canAttack = entity.CanStartAttack;
-            Transform transform = entity.Transform;
             ReactiveVariable<Entity> currentTarget = entity.CurrentTarget;
 
             ICompositeCondition fromRotateToAttackCondition = new CompositeCondition()
@@ -330,9 +362,9 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Features.AI
                     if (target == null)
                         return false;
 
-                    float angleToTarget = Quaternion.Angle(transform.rotation, Quaternion.LookRotation(target.Transform.position - transform.position));
+                    float angleToTarget = Vector3.Angle(attackPoint.forward, target.Transform.position - entity.Transform.position);
 
-                    return angleToTarget < 3f;
+                    return angleToTarget < 5f;
                 }));
 
             ReactiveVariable<bool> inAttackProcess = entity.InAttackProcess;
