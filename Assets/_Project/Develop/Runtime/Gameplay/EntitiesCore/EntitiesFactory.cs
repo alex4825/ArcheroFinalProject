@@ -543,13 +543,18 @@ namespace Assets._Project.Develop.Runtime.Gameplay.EntitiesCore
                .Add(new FuncCondition(() => entity.InAttackCooldown.Value == false))
                .Add(new FuncCondition(() => entity.CurrentTarget.Value != null));
 
+            ICompositeCondition canApplyDamage = new CompositeCondition()
+                .Add(new FuncCondition(() => entity.IsDead.Value == false));
+
             entity
                 .AddCanRotate(canRotate)
+                .AddCanApplyDamage(canApplyDamage)
                 .AddMustDie(mustDie)
                 .AddMustSelfRelease(mustSelfRelease)
                 .AddCanStartAttack(canStartAttack);
 
             entity
+                .AddSystem(new ApplyDamageSystem())
                 .AddSystem(new TransformRotationSystem(entity.TurretGun))
                 .AddSystem(new StartAttackSystem())
                 .AddSystem(new AttackProcessTimerSystem())
