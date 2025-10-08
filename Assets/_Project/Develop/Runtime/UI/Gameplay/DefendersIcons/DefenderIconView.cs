@@ -2,7 +2,6 @@
 using Assets._Project.Develop.Runtime.UI.CommonViews;
 using Assets._Project.Develop.Runtime.UI.Core;
 using System;
-using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -10,12 +9,16 @@ namespace Assets._Project.Develop.Runtime.UI.Gameplay.DefendersIcons
 {
     public class DefenderIconView : IconTextView, IView
     {
-        public event Action<DefenderConfig> Clicked;
+        public event Action<DefenderIconView> Clicked;
 
-        private DefenderConfig _defenderConfig;
+        [SerializeField] private Image _background;
 
-        public void SetConfig(DefenderConfig config) => _defenderConfig = config;
+        public DefenderConfig DefenderConfig { get; private set; }
 
-        public void OnClick() => Clicked?.Invoke(_defenderConfig);
+        public void SetBackgroundColor(Color color) => _background.color = color;
+
+        public void SetConfig(DefenderConfig config) => DefenderConfig = config;
+
+        public void OnClick() => Clicked?.Invoke(this);
     }
 }

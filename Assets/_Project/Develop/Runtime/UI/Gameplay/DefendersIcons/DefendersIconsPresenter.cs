@@ -8,16 +8,13 @@ namespace Assets._Project.Develop.Runtime.UI.Gameplay.DefendersIcons
     {
         public event Action<DefenderConfig> IconClicked;
 
-        private readonly GameplayPresentersFactory _gameplayPresentersFactory;
         private readonly ViewsFactory _viewsFactory;
         private DefendersIconsListView _iconsListView;        
 
         public DefendersIconsPresenter(
-            GameplayPresentersFactory gameplayPresentersFactory,
             ViewsFactory viewsFactory,
             DefendersIconsListView iconsListView)
         {
-            _gameplayPresentersFactory = gameplayPresentersFactory;
             _viewsFactory = viewsFactory;
             _iconsListView = iconsListView;
         }
@@ -46,9 +43,19 @@ namespace Assets._Project.Develop.Runtime.UI.Gameplay.DefendersIcons
             }
         }
 
-        private void OnIconClicked(DefenderConfig config)
+        private void OnIconClicked(DefenderIconView clickedIconView)
         {
-            IconClicked?.Invoke(config);
+            clickedIconView.SetBackgroundColor(_iconsListView.SelectedBackgroundColor);
+
+            foreach (DefenderIconView iconView in _iconsListView.Elements)
+            {
+                if (iconView == clickedIconView)
+                    continue;
+
+                iconView.SetBackgroundColor(_iconsListView.DefaultBackgroundColor);
+            }
+
+            IconClicked?.Invoke(clickedIconView.DefenderConfig);
         }
     }
 }

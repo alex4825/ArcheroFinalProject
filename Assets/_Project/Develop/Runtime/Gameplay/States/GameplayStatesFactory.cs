@@ -28,6 +28,7 @@ using Assets._Project.Develop.Runtime.Utilities.ConfigsManagement;
 using Assets._Project.Develop.Runtime.UI.Core;
 using static UnityEngine.EventSystems.EventTrigger;
 using Assets._Project.Develop.Runtime.Gameplay.Features.LifeCycle;
+using Assets._Project.Develop.Runtime.UI.Gameplay.DefendersIcons;
 
 namespace Assets._Project.Develop.Runtime.Gameplay.States
 {
@@ -158,7 +159,7 @@ namespace Assets._Project.Develop.Runtime.Gameplay.States
             WaitingForPointingState waitingForExplodePointState = new WaitingForPointingState(_container.Resolve<IInputService>());
 
             PlacementDefendersState placementDefendersState = new PlacementDefendersState(
-                _levelConfig.DefenderConfig,
+                _container.Resolve<GameplayScreenPresenter>().GetChild<DefendersIconsPresenter>(),
                 waitingForExplodePointState.PointFound,
                 _entitiesBrainsFactory,
                 _container.Resolve<WalletService>());

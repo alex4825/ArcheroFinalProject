@@ -149,7 +149,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _parent: {fileID: 4778570782537770968}
-  DefendersConfigs:
+  <DefaultBackgroundColor>k__BackingField: {r: 0.16078432, g: 0.16078432, b: 0.16078432,
+    a: 1}
+  <SelectedBackgroundColor>k__BackingField: {r: 0.06247943, g: 0.4716981, b: 0.027589865,
+    a: 1}
+  <DefendersConfigs>k__BackingField:
   - {fileID: 11400000, guid: a093cb20511f9a149a53930385cde5c7, type: 2}
   - {fileID: 11400000, guid: c23580ad74dd76547a8b4bb84504b7e0, type: 2}
   - {fileID: 11400000, guid: fab3ede3ce565274b876fc73d95da44d, type: 2}

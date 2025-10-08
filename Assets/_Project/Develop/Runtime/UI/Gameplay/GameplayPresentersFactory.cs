@@ -27,7 +27,7 @@ namespace Assets._Project.Develop.Runtime.UI.Gameplay
 
         public DefendersIconsPresenter CreateDefendersIconsPresenter(DefendersIconsListView iconsListView)
         {
-            return new DefendersIconsPresenter(this, _container.Resolve<ViewsFactory>(), iconsListView);
+            return new DefendersIconsPresenter(_container.Resolve<ViewsFactory>(), iconsListView);
         }
 
         public EntitiesHealthDisplayPresenter CreateEntitiesHealthDisplayPresenter(EntitiesHealthDisplay view)

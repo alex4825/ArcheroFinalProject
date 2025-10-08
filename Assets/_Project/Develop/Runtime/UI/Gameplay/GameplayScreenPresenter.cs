@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System;
 using Assets._Project.Develop.Runtime.Gameplay.Features.Attack.Explode;
 using Assets._Project.Develop.Runtime.Gameplay.Features.MainHero;
+using System.Linq;
 
 namespace Assets._Project.Develop.Runtime.UI.Gameplay
 {
@@ -58,6 +59,11 @@ namespace Assets._Project.Develop.Runtime.UI.Gameplay
                 childPresenter.Dispose();
 
             _childPresenters.Clear();
+        }
+
+        public TPresenter GetChild<TPresenter>() where TPresenter : class, IPresenter
+        {
+            return _childPresenters.OfType<TPresenter>().First();
         }
 
         private void CreateDefendersIconsPresenter()

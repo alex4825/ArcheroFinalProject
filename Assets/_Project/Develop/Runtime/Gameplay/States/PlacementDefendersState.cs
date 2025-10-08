@@ -5,6 +5,7 @@ using Assets._Project.Develop.Runtime.Gameplay.Features.Enemies;
 using Assets._Project.Develop.Runtime.Gameplay.Features.LifeCycle;
 using Assets._Project.Develop.Runtime.Gameplay.Features.TeamsFeature;
 using Assets._Project.Develop.Runtime.Infrastracture.Meta.Features.Wallet;
+using Assets._Project.Develop.Runtime.UI.Gameplay.DefendersIcons;
 using Assets._Project.Develop.Runtime.Utilities;
 using Assets._Project.Develop.Runtime.Utilities.Reactive;
 using Assets._Project.Develop.Runtime.Utilities.StateMachineCore;
@@ -16,22 +17,24 @@ namespace Assets._Project.Develop.Runtime.Gameplay.States
 {
     public class PlacementDefendersState : State, IUpdatableState
     {
-        private DefenderConfig _defenderConfig;
+        private DefendersIconsPresenter _defendersIconsPresenter;
         private IReadonlyEvent<Vector3> _placeFound;
         private EnemiesFactory _enemiesFactory;
         private WalletService _walletService;
+
+        private DefenderConfig _currentDefenderConfig;
 
         private ReactiveEvent<Entity> _created = new();
 
         private IDisposable _placeFoundDisposable;
 
         public PlacementDefendersState(
-            DefenderConfig defenderConfig,
+            DefendersIconsPresenter defendersIconsPresenter,
             IReadonlyEvent<Vector3> placeFound,
             EnemiesFactory entitiesBrainsFactory,
             WalletService walletService)
         {
-            _defenderConfig = defenderConfig;
+            _defendersIconsPresenter = defendersIconsPresenter;
             _placeFound = placeFound;
             _enemiesFactory = entitiesBrainsFactory;
             _walletService = walletService;
@@ -45,6 +48,7 @@ namespace Assets._Project.Develop.Runtime.Gameplay.States
             Debug.Log("Расстановка защитников: ВХОД");
 
             _placeFoundDisposable = _placeFound.Subscribe(OnPlaceFound);
+            _defendersIconsPresenter.IconClicked += OnDefenderConfigSelected;
         }
 
         public void Update(float deltaTime)
@@ -58,16 +62,23 @@ namespace Assets._Project.Develop.Runtime.Gameplay.States
             Debug.Log("Расстановка защитников: ВЫХОД");
 
             _placeFoundDisposable?.Dispose();
+            _defendersIconsPresenter.IconClicked -= OnDefenderConfigSelected;
         }
 
         private void OnPlaceFound(Vector3 position)
         {
-            if (_walletService.GetCurrency(CurrencyTypes.Gold).Value > _defenderConfig.Cost)
+            if (_currentDefenderConfig == null)
+                return;
+
+            if (_walletService.GetCurrency(CurrencyTypes.Gold).Value > _currentDefenderConfig.Cost)
             {
-                Entity entity = _enemiesFactory.Create(position, _defenderConfig, _defenderConfig.Team);
+                Entity entity = _enemiesFactory.Create(position, _currentDefenderConfig, _currentDefenderConfig.Team);
                 _created?.Invoke(entity);
-                _walletService.Spend(CurrencyTypes.Gold, _defenderConfig.Cost);
+                _walletService.Spend(CurrencyTypes.Gold, _currentDefenderConfig.Cost);
             }
         }
+
+        private void OnDefenderConfigSelected(DefenderConfig config)
+            => _currentDefenderConfig = config;
     }
 }

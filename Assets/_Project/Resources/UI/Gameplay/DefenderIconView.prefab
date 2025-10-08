@@ -451,6 +451,7 @@ GameObject:
   - component: {fileID: 4504407573936526456}
   - component: {fileID: 2084556853793315299}
   - component: {fileID: 1424976695351419706}
+  - component: {fileID: 3593032961614601850}
   m_Layer: 5
   m_Name: DefenderIconView
   m_TagString: Untagged
@@ -502,6 +503,37 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _text: {fileID: 2958933972073790898}
   _icon: {fileID: 30375109143670902}
+  _background: {fileID: 6664273188094066854}
+--- !u!114 &3593032961614601850
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6845701738286282272}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Delegates:
+  - eventID: 4
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 1424976695351419706}
+          m_TargetAssemblyTypeName: Assets._Project.Develop.Runtime.UI.Gameplay.DefendersIcons.DefenderIconView,
+            Assembly-CSharp
+          m_MethodName: OnClick
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
 --- !u!1 &7869958704563865664
 GameObject:
   m_ObjectHideFlags: 0

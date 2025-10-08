@@ -2,6 +2,7 @@
 using Assets._Project.Develop.Runtime.Utilities.Reactive;
 using System;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 namespace Assets._Project.Develop.Runtime.Gameplay.Features.InputFeature
 {
@@ -51,6 +52,12 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Features.InputFeature
 
             if (Input.GetMouseButtonDown(LeftMouseButton))
             {
+                if (EventSystem.current.IsPointerOverGameObject())
+                {
+                    Debug.Log("Click on UI");
+                    return;
+                }
+
                 _attacked.Invoke();
                 _pointed.Invoke(GetMousePosition());
             }
