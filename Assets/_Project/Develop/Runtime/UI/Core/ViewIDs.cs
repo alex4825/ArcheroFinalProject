@@ -12,5 +12,6 @@
         public const string SimpleHealthBar = nameof(SimpleHealthBar);
         public const string TextHealthBar = nameof(TextHealthBar);
         public const string FreeExploderView = nameof(FreeExploderView);
+        public const string DefenderIconView = nameof(DefenderIconView);
     }
 }

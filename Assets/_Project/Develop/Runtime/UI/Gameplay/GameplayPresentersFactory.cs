@@ -6,6 +6,7 @@ using Assets._Project.Develop.Runtime.Infrastracture.DI;
 using Assets._Project.Develop.Runtime.Infrastracture.Gameplay.Infrastracture;
 using Assets._Project.Develop.Runtime.UI.CommonViews;
 using Assets._Project.Develop.Runtime.UI.Core;
+using Assets._Project.Develop.Runtime.UI.Gameplay.DefendersIcons;
 using Assets._Project.Develop.Runtime.UI.Gameplay.HealthDisplay;
 using Assets._Project.Develop.Runtime.UI.Gameplay.ResultsPopups;
 using Assets._Project.Develop.Runtime.Utilities.CoroutinesManagement;
@@ -22,6 +23,11 @@ namespace Assets._Project.Develop.Runtime.UI.Gameplay
         {
             _container = container;
             _gameplayInputArgs = gameplayInputArgs;
+        }
+
+        public DefendersIconsPresenter CreateDefendersIconsPresenter(DefendersIconsListView iconsListView)
+        {
+            return new DefendersIconsPresenter(this, _container.Resolve<ViewsFactory>(), iconsListView);
         }
 
         public EntitiesHealthDisplayPresenter CreateEntitiesHealthDisplayPresenter(EntitiesHealthDisplay view)
@@ -43,7 +49,7 @@ namespace Assets._Project.Develop.Runtime.UI.Gameplay
             return new GameplayScreenPresenter(
                 view,
                 _container.Resolve<GameplayWaveContext>(),
-                _container.Resolve<GameplayPresentersFactory>(),
+                this,
                 _container.Resolve<MainHeroHolderService>(),
                 currentLevelConfig.WavesCount);
         }

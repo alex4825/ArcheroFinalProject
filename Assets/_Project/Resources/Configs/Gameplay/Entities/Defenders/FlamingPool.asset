@@ -13,6 +13,8 @@ MonoBehaviour:
   m_Name: FlamingPool
   m_EditorClassIdentifier: 
   <Cost>k__BackingField: 20
+  <Icon>k__BackingField: {fileID: 21300000, guid: 9b6345ba8a3ee1b4d86468280dac3083,
+    type: 3}
   <Team>k__BackingField: 0
   <PrefabPath>k__BackingField: Entities/Defenders/FlamingPool
   <Damage>k__BackingField: 10

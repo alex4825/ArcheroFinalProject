@@ -13,6 +13,8 @@ MonoBehaviour:
   m_Name: TurretConfig
   m_EditorClassIdentifier: 
   <Cost>k__BackingField: 25
+  <Icon>k__BackingField: {fileID: 21300000, guid: fd963f24b50af4545a9e2f1059a193bd,
+    type: 3}
   <Team>k__BackingField: 0
   <PrefabPath>k__BackingField: Entities/Defenders/Turret
   <MissileConfig>k__BackingField: {fileID: 11400000, guid: 93cdce4e35826f7418ae8066ca87ee6d,

@@ -11,10 +11,10 @@ namespace Assets._Project.Develop.Runtime.UI.Gameplay
 {
     public class GameplayScreenPresenter : IPresenter
     {
-        private readonly GameplayScreenView _view; 
-        private readonly GameplayPresentersFactory _gameplayPresentersFactory;         
+        private readonly GameplayScreenView _view;
+        private readonly GameplayPresentersFactory _gameplayPresentersFactory;
         private EntitiesHealthDisplayPresenter _entitiesHealthDisplayPresenter;
-        private readonly GameplayWaveContext  _gameplayWaveContext;
+        private readonly GameplayWaveContext _gameplayWaveContext;
         private readonly MainHeroHolderService _mainHeroHolderService;
 
         private int _wavesCount;
@@ -39,6 +39,8 @@ namespace Assets._Project.Develop.Runtime.UI.Gameplay
         {
             CreateWaveCountPresenter();
 
+            CreateDefendersIconsPresenter();
+
             CreateEntitiesHealthDisplay();
 
             foreach (IPresenter presenter in _childPresenters)
@@ -56,6 +58,11 @@ namespace Assets._Project.Develop.Runtime.UI.Gameplay
                 childPresenter.Dispose();
 
             _childPresenters.Clear();
+        }
+
+        private void CreateDefendersIconsPresenter()
+        {
+            _childPresenters.Add(_gameplayPresentersFactory.CreateDefendersIconsPresenter(_view.DefenderIconListView));
         }
 
         private void CreateWaveCountPresenter()
