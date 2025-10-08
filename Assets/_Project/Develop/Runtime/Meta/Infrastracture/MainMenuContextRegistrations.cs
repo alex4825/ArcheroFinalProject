@@ -1,12 +1,8 @@
 ﻿using Assets._Project.Develop.Runtime.Infrastracture.DI;
-using Assets._Project.Develop.Runtime.Infrastracture.Meta.Features.Wallet;
 using Assets._Project.Develop.Runtime.UI;
-using Assets._Project.Develop.Runtime.UI.CommonViews;
 using Assets._Project.Develop.Runtime.UI.Core;
 using Assets._Project.Develop.Runtime.UI.MainMenu;
-using Assets._Project.Develop.Runtime.UI.Wallet;
 using Assets._Project.Develop.Runtime.Utilities.AssetsManagement;
-using Assets._Project.Develop.Runtime.Utilities.CoroutinesManagement;
 using UnityEngine;
 
 namespace Assets._Project.Develop.Runtime.Infrastracture.Meta.Infrastracture

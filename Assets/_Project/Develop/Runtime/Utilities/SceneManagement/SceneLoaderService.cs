@@ -1,6 +1,6 @@
-﻿using UnityEngine.SceneManagement;
+﻿using System.Collections;
 using UnityEngine;
-using System.Collections;
+using UnityEngine.SceneManagement;
 
 namespace Assets._Project.Develop.Runtime.Utilities.SceneManagement
 {
@@ -8,11 +8,11 @@ namespace Assets._Project.Develop.Runtime.Utilities.SceneManagement
     {
         public IEnumerator LoadAcync(string sceneName, LoadSceneMode loadSceneMode = LoadSceneMode.Single)
         {
-            AsyncOperation wait = SceneManager.LoadSceneAsync(sceneName, loadSceneMode);  
+            AsyncOperation wait = SceneManager.LoadSceneAsync(sceneName, loadSceneMode);
 
             yield return new WaitWhile(() => wait.isDone == false);
         }
-        
+
         public IEnumerator UnloadAcync(string sceneName)
         {
             AsyncOperation wait = SceneManager.UnloadSceneAsync(sceneName);

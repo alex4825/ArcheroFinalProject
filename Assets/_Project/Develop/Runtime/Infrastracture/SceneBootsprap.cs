@@ -11,6 +11,6 @@ namespace Assets._Project.Develop.Runtime.Infrastracture
 
         public abstract IEnumerator Initialize();
 
-        public abstract void Run(); 
+        public abstract void Run();
     }
 }

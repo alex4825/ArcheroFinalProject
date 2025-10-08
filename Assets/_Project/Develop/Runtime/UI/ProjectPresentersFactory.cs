@@ -52,9 +52,9 @@ namespace Assets._Project.Develop.Runtime.UI
             CurrencyTypes currencyType)
         {
             return new CurrencyPresenter(
-                currency, 
-                currencyType, 
-                _container.Resolve<ConfigsProviderService>().GetConfig<CurrencyIconsConfig>(), 
+                currency,
+                currencyType,
+                _container.Resolve<ConfigsProviderService>().GetConfig<CurrencyIconsConfig>(),
                 view);
         }
 

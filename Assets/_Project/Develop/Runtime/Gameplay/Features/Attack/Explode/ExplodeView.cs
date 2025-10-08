@@ -3,7 +3,6 @@ using Assets._Project.Develop.Runtime.Gameplay.EntitiesCore.Mono;
 using Assets._Project.Develop.Runtime.Utilities.Reactive;
 using System;
 using UnityEngine;
-using DG.Tweening;
 
 namespace Assets._Project.Develop.Runtime.Gameplay.Features.Attack.Explode
 {

@@ -3,7 +3,7 @@ using System;
 
 namespace Assets._Project.Develop.Runtime.Gameplay.States
 {
-    public class GameplayStatesContext: IDisposable, IUpdatable
+    public class GameplayStatesContext : IDisposable, IUpdatable
     {
         private GameplayStateMachine _gameplayStateMachine;
 

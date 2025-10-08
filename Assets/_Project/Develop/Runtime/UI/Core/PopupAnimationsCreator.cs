@@ -23,7 +23,7 @@ namespace Assets._Project.Develop.Runtime.UI.Core
                     return DOTween.Sequence()
                         .Append(anticlicker
                             .DOFade(anticlickerMaxAlpha, 0.2f)
-                            .From(0))   
+                            .From(0))
                         .Join(body.transform
                             .DOScale(1, 0.5f)
                             .From(0).SetEase(Ease.OutBack));
@@ -38,7 +38,7 @@ namespace Assets._Project.Develop.Runtime.UI.Core
                             .From(0));
 
                 default:
-                   throw new ArgumentException(nameof(popupAnimationType));
+                    throw new ArgumentException(nameof(popupAnimationType));
             }
         }
 

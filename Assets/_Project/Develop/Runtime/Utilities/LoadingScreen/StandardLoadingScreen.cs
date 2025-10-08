@@ -14,7 +14,7 @@ namespace Assets._Project.Develop.Runtime.Utilities.LoadingScreen
 
         public void Hide()
         {
-            gameObject.SetActive(false); 
+            gameObject.SetActive(false);
         }
 
         public void Show()

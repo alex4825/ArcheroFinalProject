@@ -24,14 +24,14 @@ namespace Assets._Project.Develop.Runtime.UI.Wallet
 
         public void Initialize()
         {
-            foreach(CurrencyTypes currencyType in _walletService.AvailableCurrencies)
+            foreach (CurrencyTypes currencyType in _walletService.AvailableCurrencies)
             {
                 IconTextView currencyView = _viewsFactory.Create<IconTextView>(ViewIDs.CurrencyView);
 
                 _view.Add(currencyView);
 
                 CurrencyPresenter currencyPresenter = _presentersFactory.CreateCurrencyPresenter(
-                    currencyView, 
+                    currencyView,
                     _walletService.GetCurrency(currencyType),
                     currencyType);
 

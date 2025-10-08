@@ -1,5 +1,4 @@
 using Assets._Project.Develop.Runtime.Utilities.StateMachineCore;
-using System;
 
 namespace Assets._Project.Develop.Runtime.Gameplay.States
 {

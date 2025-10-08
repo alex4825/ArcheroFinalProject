@@ -18,7 +18,7 @@ namespace Assets._Project.Develop.Runtime.Meta.Features.LevelsProgression
 
         public void ReadFrom(PlayerData data)
         {
-            _completedLevels.Clear(); 
+            _completedLevels.Clear();
             _completedLevels.AddRange(data.CompletedLevels);
         }
 

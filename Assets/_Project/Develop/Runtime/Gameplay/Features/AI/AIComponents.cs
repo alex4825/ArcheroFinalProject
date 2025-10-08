@@ -5,6 +5,6 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Features.AI
 {
     public class CurrentTarget : IEntityComponent
     {
-        public ReactiveVariable<Entity> Value; 
+        public ReactiveVariable<Entity> Value;
     }
 }

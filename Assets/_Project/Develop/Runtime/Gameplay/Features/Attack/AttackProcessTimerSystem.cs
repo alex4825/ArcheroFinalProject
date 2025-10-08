@@ -25,7 +25,7 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Features.Attack
         public void OnUpdate(float deltaTime)
         {
             if (_inAttackProcess.Value == false)
-                return; 
+                return;
 
             _currentTime.Value += deltaTime;
         }
@@ -35,7 +35,7 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Features.Attack
             _startAttackEventDisposable.Dispose();
         }
 
-        private void OnStartAttackProcess ()
+        private void OnStartAttackProcess()
         {
             _currentTime.Value = 0;
         }

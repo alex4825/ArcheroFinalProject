@@ -21,7 +21,7 @@ namespace Assets._Project.Develop.Runtime.UI.Core
 
         protected abstract Transform PopupLayer { get; }
 
-        
+
         public LevelsMenuPopupPresenter OpenLevelsMenuPopup()
         {
             LevelsMenuPopupView view = ViewsFactory.Create<LevelsMenuPopupView>(ViewIDs.LevelsMenuPopup, PopupLayer);

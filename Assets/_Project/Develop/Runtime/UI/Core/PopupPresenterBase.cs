@@ -23,7 +23,7 @@ namespace Assets._Project.Develop.Runtime.UI.Core
 
         public virtual void Initialize()
         {
-            
+
         }
 
         public virtual void Dispose()
@@ -47,7 +47,8 @@ namespace Assets._Project.Develop.Runtime.UI.Core
             _coroutinesPerformer.StartPerform(ProcessHide(callback));
         }
 
-        protected virtual void OnPreShow() {
+        protected virtual void OnPreShow()
+        {
             PopupView.CloseRequest += OnCloseRequest;
         }
 
@@ -80,7 +81,7 @@ namespace Assets._Project.Develop.Runtime.UI.Core
 
         private void KillProcess()
         {
-            if (_process != null) 
+            if (_process != null)
                 _coroutinesPerformer.StopPerform(_process);
         }
     }

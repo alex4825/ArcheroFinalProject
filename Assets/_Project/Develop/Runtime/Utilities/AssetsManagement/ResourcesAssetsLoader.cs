@@ -1,4 +1,3 @@
-using Assets._Project.Develop.Runtime.Utilities.ConfigsManagement;
 using UnityEngine;
 
 namespace Assets._Project.Develop.Runtime.Utilities.AssetsManagement

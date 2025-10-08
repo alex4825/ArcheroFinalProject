@@ -9,7 +9,7 @@ namespace Assets._Project.Develop.Runtime.UI.Gameplay.DefendersIcons
         public event Action<DefenderConfig> IconClicked;
 
         private readonly ViewsFactory _viewsFactory;
-        private DefendersIconsListView _iconsListView;        
+        private DefendersIconsListView _iconsListView;
 
         public DefendersIconsPresenter(
             ViewsFactory viewsFactory,

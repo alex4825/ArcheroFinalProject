@@ -1,5 +1,4 @@
 ﻿using Assets._Project.Develop.Runtime.Configs.Gameplay.Entities.Defenders;
-using Assets._Project.Develop.Runtime.Configs.Gameplay.Stages;
 using Assets._Project.Develop.Runtime.Gameplay.Environment;
 using System.Collections.Generic;
 using UnityEngine;

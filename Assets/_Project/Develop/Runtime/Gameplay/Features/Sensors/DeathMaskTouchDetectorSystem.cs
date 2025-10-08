@@ -22,7 +22,7 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Features.Sensors
         public void OnUpdate(float deltaTime)
         {
             for (int i = 0; i < _contacts.Count; i++)
-            {                
+            {
                 if (MatchWithDeathLayer(_contacts.Items[i]))
                 {
                     _isTouchDeathMask.Value = true;

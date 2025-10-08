@@ -20,7 +20,7 @@ namespace Assets._Project.Develop.Runtime.UI.LevelsMenuPopup
         public LevelTilePresenter(
             LevelsProgressionService levelsService,
             SceneSwitcherService sceneSwitcherService,
-            ICoroutinesPerformer coroutinesPerformer, 
+            ICoroutinesPerformer coroutinesPerformer,
             int levelNumber,
             LevelTileView view)
         {

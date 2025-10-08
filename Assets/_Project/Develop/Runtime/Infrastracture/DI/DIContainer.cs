@@ -35,7 +35,7 @@ namespace Assets._Project.Develop.Runtime.Infrastracture.DI
 
             Registration registration = new Registration(container => creator.Invoke(container), _updatables);
 
-            _container.Add(typeof(T), registration);                
+            _container.Add(typeof(T), registration);
 
             return registration;
         }
@@ -76,7 +76,7 @@ namespace Assets._Project.Develop.Runtime.Infrastracture.DI
 
         public void Update(float deltaTime)
         {
-            for(int i = 0; i < _updatables.Count; i++)
+            for (int i = 0; i < _updatables.Count; i++)
                 _updatables[i]?.Update(deltaTime);
         }
 

@@ -1,5 +1,4 @@
-﻿using Assets._Project.Develop.Runtime.Gameplay.Features.TeamsFeature;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace Assets._Project.Develop.Runtime.Configs.Gameplay.Entities.Defenders
 {

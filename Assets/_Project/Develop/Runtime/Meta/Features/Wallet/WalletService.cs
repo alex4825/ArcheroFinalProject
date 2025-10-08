@@ -1,9 +1,9 @@
-﻿using Assets._Project.Develop.Runtime.Utilities.Reactive;
-using System.Collections.Generic;
-using System;
-using System.Linq;
-using Assets._Project.Develop.Runtime.Utilities.DataManagement;
+﻿using Assets._Project.Develop.Runtime.Utilities.DataManagement;
 using Assets._Project.Develop.Runtime.Utilities.DataManagement.DataProviders;
+using Assets._Project.Develop.Runtime.Utilities.Reactive;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Assets._Project.Develop.Runtime.Infrastracture.Meta.Features.Wallet
 {

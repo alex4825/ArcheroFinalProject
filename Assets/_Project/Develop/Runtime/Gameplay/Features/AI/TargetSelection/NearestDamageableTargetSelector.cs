@@ -6,7 +6,6 @@ using Assets._Project.Develop.Runtime.Utilities.Reactive;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using static Unity.VisualScripting.Member;
 
 namespace Assets._Project.Develop.Runtime.Gameplay.Features.AI.TargetSelection
 {
@@ -32,7 +31,7 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Features.AI.TargetSelection
                     result = result && canApplyDamage.Evaluate();
                 }
 
-                if(_source.TryGetTeam(out ReactiveVariable<Teams> sourceTeam)
+                if (_source.TryGetTeam(out ReactiveVariable<Teams> sourceTeam)
                 && target.TryGetTeam(out ReactiveVariable<Teams> targetTeam))
                 {
                     result = result && sourceTeam.Value != targetTeam.Value;

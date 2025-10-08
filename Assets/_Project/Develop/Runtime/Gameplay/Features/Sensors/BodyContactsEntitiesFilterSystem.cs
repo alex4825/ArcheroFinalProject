@@ -8,11 +8,11 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Features.Sensors
     public class BodyContactsEntitiesFilterSystem : IInitializableSystem, IUpdatableSystem
     {
         private Buffer<Collider> _contacts;
-        private Buffer<Entity> _contactsEntities;   
+        private Buffer<Entity> _contactsEntities;
 
         private readonly CollidersRegistryService _colllidersRegistryService;
 
-        public BodyContactsEntitiesFilterSystem(CollidersRegistryService colllidersRegistryService  )
+        public BodyContactsEntitiesFilterSystem(CollidersRegistryService colllidersRegistryService)
         {
             _colllidersRegistryService = colllidersRegistryService;
         }

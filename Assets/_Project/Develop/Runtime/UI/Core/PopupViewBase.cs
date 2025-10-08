@@ -1,6 +1,6 @@
-﻿using System;
+﻿using DG.Tweening;
+using System;
 using UnityEngine;
-using DG.Tweening;
 using UnityEngine.UI;
 
 namespace Assets._Project.Develop.Runtime.UI.Core
@@ -36,7 +36,7 @@ namespace Assets._Project.Develop.Runtime.UI.Core
             //Анимация появления
             _mainGroup.alpha = 1;
 
-            Sequence animation = PopupAnimationsCreator.CreateShowAnimation(_body, _anticklicker, _animationType, _anticklickerDefaultAlpha);                
+            Sequence animation = PopupAnimationsCreator.CreateShowAnimation(_body, _anticklicker, _animationType, _anticklickerDefaultAlpha);
 
             ModifyShowAnimation(animation);
 

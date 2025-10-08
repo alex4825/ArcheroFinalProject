@@ -1,7 +1,5 @@
 using Assets._Project.Develop.Runtime.Gameplay.EntitiesCore;
 using Assets._Project.Develop.Runtime.Utilities.Reactive;
-using System;
-using UnityEngine;
 
 namespace Assets._Project.Develop.Runtime.Gameplay.Features.CurrencyFeature
 {
@@ -27,7 +25,7 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Features.CurrencyFeature
 
     public class SubtractEnergyCountRequest : IEntityComponent
     {
-        public ReactiveEvent<float> Value; 
+        public ReactiveEvent<float> Value;
     }
 
     public class RecoveryEnergyCountKoef : IEntityComponent

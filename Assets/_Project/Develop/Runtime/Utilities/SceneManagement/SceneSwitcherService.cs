@@ -33,7 +33,7 @@ namespace Assets._Project.Develop.Runtime.Utilities.SceneManagement
 
             SceneBootsprap sceneBootsprap = Object.FindObjectOfType<SceneBootsprap>();
 
-            if(sceneBootsprap ==  null)
+            if (sceneBootsprap == null)
                 throw new NullReferenceException(nameof(sceneBootsprap) + " not found");
 
             _currentSceneContainer = new DIContainer(_projectContainer);
@@ -46,7 +46,7 @@ namespace Assets._Project.Develop.Runtime.Utilities.SceneManagement
 
             _loadingScreen.Hide();
 
-            sceneBootsprap.Run(); 
+            sceneBootsprap.Run();
         }
     }
 }
