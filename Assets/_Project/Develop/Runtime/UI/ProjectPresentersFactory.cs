@@ -4,7 +4,6 @@ using Assets._Project.Develop.Runtime.Infrastracture.Meta.Features.Wallet;
 using Assets._Project.Develop.Runtime.Meta.Features.LevelsProgression;
 using Assets._Project.Develop.Runtime.UI.CommonViews;
 using Assets._Project.Develop.Runtime.UI.Core;
-using Assets._Project.Develop.Runtime.UI.Core.TestPopup;
 using Assets._Project.Develop.Runtime.UI.LevelsMenuPopup;
 using Assets._Project.Develop.Runtime.UI.Statistics;
 using Assets._Project.Develop.Runtime.UI.Wallet;
@@ -45,11 +44,6 @@ namespace Assets._Project.Develop.Runtime.UI
                 levelNumber,
                 view
                 );
-        }
-
-        public TestPopupPresenter CreateTestPopupPresenter(TestPopupView view)
-        {
-            return new TestPopupPresenter(view, _container.Resolve<ICoroutinesPerformer>());
         }
 
         public CurrencyPresenter CreateCurrencyPresenter(
