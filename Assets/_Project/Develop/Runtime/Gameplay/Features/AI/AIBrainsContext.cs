@@ -9,6 +9,11 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Features.AI
     {
         private readonly List<EntityToBrain> _entityToBrains = new();
 
+        private bool _isEnabled;
+
+        public void Enable() => _isEnabled = true;
+        public void Disable() => _isEnabled = false;
+
         public void SetFor(Entity entity, IBrain brain)
         {
             foreach (var item in _entityToBrains)
@@ -29,6 +34,9 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Features.AI
 
         public void Update(float deltaTime)
         {
+            if (_isEnabled == false)
+                return;
+
             for (int i = 0; i < _entityToBrains.Count; i++)
             {
                 if (_entityToBrains[i].Entity.IsInit == false)

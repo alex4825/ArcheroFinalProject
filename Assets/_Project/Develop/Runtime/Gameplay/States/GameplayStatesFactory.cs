@@ -29,6 +29,7 @@ using Assets._Project.Develop.Runtime.UI.Core;
 using static UnityEngine.EventSystems.EventTrigger;
 using Assets._Project.Develop.Runtime.Gameplay.Features.LifeCycle;
 using Assets._Project.Develop.Runtime.UI.Gameplay.DefendersIcons;
+using Assets._Project.Develop.Runtime.Gameplay.Features.AI;
 
 namespace Assets._Project.Develop.Runtime.Gameplay.States
 {
@@ -38,6 +39,7 @@ namespace Assets._Project.Develop.Runtime.Gameplay.States
         private readonly TimerServiceFactory _timerServiceFactory;
         private readonly EnemiesFactory _entitiesBrainsFactory;
         private readonly GameplayWaveContext _gameplayWaveContext;
+        private readonly AIBrainsContext _brainsContext;
         private readonly LevelConfig _levelConfig;
 
         public GameplayStatesFactory(DIContainer container, LevelConfig levelConfig)
@@ -46,6 +48,7 @@ namespace Assets._Project.Develop.Runtime.Gameplay.States
             _timerServiceFactory = container.Resolve<TimerServiceFactory>();
             _entitiesBrainsFactory = container.Resolve<EnemiesFactory>();
             _gameplayWaveContext = _container.Resolve<GameplayWaveContext>();
+            _brainsContext = _container.Resolve<AIBrainsContext>();
             _levelConfig = levelConfig;
         }
 
@@ -89,7 +92,12 @@ namespace Assets._Project.Develop.Runtime.Gameplay.States
                 .Add(new FuncCondition(() => fortressHolderService.Fortress == null))
                 .Add(new FuncCondition(() => fortressHolderService.Fortress.IsDead.Value));
 
-            GameplayStateMachine gameplayCycle = new GameplayStateMachine(new List<IDisposable> { coreLoopState });
+            GameplayStateMachine gameplayCycle = new GameplayStateMachine(
+                new List<IDisposable> {
+                    coreLoopState,
+                    coreLoopState.Entered.Subscribe(_brainsContext.Enable),
+                    coreLoopState.Exited.Subscribe(_brainsContext.Disable)
+                });
 
             gameplayCycle.AddState(coreLoopState);
             gameplayCycle.AddState(winState);
