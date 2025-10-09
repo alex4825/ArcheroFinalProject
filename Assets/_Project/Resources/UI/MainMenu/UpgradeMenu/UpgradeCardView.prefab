@@ -1095,6 +1095,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6005018703153565182}
+  - component: {fileID: 150694398930850350}
   m_Layer: 5
   m_Name: UpgradeCardView
   m_TagString: Untagged
@@ -1128,3 +1129,20 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 300, y: 500}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &150694398930850350
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8961580994510592566}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8d94db87768b2c44e81a145cc1354b02, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _outline: {fileID: 8637960548809399958}
+  _upgradeIcon: {fileID: 4644205912980761129}
+  _label: {fileID: 3278673372420814238}
+  _cost: {fileID: 2496845027831600946}
+  _description: {fileID: 7841869870287892683}
