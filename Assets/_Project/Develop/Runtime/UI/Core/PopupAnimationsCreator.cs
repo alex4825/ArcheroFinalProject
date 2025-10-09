@@ -60,7 +60,7 @@ namespace Assets._Project.Develop.Runtime.UI.Core
                             .From(anticlicker.color.a))
                         .Join(body.transform
                             .DOScale(0, 0.5f)
-                            .From(1).SetEase(Ease.OutBack));
+                            .From(1).SetEase(Ease.InSine));
 
                 case PopupAnimationTypes.Fade:
                     return DOTween.Sequence()

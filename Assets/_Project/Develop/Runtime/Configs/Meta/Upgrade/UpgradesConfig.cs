@@ -12,8 +12,10 @@ namespace Assets._Project.Develop.Runtime.Configs.Meta.Upgrade
     {
         [SerializeField] private List<UpgradeConfig> _values;
 
-        public float GetValueFor(UpgradeTypes upgradeType)
-            => _values.First(config => config.Type == upgradeType).Koef;
+        public IReadOnlyList<UpgradeConfig> Configs => _values;
+
+        public UpgradeConfig GetBy(UpgradeTypes upgradeType)
+            => _values.First(config => config.Type == upgradeType);
     }
 
     [Serializable]

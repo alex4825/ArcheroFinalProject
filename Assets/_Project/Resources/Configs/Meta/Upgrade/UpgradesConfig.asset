@@ -21,13 +21,15 @@ MonoBehaviour:
     <Cost>k__BackingField: 10
     <Koef>k__BackingField: 0.15
   - <Type>k__BackingField: 1
-    <Icon>k__BackingField: {fileID: 0}
+    <Icon>k__BackingField: {fileID: 21300000, guid: c02b54b922b294980963965089a13013,
+      type: 3}
     <Label>k__BackingField: More Damage
     <Description>k__BackingField: Increase the amount of player's click damage
     <Cost>k__BackingField: 20
     <Koef>k__BackingField: 0.1
   - <Type>k__BackingField: 2
-    <Icon>k__BackingField: {fileID: 0}
+    <Icon>k__BackingField: {fileID: 21300000, guid: f2588823fade04a81aa5da11e52df04b,
+      type: 3}
     <Label>k__BackingField: More Loot
     <Description>k__BackingField: Increase the amount of loot on level victory
     <Cost>k__BackingField: 30

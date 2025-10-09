@@ -1,9 +1,12 @@
 ﻿using Assets._Project.Develop.Runtime.Configs.Gameplay.Levels;
+using Assets._Project.Develop.Runtime.Configs.Meta.Upgrade;
 using Assets._Project.Develop.Runtime.Infrastracture.DI;
+using Assets._Project.Develop.Runtime.UI.Core;
 using Assets._Project.Develop.Runtime.UI.UpgradeMenuPopup;
 using Assets._Project.Develop.Runtime.Utilities.ConfigsManagement;
 using Assets._Project.Develop.Runtime.Utilities.CoroutinesManagement;
 using Assets._Project.Develop.Runtime.Utilities.SceneManagement;
+using UnityEngine;
 
 namespace Assets._Project.Develop.Runtime.UI.MainMenu
 {
@@ -16,9 +19,18 @@ namespace Assets._Project.Develop.Runtime.UI.MainMenu
             _container = container;
         }
 
+        public UpgradeCardPresenter CreateUpgradeCardPresenter(UpgradeCardView cardView, UpgradeConfig config)
+        {
+            return new UpgradeCardPresenter(cardView, config, _container.Resolve<ViewsFactory>());
+        }
+
         public UpgradePopupPresenter CreateUpgradePopupPresenter(UpgradePopupView view)
         {
-            return new UpgradePopupPresenter(view, _container.Resolve<ICoroutinesPerformer>());
+            return new UpgradePopupPresenter(
+                view,
+                _container.Resolve<ICoroutinesPerformer>(),
+                _container.Resolve<ViewsFactory>(),
+                _container.Resolve<MainMenuPresentersFactory>());
         }
 
         public MainMenuScreenPresenter CreateMainMenuScreen(MainMenuScreenView view)
