@@ -36,6 +36,7 @@ namespace Assets._Project.Develop.Runtime.UI.MainMenu
         public void Initialize()
         {
             _screen.PlayRandomLevelButtonClicked += OnPlayRandomLevelButtonClicked;
+            _screen.CloseButtonClicked += OnCloseButtonClicked;
 
             CreateWallet();
             CreateDefeatPresenter();
@@ -79,6 +80,15 @@ namespace Assets._Project.Develop.Runtime.UI.MainMenu
                 _sceneSwitcherService.ProcessSwitchTo
                 (Scenes.Gameplay,
                 new GameplayInputArgs(Random.Range(1, _levelsCount + 1))));
+        }
+
+        private void OnCloseButtonClicked()
+        {
+#if UNITY_EDITOR
+            UnityEditor.EditorApplication.isPlaying = false;
+#else
+        Application.Quit();
+#endif
         }
     }
 }
