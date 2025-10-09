@@ -79,9 +79,13 @@ namespace Assets._Project.Develop.Runtime.Infrastracture.EntryPoint
             IDataSerializer serializer = new JsonSerializer();
             IDataKeysStorage dataKeysStorage = new MapDataKeysStorage();
 
+            IDataRepository dataRepository;
+#if UNITY_WEBGL && !UNITY_EDITOR
+            dataRepository = new PlayerPrefsDataRepository();
+#else
             string saveFolderPath = Application.isEditor ? Application.dataPath : Application.persistentDataPath;
-            IDataRepository dataRepository = new LocalFileDataRepository(saveFolderPath, "json");
-
+            dataRepository = new LocalFileDataRepository(saveFolderPath, "json");
+#endif
             return new SaveLoadService(serializer, dataKeysStorage, dataRepository);
         }
 
