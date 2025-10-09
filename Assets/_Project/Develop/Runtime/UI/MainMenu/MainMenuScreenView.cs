@@ -29,24 +29,24 @@ namespace Assets._Project.Develop.Runtime.UI.MainMenu
 
         public void ShowInterface()
         {
-            WalletView.enabled = true;
-            VictoryView.enabled = true;
-            DefeatView.enabled = true;
+            WalletView.gameObject.SetActive(true);
+            VictoryView.gameObject.SetActive(true);
+            DefeatView.gameObject.SetActive(true);
 
-            _playRandomLevelButton.enabled = true;
-            _upgradeButton.enabled = true;
-            _closeButton.enabled = true;
+            _playRandomLevelButton.gameObject.SetActive(true);
+            _upgradeButton.gameObject.SetActive(true);
+            _closeButton.gameObject.SetActive(true);
         }
 
         public void HideInterface()
         {
-            WalletView.enabled = false;
-            VictoryView.enabled = false;
-            DefeatView.enabled = false;
+            WalletView.gameObject.SetActive(false);
+            VictoryView.gameObject.SetActive(false);
+            DefeatView.gameObject.SetActive(false);
 
-            _playRandomLevelButton.enabled = false;
-            _upgradeButton.enabled = false;
-            _closeButton.enabled = false;
+            _playRandomLevelButton.gameObject.SetActive(false);
+            _upgradeButton.gameObject.SetActive(false);
+            _closeButton.gameObject.SetActive(false);
         }
 
         private void OnPlayButtonClicked() => PlayRandomLevelButtonClicked?.Invoke();
