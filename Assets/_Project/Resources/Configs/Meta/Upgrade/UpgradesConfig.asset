@@ -1,0 +1,34 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 30989bd520a252e4ca1375442c5dead1, type: 3}
+  m_Name: UpgradesConfig
+  m_EditorClassIdentifier: 
+  _values:
+  - <Type>k__BackingField: 0
+    <Icon>k__BackingField: {fileID: 21300000, guid: 472c6b7b1236042dda9c7df5a4be5534,
+      type: 3}
+    <Label>k__BackingField: Repair
+    <Description>k__BackingField: Repairing the house in the beginning of the wave
+    <Cost>k__BackingField: 10
+    <Koef>k__BackingField: 0.15
+  - <Type>k__BackingField: 1
+    <Icon>k__BackingField: {fileID: 0}
+    <Label>k__BackingField: More Damage
+    <Description>k__BackingField: Increase the amount of player's click damage
+    <Cost>k__BackingField: 20
+    <Koef>k__BackingField: 0.1
+  - <Type>k__BackingField: 2
+    <Icon>k__BackingField: {fileID: 0}
+    <Label>k__BackingField: More Loot
+    <Description>k__BackingField: Increase the amount of loot on level victory
+    <Cost>k__BackingField: 30
+    <Koef>k__BackingField: 0.1

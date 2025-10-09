@@ -54,6 +54,8 @@ MonoBehaviour:
   _anticklicker: {fileID: 4256760604075897421}
   _body: {fileID: 7487282541479654331}
   _animationType: 1
+  CardsContainer: {fileID: 3982241345399130498}
+  UpgradesConfig: {fileID: 11400000, guid: eb9ef662d64c5804c8ff58509d14c4ad, type: 2}
 --- !u!1 &7589680284538640636
 GameObject:
   m_ObjectHideFlags: 0

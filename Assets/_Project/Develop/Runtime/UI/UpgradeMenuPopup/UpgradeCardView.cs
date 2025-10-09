@@ -11,6 +11,7 @@ namespace Assets._Project.Develop.Runtime.UI.UpgradeMenuPopup
         [SerializeField] private Image _upgradeIcon;
         [SerializeField] private TextMeshProUGUI _label;
         [SerializeField] private TextMeshProUGUI _cost;
+        [SerializeField] private TextMeshProUGUI _profit;
         [SerializeField] private TextMeshProUGUI _description;
 
         public void Select() => _outline.SetActive(true);
@@ -19,6 +20,7 @@ namespace Assets._Project.Develop.Runtime.UI.UpgradeMenuPopup
         public void SetIcon(Sprite icon) => _upgradeIcon.sprite = icon;
         public void SetLabel(string text) => _label.text = text;
         public void SetCost(string text) => _cost.text = text;
+        public void SetProfit(string text) => _profit.text = text;
         public void SetDescription(string text) => _description.text = text;
     }
 }
