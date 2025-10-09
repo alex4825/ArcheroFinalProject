@@ -44,11 +44,36 @@ namespace Assets._Project.Develop.Runtime.UI.Core
 
         public static Sequence CreateHideAnimation(
             CanvasGroup body,
-            Image anticklicker,
+            Image anticlicker,
             PopupAnimationTypes popupAnimationType,
-            float anticklickerMaxAlpha)
+            float anticlickerMaxAlpha)
         {
-            return DOTween.Sequence();
+            switch (popupAnimationType)
+            {
+                case PopupAnimationTypes.None:
+                    return DOTween.Sequence();
+
+                case PopupAnimationTypes.Expand:
+                    return DOTween.Sequence()
+                        .Append(anticlicker
+                            .DOFade(0, 0.2f)
+                            .From(anticlicker.color.a))
+                        .Join(body.transform
+                            .DOScale(0, 0.5f)
+                            .From(1).SetEase(Ease.OutBack));
+
+                case PopupAnimationTypes.Fade:
+                    return DOTween.Sequence()
+                        .Append(anticlicker
+                            .DOFade(0, 0.2f)
+                            .From(anticlicker.color.a))
+                        .Join(body
+                            .DOFade(0, 0.3f)
+                            .From(body.alpha));
+
+                default:
+                    throw new ArgumentException(nameof(popupAnimationType));
+            }
         }
     }
 }

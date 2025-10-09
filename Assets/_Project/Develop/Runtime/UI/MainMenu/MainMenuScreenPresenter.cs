@@ -1,6 +1,7 @@
 ﻿using Assets._Project.Develop.Runtime.Infrastracture.Gameplay.Infrastracture;
 using Assets._Project.Develop.Runtime.UI.Core;
 using Assets._Project.Develop.Runtime.UI.Statistics;
+using Assets._Project.Develop.Runtime.UI.UpgradeMenuPopup;
 using Assets._Project.Develop.Runtime.UI.Wallet;
 using Assets._Project.Develop.Runtime.Utilities.CoroutinesManagement;
 using Assets._Project.Develop.Runtime.Utilities.SceneManagement;
@@ -15,6 +16,7 @@ namespace Assets._Project.Develop.Runtime.UI.MainMenu
         private readonly ProjectPresentersFactory _projectPresentersFactory;
         private readonly SceneSwitcherService _sceneSwitcherService;
         private readonly ICoroutinesPerformer _coroutinesPerformer;
+        private readonly MainMenuPopupService _mainMenuPopupService;
         private int _levelsCount;
 
         private readonly List<IPresenter> _childPresenters = new();
@@ -24,18 +26,21 @@ namespace Assets._Project.Develop.Runtime.UI.MainMenu
             ProjectPresentersFactory projectPresentersFactory,
             SceneSwitcherService sceneSwitcherService,
             ICoroutinesPerformer coroutinesPerformer,
+            MainMenuPopupService mainMenuPopupService,
             int levelsCount)
         {
             _screen = screen;
             _projectPresentersFactory = projectPresentersFactory;
             _sceneSwitcherService = sceneSwitcherService;
             _coroutinesPerformer = coroutinesPerformer;
+            _mainMenuPopupService = mainMenuPopupService;
             _levelsCount = levelsCount;
         }
 
         public void Initialize()
         {
             _screen.PlayRandomLevelButtonClicked += OnPlayRandomLevelButtonClicked;
+            _screen.UpgradeButtonClicked += OnUpgradeButtonClicked;
             _screen.CloseButtonClicked += OnCloseButtonClicked;
 
             CreateWallet();
@@ -49,6 +54,7 @@ namespace Assets._Project.Develop.Runtime.UI.MainMenu
         public void Dispose()
         {
             _screen.PlayRandomLevelButtonClicked -= OnPlayRandomLevelButtonClicked;
+            _screen.CloseButtonClicked -= OnCloseButtonClicked;
 
             foreach (IPresenter childPresenter in _childPresenters)
                 childPresenter.Dispose();
@@ -80,6 +86,21 @@ namespace Assets._Project.Develop.Runtime.UI.MainMenu
                 _sceneSwitcherService.ProcessSwitchTo
                 (Scenes.Gameplay,
                 new GameplayInputArgs(Random.Range(1, _levelsCount + 1))));
+        }
+
+        private void OnUpgradeButtonClicked()
+        {
+            UpgradePopupPresenter upgradePopup = _mainMenuPopupService.OpenUpgradePopup();
+
+            upgradePopup.CloseRequest += OnCloseUpgradePopup;
+
+            _screen.HideInterface();
+        }
+
+        private void OnCloseUpgradePopup(PopupPresenterBase upgradePopup)
+        {
+            upgradePopup.CloseRequest -= OnCloseUpgradePopup;
+            _screen.ShowInterface();
         }
 
         private void OnCloseButtonClicked()

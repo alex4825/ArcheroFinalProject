@@ -27,7 +27,8 @@ namespace Assets._Project.Develop.Runtime.Infrastracture.Meta.Infrastracture
             return new MainMenuPopupService(
                 container.Resolve<ViewsFactory>(),
                 container.Resolve<ProjectPresentersFactory>(),
-                container.Resolve<MainMenuUIRoot>());
+                container.Resolve<MainMenuUIRoot>(),
+                container.Resolve<MainMenuPresentersFactory>());
         }
 
         private static MainMenuScreenPresenter CreateMainMenuScreenPresenter(DIContainer container)

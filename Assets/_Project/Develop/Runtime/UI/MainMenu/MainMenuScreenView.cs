@@ -9,28 +9,48 @@ namespace Assets._Project.Develop.Runtime.UI.MainMenu
     public class MainMenuScreenView : MonoBehaviour, IView
     {
         public event Action PlayRandomLevelButtonClicked;
+        public event Action UpgradeButtonClicked;
         public event Action CloseButtonClicked;
+
+        [SerializeField] private Button _playRandomLevelButton;
+        [SerializeField] private Button _upgradeButton;
+        [SerializeField] private Button _closeButton;
 
         [field: SerializeField] public IconTextListView WalletView { get; private set; }
         [field: SerializeField] public IconTextView VictoryView { get; private set; }
         [field: SerializeField] public IconTextView DefeatView { get; private set; }
 
-        [SerializeField] private Button _playRandomLevelButton;
-        [SerializeField] private Button _closeButtonClicked;
-
         private void OnEnable()
         {
-            _playRandomLevelButton.onClick.AddListener(OnOpenLevelsMenuButtonClicked);
-            _closeButtonClicked.onClick.AddListener(OnCloseButtonClicked);
+            _playRandomLevelButton.onClick.AddListener(OnPlayButtonClicked);
+            _upgradeButton.onClick.AddListener(OnUpgradeButtonClicked);
+            _closeButton.onClick.AddListener(OnCloseButtonClicked);
         }
 
-        private void OnDisable()
+        public void ShowInterface()
         {
-            _playRandomLevelButton.onClick.RemoveListener(OnOpenLevelsMenuButtonClicked);
-            _closeButtonClicked.onClick.RemoveListener(OnCloseButtonClicked);
+            WalletView.enabled = true;
+            VictoryView.enabled = true;
+            DefeatView.enabled = true;
+
+            _playRandomLevelButton.enabled = true;
+            _upgradeButton.enabled = true;
+            _closeButton.enabled = true;
         }
 
-        private void OnOpenLevelsMenuButtonClicked() => PlayRandomLevelButtonClicked?.Invoke();
+        public void HideInterface()
+        {
+            WalletView.enabled = false;
+            VictoryView.enabled = false;
+            DefeatView.enabled = false;
+
+            _playRandomLevelButton.enabled = false;
+            _upgradeButton.enabled = false;
+            _closeButton.enabled = false;
+        }
+
+        private void OnPlayButtonClicked() => PlayRandomLevelButtonClicked?.Invoke();
+        private void OnUpgradeButtonClicked() => UpgradeButtonClicked?.Invoke();
         private void OnCloseButtonClicked() => CloseButtonClicked?.Invoke();
     }
 }

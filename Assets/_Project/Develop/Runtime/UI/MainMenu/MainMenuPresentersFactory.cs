@@ -1,5 +1,6 @@
 ﻿using Assets._Project.Develop.Runtime.Configs.Gameplay.Levels;
 using Assets._Project.Develop.Runtime.Infrastracture.DI;
+using Assets._Project.Develop.Runtime.UI.UpgradeMenuPopup;
 using Assets._Project.Develop.Runtime.Utilities.ConfigsManagement;
 using Assets._Project.Develop.Runtime.Utilities.CoroutinesManagement;
 using Assets._Project.Develop.Runtime.Utilities.SceneManagement;
@@ -15,6 +16,11 @@ namespace Assets._Project.Develop.Runtime.UI.MainMenu
             _container = container;
         }
 
+        public UpgradePopupPresenter CreateUpgradePopupPresenter(UpgradePopupView view)
+        {
+            return new UpgradePopupPresenter(view, _container.Resolve<ICoroutinesPerformer>());
+        }
+
         public MainMenuScreenPresenter CreateMainMenuScreen(MainMenuScreenView view)
         {
             return new MainMenuScreenPresenter(
@@ -22,6 +28,7 @@ namespace Assets._Project.Develop.Runtime.UI.MainMenu
                 _container.Resolve<ProjectPresentersFactory>(),
                 _container.Resolve<SceneSwitcherService>(),
                 _container.Resolve<ICoroutinesPerformer>(),
+                _container.Resolve<MainMenuPopupService>(),
                 _container.Resolve<ConfigsProviderService>().GetConfig<LevelsListConfig>().Levels.Count);
         }
     }
