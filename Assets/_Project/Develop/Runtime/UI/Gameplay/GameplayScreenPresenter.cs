@@ -3,6 +3,9 @@ using Assets._Project.Develop.Runtime.Gameplay.Waves;
 using Assets._Project.Develop.Runtime.UI.Core;
 using Assets._Project.Develop.Runtime.UI.Gameplay.HealthDisplay;
 using Assets._Project.Develop.Runtime.UI.Statistics;
+using Assets._Project.Develop.Runtime.Utilities.CoroutinesManagement;
+using Assets._Project.Develop.Runtime.Utilities.SceneManagement;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -14,7 +17,8 @@ namespace Assets._Project.Develop.Runtime.UI.Gameplay
         private readonly GameplayPresentersFactory _gameplayPresentersFactory;
         private EntitiesHealthDisplayPresenter _entitiesHealthDisplayPresenter;
         private readonly GameplayWaveContext _gameplayWaveContext;
-        private readonly MainHeroHolderService _mainHeroHolderService;
+        private readonly SceneSwitcherService _sceneSwitcherService;
+        private readonly ICoroutinesPerformer _coroutinesPerformer;
 
         private int _wavesCount;
 
@@ -24,13 +28,15 @@ namespace Assets._Project.Develop.Runtime.UI.Gameplay
             GameplayScreenView view,
             GameplayWaveContext gameplayWaveContext,
             GameplayPresentersFactory gameplayPresentersFactory,
-            MainHeroHolderService mainHeroHolderService,
+            SceneSwitcherService sceneSwitcherService,
+            ICoroutinesPerformer coroutinesPerformer,
             int wavesCount)
         {
             _view = view;
             _gameplayWaveContext = gameplayWaveContext;
             _gameplayPresentersFactory = gameplayPresentersFactory;
-            _mainHeroHolderService = mainHeroHolderService;
+            _sceneSwitcherService = sceneSwitcherService;
+            _coroutinesPerformer = coroutinesPerformer;
             _wavesCount = wavesCount;
         }
 
@@ -44,6 +50,8 @@ namespace Assets._Project.Develop.Runtime.UI.Gameplay
 
             foreach (IPresenter presenter in _childPresenters)
                 presenter.Initialize();
+
+            _view.CloseButtonClicked += OnCloseMenuButtonClicked;
         }
 
         public void LateUpdate()
@@ -57,11 +65,18 @@ namespace Assets._Project.Develop.Runtime.UI.Gameplay
                 childPresenter.Dispose();
 
             _childPresenters.Clear();
+
+            _view.CloseButtonClicked += OnCloseMenuButtonClicked;
         }
 
         public TPresenter GetChild<TPresenter>() where TPresenter : class, IPresenter
         {
             return _childPresenters.OfType<TPresenter>().First();
+        }
+
+        private void OnCloseMenuButtonClicked()
+        {
+            _coroutinesPerformer.StartPerform(_sceneSwitcherService.ProcessSwitchTo(Scenes.MainMenu));
         }
 
         private void CreateDefendersIconsPresenter()

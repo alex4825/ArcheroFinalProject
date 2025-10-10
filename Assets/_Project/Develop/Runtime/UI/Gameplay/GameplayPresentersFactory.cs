@@ -50,7 +50,8 @@ namespace Assets._Project.Develop.Runtime.UI.Gameplay
                 view,
                 _container.Resolve<GameplayWaveContext>(),
                 this,
-                _container.Resolve<MainHeroHolderService>(),
+                _container.Resolve<SceneSwitcherService>(),
+                _container.Resolve<ICoroutinesPerformer>(),
                 currentLevelConfig.WavesCount);
         }
 
