@@ -1,4 +1,5 @@
 ﻿using Assets._Project.Develop.Runtime.Utilities.Conditions;
+using Assets._Project.Develop.Runtime.Utilities.Reactive;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,10 +16,14 @@ namespace Assets._Project.Develop.Runtime.Utilities.StateMachineCore
 
         private List<IDisposable> _disposables;
 
+        private ReactiveEvent _disposed = new();
+
         protected StateMachine(List<IDisposable> disposables)
         {
             _disposables = new List<IDisposable>(disposables);
         }
+
+        public IReadonlyEvent Disposed => _disposed;
 
         protected TState CurrentState => _currentState.State;
 
@@ -70,6 +75,8 @@ namespace Assets._Project.Develop.Runtime.Utilities.StateMachineCore
 
         public void Dispose()
         {
+            _disposed?.Invoke();
+
             _isRunning = false;
 
             foreach (StateNode<TState> stateNode in _states)
