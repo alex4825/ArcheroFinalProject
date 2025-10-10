@@ -23,6 +23,6 @@ MonoBehaviour:
   <Damage>k__BackingField: 10
   <RotationSpeed>k__BackingField: 500
   <AttackProcessTime>k__BackingField: 0.5
-  <AttackCooldown>k__BackingField: 1
-  <MaxAttackDistance>k__BackingField: 10
+  <AttackCooldown>k__BackingField: 0.5
+  <MaxAttackDistance>k__BackingField: 15
   <DeathProcessTime>k__BackingField: 1

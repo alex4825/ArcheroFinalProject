@@ -13,13 +13,17 @@ MonoBehaviour:
   m_Name: LevelConfig 2
   m_EditorClassIdentifier: 
   _waveConfigs:
-  - {fileID: 11400000, guid: e81f08fe46bb6964695af242cf03dea0, type: 2}
   - {fileID: 11400000, guid: 0dec72f987e82834b915a9b4907b26e3, type: 2}
-  - {fileID: 11400000, guid: 0dec72f987e82834b915a9b4907b26e3, type: 2}
-  <DefenderConfig>k__BackingField: {fileID: 11400000, guid: a093cb20511f9a149a53930385cde5c7,
+  - {fileID: 11400000, guid: 4027c5c7bf07c594c97d3fedb38e54ad, type: 2}
+  - {fileID: 11400000, guid: 77a6347a90546004e9d6993349707a0f, type: 2}
+  - {fileID: 11400000, guid: 4027c5c7bf07c594c97d3fedb38e54ad, type: 2}
+  - {fileID: 11400000, guid: 7c6e32c48f7a5f44397270af05aac911, type: 2}
+  - {fileID: 11400000, guid: 7c6e32c48f7a5f44397270af05aac911, type: 2}
+  <DefenderConfig>k__BackingField: {fileID: 11400000, guid: fab3ede3ce565274b876fc73d95da44d,
     type: 2}
-  <DelayBetweenWaves>k__BackingField: 3
-  <FortressHP>k__BackingField: 200
-  <VictoryCost>k__BackingField: 60
+  <DelayBetweenWaves>k__BackingField: 6
+  <FortressHP>k__BackingField: 300
+  <VictoryGoldCost>k__BackingField: 100
+  <VictoryDiamondCost>k__BackingField: 10
   <LevelEnvironment>k__BackingField: {fileID: 124691657050534622, guid: d027884a1b8a31c419d073c8a375c3c9,
     type: 3}

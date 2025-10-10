@@ -12,7 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 718e8f1fa5df91645a49e96628660d1d, type: 3}
   m_Name: PlayerConfig
   m_EditorClassIdentifier: 
-  <PrefabPath>k__BackingField: Entities/Player
-  <ExplodeDamage>k__BackingField: 30
+  <ExplodeDamage>k__BackingField: 10
   <ExplodeRadius>k__BackingField: 5
   <Team>k__BackingField: 0
