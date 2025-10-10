@@ -59,7 +59,7 @@ namespace Assets._Project.Develop.Runtime.Gameplay.States
                 _container.Resolve<VictoryDefeatCounter>(),
                 _container.Resolve<WalletService>(),
                 _container.Resolve<GameplayPopupService>(),
-                _levelConfig.VictoryCost);
+                _levelConfig);
         }
 
         public DefeatState CreateDefeatState()

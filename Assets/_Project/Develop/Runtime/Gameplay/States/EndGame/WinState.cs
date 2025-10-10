@@ -1,4 +1,5 @@
-﻿using Assets._Project.Develop.Runtime.Gameplay.Features.InputFeature;
+﻿using Assets._Project.Develop.Runtime.Configs.Gameplay.Levels;
+using Assets._Project.Develop.Runtime.Gameplay.Features.InputFeature;
 using Assets._Project.Develop.Runtime.Infrastracture.Meta.Features.Wallet;
 using Assets._Project.Develop.Runtime.UI.Gameplay;
 using Assets._Project.Develop.Runtime.Utilities.CoroutinesManagement;
@@ -16,7 +17,7 @@ namespace Assets._Project.Develop.Runtime.Gameplay.States.EndGame
         private readonly VictoryDefeatCounter _victoryDefeatCounter;
         private readonly WalletService _walletService;
         private readonly GameplayPopupService _gameplayPopupService;
-        private int _victoryCost;
+        private LevelConfig _levelConfig;
 
         public WinState(
             IInputService inputService,
@@ -25,14 +26,14 @@ namespace Assets._Project.Develop.Runtime.Gameplay.States.EndGame
             VictoryDefeatCounter victoryDefeatCounter,
             WalletService walletService,
             GameplayPopupService gameplayPopupService,
-            int victoryCost) : base(inputService)
+            LevelConfig levelConfig) : base(inputService)
         {
             _playerDataProvider = playerDataProvider;
             _coroutinesPerformer = coroutinesPerformer;
             _victoryDefeatCounter = victoryDefeatCounter;
             _walletService = walletService;
             _gameplayPopupService = gameplayPopupService;
-            _victoryCost = victoryCost;
+            _levelConfig = levelConfig;
         }
 
         public override void Enter()
@@ -42,7 +43,8 @@ namespace Assets._Project.Develop.Runtime.Gameplay.States.EndGame
             Debug.Log("Победа!");
 
             _victoryDefeatCounter.AddVictory();
-            _walletService.Add(CurrencyTypes.Gold, _victoryCost);
+            _walletService.Add(CurrencyTypes.Gold, _levelConfig.VictoryGoldCost);
+            _walletService.Add(CurrencyTypes.Diamond, _levelConfig.VictoryDiamondCost);
 
             _coroutinesPerformer.StartPerform(_playerDataProvider.SaveAcync());
             _gameplayPopupService.OpenWinPopup();
