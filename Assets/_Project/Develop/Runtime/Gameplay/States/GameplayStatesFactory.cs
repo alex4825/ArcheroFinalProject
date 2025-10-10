@@ -27,6 +27,7 @@ using Assets._Project.Develop.Runtime.Utilities.Reactive;
 using Assets._Project.Develop.Runtime.Utilities.Timer;
 using System;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 namespace Assets._Project.Develop.Runtime.Gameplay.States
@@ -40,6 +41,7 @@ namespace Assets._Project.Develop.Runtime.Gameplay.States
         private readonly AIBrainsContext _brainsContext;
         private readonly FortressHolderService _fortressHolderService;
         private readonly StatsService _statsService;
+        private readonly WalletService _walletService;
         private readonly LevelConfig _levelConfig;
 
         public GameplayStatesFactory(DIContainer container, LevelConfig levelConfig)
@@ -51,6 +53,7 @@ namespace Assets._Project.Develop.Runtime.Gameplay.States
             _brainsContext = _container.Resolve<AIBrainsContext>();
             _fortressHolderService = _container.Resolve<FortressHolderService>();
             _statsService = _container.Resolve<StatsService>();
+            _walletService = _container.Resolve<WalletService>();
             _levelConfig = levelConfig;
         }
 
@@ -61,7 +64,7 @@ namespace Assets._Project.Develop.Runtime.Gameplay.States
                 _container.Resolve<PlayerDataProvider>(),
                 _container.Resolve<ICoroutinesPerformer>(),
                 _container.Resolve<VictoryDefeatCounter>(),
-                _container.Resolve<WalletService>(),
+                _walletService,
                 _container.Resolve<GameplayPopupService>(),
                 _statsService,
                 _levelConfig);
@@ -79,7 +82,11 @@ namespace Assets._Project.Develop.Runtime.Gameplay.States
 
         public GameplayStateMachine CreateGameplayStateMachine()
         {
-            GameplayStateMachine coreLoopState = CreateCoreLoopState(_levelConfig.DelayBetweenWaves);
+            List<IDisposable> disposables = new List<IDisposable>();
+
+            ReactiveVariable<int> goldSpendInGame = new();
+
+            GameplayStateMachine coreLoopState = CreateCoreLoopState(_levelConfig.DelayBetweenWaves, goldSpendInGame);
 
             DefeatState defeatState = CreateDefeatState();
             WinState winState = CreateWinState();
@@ -94,12 +101,18 @@ namespace Assets._Project.Develop.Runtime.Gameplay.States
                 .Add(new FuncCondition(() => _fortressHolderService.Fortress == null))
                 .Add(new FuncCondition(() => _fortressHolderService.Fortress.IsDead.Value));
 
-            GameplayStateMachine gameplayCycle = new GameplayStateMachine(
-                new List<IDisposable> {
-                    coreLoopState,
-                    coreLoopState.Entered.Subscribe(_brainsContext.Enable),
-                    coreLoopState.Exited.Subscribe(_brainsContext.Disable)
-                });
+            disposables.Add(coreLoopState.Entered.Subscribe(_brainsContext.Enable));
+            disposables.Add(coreLoopState.Exited.Subscribe(_brainsContext.Disable));
+            disposables.Add(coreLoopState.Disposed.Subscribe(() =>
+            {
+                bool isLevelSkipped = coreLoopToWinStateCondition.Evaluate() == false && coreLoopToDefeatStateCondition.Evaluate() == false;
+
+                if (isLevelSkipped)
+                    _walletService.Add(CurrencyTypes.Gold, goldSpendInGame.Value);
+            }));
+
+
+            GameplayStateMachine gameplayCycle = new GameplayStateMachine(disposables);
 
             gameplayCycle.AddState(coreLoopState);
             gameplayCycle.AddState(winState);
@@ -111,18 +124,22 @@ namespace Assets._Project.Develop.Runtime.Gameplay.States
             return gameplayCycle;
         }
 
-        public GameplayStateMachine CreateCoreLoopState(float startDelayTime)
+        public GameplayStateMachine CreateCoreLoopState(float startDelayTime, ReactiveVariable<int> goldSpend)
         {
             List<IDisposable> disposables = new List<IDisposable>();
 
             TimerService startDelayTimer = _timerServiceFactory.Create(startDelayTime);
 
-            GameplayParallelState restPhaseState = CreateRestPhaseState(out IReadonlyEvent<Entity> entityCreated);
+            GameplayParallelState restPhaseState = CreateRestPhaseState(out IReadonlyEvent<Entity, int> entityCreated);
 
             GameplayParallelState waveCycleState = CreateWaveCycleState(disposables);
 
             Buffer<Entity> createdDefenders = new(64);
-            disposables.Add(entityCreated.Subscribe(entity => createdDefenders.TryAdd(entity)));
+            disposables.Add(entityCreated.Subscribe((entity, cost) =>
+            {
+                createdDefenders.TryAdd(entity);
+                goldSpend.Value += cost;
+            }));
 
             disposables.Add(waveCycleState.Exited.Subscribe(() => KillOneWaveLifetime(createdDefenders)));
 
@@ -164,7 +181,7 @@ namespace Assets._Project.Develop.Runtime.Gameplay.States
             }
         }
 
-        private GameplayParallelState CreateRestPhaseState(out IReadonlyEvent<Entity> entityCreated)
+        private GameplayParallelState CreateRestPhaseState(out IReadonlyEvent<Entity, int> entityCreated)
         {
             WaitingForPointingState waitingForPointState = new WaitingForPointingState(_container.Resolve<IInputService>());
 

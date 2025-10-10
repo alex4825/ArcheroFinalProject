@@ -19,7 +19,7 @@ namespace Assets._Project.Develop.Runtime.Gameplay.States
 
         private DefenderConfig _currentDefenderConfig;
 
-        private ReactiveEvent<Entity> _created = new();
+        private ReactiveEvent<Entity, int> _created = new();
 
         private IDisposable _placeFoundDisposable;
 
@@ -35,7 +35,7 @@ namespace Assets._Project.Develop.Runtime.Gameplay.States
             _walletService = walletService;
         }
 
-        public IReadonlyEvent<Entity> Created => _created;
+        public IReadonlyEvent<Entity, int> Created => _created;
 
         public override void Enter()
         {
@@ -68,7 +68,7 @@ namespace Assets._Project.Develop.Runtime.Gameplay.States
             if (_walletService.GetCurrency(CurrencyTypes.Gold).Value > _currentDefenderConfig.Cost)
             {
                 Entity entity = _enemiesFactory.Create(position, _currentDefenderConfig, _currentDefenderConfig.Team);
-                _created?.Invoke(entity);
+                _created?.Invoke(entity, _currentDefenderConfig.Cost);
                 _walletService.Spend(CurrencyTypes.Gold, _currentDefenderConfig.Cost);
             }
         }
