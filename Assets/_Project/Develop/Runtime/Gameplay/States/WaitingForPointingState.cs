@@ -3,11 +3,14 @@ using Assets._Project.Develop.Runtime.Utilities.Reactive;
 using Assets._Project.Develop.Runtime.Utilities.StateMachineCore;
 using System;
 using UnityEngine;
+using UnityEngine.AI;
 
 namespace Assets._Project.Develop.Runtime.Gameplay.States
 {
     public class WaitingForPointingState : State, IUpdatableState
     {
+        private const float MaxDistanceToCheck = 1f;
+
         private IInputService _inputService;
 
         private ReactiveEvent<Vector3> _pointFound = new();
@@ -42,9 +45,10 @@ namespace Assets._Project.Develop.Runtime.Gameplay.States
             _pointedDisposable.Dispose();
         }
 
-        private void OnPointed(Vector3 position)
+        private void OnPointed(Vector3 clickPoint)
         {
-            _pointFound.Invoke(position);
+            if (NavMesh.SamplePosition(clickPoint, out NavMeshHit navMeshHit, MaxDistanceToCheck, NavMesh.AllAreas))
+                _pointFound.Invoke(navMeshHit.position);
         }
     }
 }

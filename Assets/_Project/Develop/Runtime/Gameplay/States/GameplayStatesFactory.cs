@@ -162,17 +162,17 @@ namespace Assets._Project.Develop.Runtime.Gameplay.States
 
         private GameplayParallelState CreateRestPhaseState(out IReadonlyEvent<Entity> entityCreated)
         {
-            WaitingForPointingState waitingForExplodePointState = new WaitingForPointingState(_container.Resolve<IInputService>());
+            WaitingForPointingState waitingForPointState = new WaitingForPointingState(_container.Resolve<IInputService>());
 
             PlacementDefendersState placementDefendersState = new PlacementDefendersState(
                 _container.Resolve<GameplayScreenPresenter>().GetChild<DefendersIconsPresenter>(),
-                waitingForExplodePointState.PointFound,
+                waitingForPointState.PointFound,
                 _entitiesBrainsFactory,
                 _container.Resolve<WalletService>());
 
             entityCreated = placementDefendersState.Created;
 
-            return new GameplayParallelState(waitingForExplodePointState, placementDefendersState);
+            return new GameplayParallelState(waitingForPointState, placementDefendersState);
         }
 
         private GameplayParallelState CreateWaveCycleState(List<IDisposable> disposables)

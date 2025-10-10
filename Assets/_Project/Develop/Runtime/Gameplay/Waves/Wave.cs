@@ -7,12 +7,15 @@ using Assets._Project.Develop.Runtime.Utilities.Reactive;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 using Random = UnityEngine.Random;
 
 namespace Assets._Project.Develop.Runtime.Gameplay.Waves
 {
     public class Wave : IDisposable
     {
+        private const float MaxPointDeviation = 25f;
+
         private readonly EnemiesFactory _enemiesFactory;
         private WaveConfig _waveConfig;
 
@@ -104,12 +107,14 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Waves
         private Vector3 GetRandomPosition()
         {
             Vector2 random2D = Random.insideUnitCircle;
-
             Vector3 randomDirection = new Vector3(random2D.x, 0f, random2D.y);
-
             float randomLength = Random.Range(_waveConfig.MinSpawnRadius, _waveConfig.MaxSpawnRadius);
 
-            return _fortressPosition + randomDirection.normalized * randomLength;
+            Vector3 randomPoint = _fortressPosition + randomDirection.normalized * randomLength;
+
+            NavMesh.SamplePosition(randomPoint, out NavMeshHit navMeshHit, MaxPointDeviation, NavMesh.AllAreas);
+
+            return navMeshHit.position;
         }
 
         private void RandomizeSpawnDelay() => _currentSpawnDelay = Random.Range(_waveConfig.MinSpawnDelayTime, _waveConfig.MaxSpawnDelayTime);
