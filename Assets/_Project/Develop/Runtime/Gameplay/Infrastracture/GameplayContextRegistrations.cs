@@ -12,6 +12,7 @@ using Assets._Project.Develop.Runtime.Gameplay.Features.StagesFeature;
 using Assets._Project.Develop.Runtime.Gameplay.States;
 using Assets._Project.Develop.Runtime.Gameplay.Waves;
 using Assets._Project.Develop.Runtime.Infrastracture.DI;
+using Assets._Project.Develop.Runtime.Meta.Features.Upgrade;
 using Assets._Project.Develop.Runtime.UI;
 using Assets._Project.Develop.Runtime.UI.Core;
 using Assets._Project.Develop.Runtime.UI.Gameplay;
@@ -112,7 +113,7 @@ namespace Assets._Project.Develop.Runtime.Infrastracture.Gameplay.Infrastracture
         }
 
         private static GameplayWaveContext CreateGameplayWaveContext(DIContainer container)
-            => new GameplayWaveContext();
+            => new GameplayWaveContext(container.Resolve<FortressHolderService>(), container.Resolve<StatsService>());
 
         private static FortressHolderService CreateFortressHolderService(DIContainer container)
             => new FortressHolderService(container.Resolve<EntitiesLifeContext>());

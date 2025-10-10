@@ -1229,9 +1229,9 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 8327684571282133819}
-        m_TargetAssemblyTypeName: Assets._Project.Develop.Runtime.UI.Core.PopupViewBase,
+        m_TargetAssemblyTypeName: Assets._Project.Develop.Runtime.UI.Gameplay.ResultsPopups.WinPopupView,
           Assembly-CSharp
-        m_MethodName: OnCloseButtonClicked
+        m_MethodName: OnContinueClick
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

@@ -38,6 +38,8 @@ namespace Assets._Project.Develop.Runtime.Gameplay.States
         private readonly EnemiesFactory _entitiesBrainsFactory;
         private readonly GameplayWaveContext _gameplayWaveContext;
         private readonly AIBrainsContext _brainsContext;
+        private readonly FortressHolderService _fortressHolderService;
+        private readonly StatsService _statsService;
         private readonly LevelConfig _levelConfig;
 
         public GameplayStatesFactory(DIContainer container, LevelConfig levelConfig)
@@ -47,6 +49,8 @@ namespace Assets._Project.Develop.Runtime.Gameplay.States
             _entitiesBrainsFactory = container.Resolve<EnemiesFactory>();
             _gameplayWaveContext = _container.Resolve<GameplayWaveContext>();
             _brainsContext = _container.Resolve<AIBrainsContext>();
+            _fortressHolderService = _container.Resolve<FortressHolderService>();
+            _statsService = _container.Resolve<StatsService>();
             _levelConfig = levelConfig;
         }
 
@@ -80,15 +84,14 @@ namespace Assets._Project.Develop.Runtime.Gameplay.States
             WinState winState = CreateWinState();
 
             StageProviderService stageProviderService = _container.Resolve<StageProviderService>();
-            FortressHolderService fortressHolderService = _container.Resolve<FortressHolderService>();
 
             ICompositeCondition coreLoopToWinStateCondition = new CompositeCondition()
                 .Add(new FuncCondition(() => _gameplayWaveContext.WavesPassed == _levelConfig.WavesCount))
-                .Add(new FuncCondition(() => fortressHolderService.Fortress.IsDead.Value == false));
+                .Add(new FuncCondition(() => _fortressHolderService.Fortress.IsDead.Value == false));
 
             ICompositeCondition coreLoopToDefeatStateCondition = new CompositeCondition(LogicOperations.Or)
-                .Add(new FuncCondition(() => fortressHolderService.Fortress == null))
-                .Add(new FuncCondition(() => fortressHolderService.Fortress.IsDead.Value));
+                .Add(new FuncCondition(() => _fortressHolderService.Fortress == null))
+                .Add(new FuncCondition(() => _fortressHolderService.Fortress.IsDead.Value));
 
             GameplayStateMachine gameplayCycle = new GameplayStateMachine(
                 new List<IDisposable> {
@@ -181,12 +184,11 @@ namespace Assets._Project.Develop.Runtime.Gameplay.States
                 _gameplayWaveContext,
                 _container.Resolve<EnemiesFactory>(),
                 _levelConfig,
-                _container.Resolve<FortressHolderService>());
+                _fortressHolderService);
 
             WaitingForPointingState waitingForExplodePointState = new WaitingForPointingState(_container.Resolve<IInputService>());
 
             PlayerConfig playerConfig = _container.Resolve<ConfigsProviderService>().GetConfig<PlayerConfig>();
-            StatsService statsService = _container.Resolve<StatsService>();
 
             ReactiveEvent<Vector3> explodedEvent = new();
             ReactiveVariable<float> explodeRadius = new ReactiveVariable<float>(playerConfig.ExplodeRadius);
@@ -194,7 +196,7 @@ namespace Assets._Project.Develop.Runtime.Gameplay.States
             Exploder exploder = new(
                 _container.Resolve<CollidersRegistryService>(),
                 explodeRadius,
-                new ReactiveVariable<float>(playerConfig.ExplodeDamage * statsService.GetKoefBy(StatTypes.ClickDamageIncrease)),
+                new ReactiveVariable<float>(playerConfig.ExplodeDamage * _statsService.GetKoefBy(StatTypes.ClickDamageIncrease)),
                 Layers.EntityMask,
                 new ReactiveVariable<Teams>(Teams.MainHero),
                 explodedEvent);

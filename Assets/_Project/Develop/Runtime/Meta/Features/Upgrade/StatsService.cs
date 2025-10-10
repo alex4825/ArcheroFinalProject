@@ -33,9 +33,10 @@ namespace Assets._Project.Develop.Runtime.Meta.Features.Upgrade
 
         public float GetKoefBy(StatTypes type)
         {
-            float koef = _statsKoefs.First(result => result.Key == type).Value.Value;
+            float koef = _statsKoefs[type].Value;
 
-            if (koef == GetKoefFromConfigBy(type))
+            float configKoef = GetKoefFromConfigBy(type);
+            if (koef == configKoef)
                 return 1;
             else
                 return 1 + koef;
@@ -57,7 +58,7 @@ namespace Assets._Project.Develop.Runtime.Meta.Features.Upgrade
                 if (_statsKoefs.ContainsKey(statToKoef.Key))
                     _statsKoefs[statToKoef.Key].Value = statToKoef.Value;
                 else
-                    _statsKoefs.Add(statToKoef.Key, new ReactiveVariable<float>(GetKoefFromConfigBy(statToKoef.Key)));
+                    _statsKoefs.Add(statToKoef.Key, new ReactiveVariable<float>(statToKoef.Value));
             }
         }
 

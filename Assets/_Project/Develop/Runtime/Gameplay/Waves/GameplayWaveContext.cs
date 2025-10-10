@@ -1,4 +1,7 @@
+using Assets._Project.Develop.Runtime.Gameplay.Environment;
+using Assets._Project.Develop.Runtime.Gameplay.Features.Heal;
 using Assets._Project.Develop.Runtime.Infrastracture.DI;
+using Assets._Project.Develop.Runtime.Meta.Features.Upgrade;
 using Assets._Project.Develop.Runtime.Utilities.Reactive;
 using System;
 
@@ -6,12 +9,21 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Waves
 {
     public class GameplayWaveContext : IDisposable, IUpdatable
     {
+        private readonly FortressHolderService _fortressHolderService;
+        private readonly StatsService _statsService;
+
         private Wave _currentWave;
 
         private ReactiveEvent<WaveResult> _currentWaveEnded = new();
         private ReactiveVariable<int> _currentWaveNumber = new();
 
         private IDisposable _waveEndedDisposable;
+
+        public GameplayWaveContext(FortressHolderService fortressHolderService, StatsService statsService)
+        {
+            _fortressHolderService = fortressHolderService;
+            _statsService = statsService;
+        }
 
         public IReadonlyEvent<WaveResult> CurrentWaveEnded => _currentWaveEnded;
 
@@ -51,6 +63,8 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Waves
             _currentWave = null;
             _currentWaveEnded?.Invoke(result);
             _waveEndedDisposable?.Dispose();
+
+            Healer.Heal(_fortressHolderService.Fortress, _statsService.GetKoefBy(StatTypes.FortressRepairOnWaveStart));
 
             WavesPassed++;
         }
