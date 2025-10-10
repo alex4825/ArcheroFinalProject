@@ -1,5 +1,7 @@
 ﻿using Assets._Project.Develop.Runtime.Configs.Meta;
+using Assets._Project.Develop.Runtime.Configs.Meta.Upgrade;
 using Assets._Project.Develop.Runtime.Infrastracture.Meta.Features.Wallet;
+using Assets._Project.Develop.Runtime.Meta.Features.Upgrade;
 using Assets._Project.Develop.Runtime.Utilities.ConfigsManagement;
 using System;
 using System.Collections.Generic;
@@ -20,8 +22,23 @@ namespace Assets._Project.Develop.Runtime.Utilities.DataManagement.DataProviders
             return new PlayerData()
             {
                 WalletData = InitWalletData(),
+                StatsData = InitStatsData(),
                 CompletedLevels = new()
             };
+        }
+
+        private Dictionary<StatTypes, float> InitStatsData()
+        {
+            StatsConfig statsConfig = _configsProviderService.GetConfig<StatsConfig>();
+
+            Dictionary<StatTypes, float> statsData = new();
+
+            foreach (UpgradeConfig upgradeConfig in statsConfig.Configs)
+            {
+                statsData.Add(upgradeConfig.Type, upgradeConfig.Koef);
+            }
+
+            return statsData;
         }
 
         private Dictionary<CurrencyTypes, int> InitWalletData()

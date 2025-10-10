@@ -1,6 +1,7 @@
 using Assets._Project.Develop.Runtime.Configs.Gameplay.Entities;
 using Assets._Project.Develop.Runtime.Configs.Gameplay.Levels;
 using Assets._Project.Develop.Runtime.Configs.Meta;
+using Assets._Project.Develop.Runtime.Configs.Meta.Upgrade;
 using Assets._Project.Develop.Runtime.Utilities.AssetsManagement;
 using System;
 using System.Collections;
@@ -20,6 +21,7 @@ namespace Assets._Project.Develop.Runtime.Utilities.ConfigsManagement
             {typeof(LevelsListConfig), "Configs/Gameplay/Levels/LevelsListConfig" },
             {typeof(HeroConfig), "Configs/Gameplay/Entities/HeroConfig" },
             {typeof(PlayerConfig), "Configs/Gameplay/Entities/PlayerConfig" },
+            {typeof(StatsConfig), "Configs/Meta/Upgrade/StatsConfig" },
         };
 
         public ResourcesConfigsLoader(ResourcesAssetsLoader resources)

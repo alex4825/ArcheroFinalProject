@@ -1,4 +1,5 @@
 ﻿using Assets._Project.Develop.Runtime.UI.Core;
+using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -7,6 +8,8 @@ namespace Assets._Project.Develop.Runtime.UI.UpgradeMenuPopup
 {
     public class UpgradeCardView : MonoBehaviour, IView
     {
+        public event Action Clicked;
+
         [SerializeField] private GameObject _outline;
         [SerializeField] private Image _upgradeIcon;
         [SerializeField] private TextMeshProUGUI _label;
@@ -22,5 +25,7 @@ namespace Assets._Project.Develop.Runtime.UI.UpgradeMenuPopup
         public void SetCost(string text) => _cost.text = text;
         public void SetProfit(string text) => _profit.text = text;
         public void SetDescription(string text) => _description.text = text;
+
+        public void OnClick() => Clicked?.Invoke();
     }
 }

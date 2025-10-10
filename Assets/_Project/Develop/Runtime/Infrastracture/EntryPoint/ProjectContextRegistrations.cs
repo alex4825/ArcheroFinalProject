@@ -1,6 +1,7 @@
 ﻿using Assets._Project.Develop.Runtime.Infrastracture.DI;
 using Assets._Project.Develop.Runtime.Infrastracture.Meta.Features.Wallet;
 using Assets._Project.Develop.Runtime.Meta.Features.LevelsProgression;
+using Assets._Project.Develop.Runtime.Meta.Features.Upgrade;
 using Assets._Project.Develop.Runtime.UI;
 using Assets._Project.Develop.Runtime.UI.Core;
 using Assets._Project.Develop.Runtime.Utilities.AssetsManagement;
@@ -54,6 +55,16 @@ namespace Assets._Project.Develop.Runtime.Infrastracture.EntryPoint
             container.RegisterAsSingle(CreateTimerService);
 
             container.RegisterAsSingle(CreateVictoryDefeatCounter).NonLazy();
+
+            container.RegisterAsSingle(CreateStatsService).NonLazy();
+        }
+
+        private static StatsService CreateStatsService(DIContainer container)
+        {
+            return new StatsService(
+                container.Resolve<PlayerDataProvider>(), 
+                container.Resolve<ConfigsProviderService>(),
+                container.Resolve<ICoroutinesPerformer>());
         }
 
         private static VictoryDefeatCounter CreateVictoryDefeatCounter(DIContainer container)
@@ -80,12 +91,14 @@ namespace Assets._Project.Develop.Runtime.Infrastracture.EntryPoint
             IDataKeysStorage dataKeysStorage = new MapDataKeysStorage();
 
             IDataRepository dataRepository;
-#if UNITY_WEBGL && !UNITY_EDITOR
+/*#if UNITY_WEBGL
             dataRepository = new PlayerPrefsDataRepository();
 #else
             string saveFolderPath = Application.isEditor ? Application.dataPath : Application.persistentDataPath;
             dataRepository = new LocalFileDataRepository(saveFolderPath, "json");
-#endif
+#endif*/
+            string saveFolderPath = Application.isEditor ? Application.dataPath : Application.persistentDataPath;
+            dataRepository = new LocalFileDataRepository(saveFolderPath, "json");
             return new SaveLoadService(serializer, dataKeysStorage, dataRepository);
         }
 

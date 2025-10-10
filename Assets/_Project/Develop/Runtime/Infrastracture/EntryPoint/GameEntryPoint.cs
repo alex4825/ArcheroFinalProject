@@ -41,14 +41,12 @@ namespace Assets._Project.Develop.Runtime.Infrastracture.EntryPoint
 
             bool isPlayerDataSaveExists = false;
 
-            yield return playerDataProvider.ExistsAcync(result => isPlayerDataSaveExists = result);
+            yield return playerDataProvider.ExistsAcync(result => isPlayerDataSaveExists = result); 
 
             if (isPlayerDataSaveExists)
                 yield return playerDataProvider.LoadAcync();
             else
                 playerDataProvider.Reset();
-
-            yield return new WaitForSeconds(1);
 
             Debug.Log("Завершается инициализация сервисов");
 

@@ -1,6 +1,8 @@
 ﻿using Assets._Project.Develop.Runtime.Configs.Gameplay.Levels;
 using Assets._Project.Develop.Runtime.Configs.Meta.Upgrade;
 using Assets._Project.Develop.Runtime.Infrastracture.DI;
+using Assets._Project.Develop.Runtime.Infrastracture.Meta.Features.Wallet;
+using Assets._Project.Develop.Runtime.Meta.Features.Upgrade;
 using Assets._Project.Develop.Runtime.UI.Core;
 using Assets._Project.Develop.Runtime.UI.UpgradeMenuPopup;
 using Assets._Project.Develop.Runtime.Utilities.ConfigsManagement;
@@ -28,9 +30,12 @@ namespace Assets._Project.Develop.Runtime.UI.MainMenu
         {
             return new UpgradePopupPresenter(
                 view,
+                _container.Resolve<ConfigsProviderService>().GetConfig<StatsConfig>(),
+                _container.Resolve<StatsService>(),
                 _container.Resolve<ICoroutinesPerformer>(),
                 _container.Resolve<ViewsFactory>(),
-                _container.Resolve<MainMenuPresentersFactory>());
+                _container.Resolve<MainMenuPresentersFactory>(),
+                _container.Resolve<WalletService>());
         }
 
         public MainMenuScreenPresenter CreateMainMenuScreen(MainMenuScreenView view)

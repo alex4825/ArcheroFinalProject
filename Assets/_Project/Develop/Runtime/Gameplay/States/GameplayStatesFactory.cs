@@ -13,6 +13,7 @@ using Assets._Project.Develop.Runtime.Gameplay.States.EndGame;
 using Assets._Project.Develop.Runtime.Gameplay.Waves;
 using Assets._Project.Develop.Runtime.Infrastracture.DI;
 using Assets._Project.Develop.Runtime.Infrastracture.Meta.Features.Wallet;
+using Assets._Project.Develop.Runtime.Meta.Features.Upgrade;
 using Assets._Project.Develop.Runtime.UI.Core;
 using Assets._Project.Develop.Runtime.UI.Gameplay;
 using Assets._Project.Develop.Runtime.UI.Gameplay.DefendersIcons;
@@ -185,6 +186,7 @@ namespace Assets._Project.Develop.Runtime.Gameplay.States
             WaitingForPointingState waitingForExplodePointState = new WaitingForPointingState(_container.Resolve<IInputService>());
 
             PlayerConfig playerConfig = _container.Resolve<ConfigsProviderService>().GetConfig<PlayerConfig>();
+            StatsService statsService = _container.Resolve<StatsService>();
 
             ReactiveEvent<Vector3> explodedEvent = new();
             ReactiveVariable<float> explodeRadius = new ReactiveVariable<float>(playerConfig.ExplodeRadius);
@@ -192,7 +194,7 @@ namespace Assets._Project.Develop.Runtime.Gameplay.States
             Exploder exploder = new(
                 _container.Resolve<CollidersRegistryService>(),
                 explodeRadius,
-                new ReactiveVariable<float>(playerConfig.ExplodeDamage),
+                new ReactiveVariable<float>(playerConfig.ExplodeDamage * statsService.GetKoefBy(StatTypes.ClickDamageIncrease)),
                 Layers.EntityMask,
                 new ReactiveVariable<Teams>(Teams.MainHero),
                 explodedEvent);

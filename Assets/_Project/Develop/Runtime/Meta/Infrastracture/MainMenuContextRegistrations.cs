@@ -1,8 +1,11 @@
 ﻿using Assets._Project.Develop.Runtime.Infrastracture.DI;
+using Assets._Project.Develop.Runtime.Meta.Features.Upgrade;
 using Assets._Project.Develop.Runtime.UI;
 using Assets._Project.Develop.Runtime.UI.Core;
 using Assets._Project.Develop.Runtime.UI.MainMenu;
 using Assets._Project.Develop.Runtime.Utilities.AssetsManagement;
+using Assets._Project.Develop.Runtime.Utilities.ConfigsManagement;
+using Assets._Project.Develop.Runtime.Utilities.DataManagement.DataProviders;
 using UnityEngine;
 
 namespace Assets._Project.Develop.Runtime.Infrastracture.Meta.Infrastracture
@@ -21,6 +24,7 @@ namespace Assets._Project.Develop.Runtime.Infrastracture.Meta.Infrastracture
 
             container.RegisterAsSingle(CreateMainMenuPopupService);
         }
+
 
         private static MainMenuPopupService CreateMainMenuPopupService(DIContainer container)
         {

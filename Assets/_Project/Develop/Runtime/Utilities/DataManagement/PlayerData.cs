@@ -1,4 +1,5 @@
 ﻿using Assets._Project.Develop.Runtime.Infrastracture.Meta.Features.Wallet;
+using Assets._Project.Develop.Runtime.Meta.Features.Upgrade;
 using System.Collections.Generic;
 
 namespace Assets._Project.Develop.Runtime.Utilities.DataManagement
@@ -12,5 +13,7 @@ namespace Assets._Project.Develop.Runtime.Utilities.DataManagement
         public int VictoryCount;
 
         public int DefeatCount;
+
+        public Dictionary<StatTypes, float> StatsData;
     }
 }
