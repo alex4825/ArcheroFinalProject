@@ -1,6 +1,7 @@
 ﻿using Assets._Project.Develop.Runtime.Configs.Gameplay.Levels;
 using Assets._Project.Develop.Runtime.Gameplay.Features.InputFeature;
 using Assets._Project.Develop.Runtime.Infrastracture.Meta.Features.Wallet;
+using Assets._Project.Develop.Runtime.Meta.Features.Upgrade;
 using Assets._Project.Develop.Runtime.UI.Gameplay;
 using Assets._Project.Develop.Runtime.Utilities.CoroutinesManagement;
 using Assets._Project.Develop.Runtime.Utilities.DataManagement.DataProviders;
@@ -17,6 +18,7 @@ namespace Assets._Project.Develop.Runtime.Gameplay.States.EndGame
         private readonly VictoryDefeatCounter _victoryDefeatCounter;
         private readonly WalletService _walletService;
         private readonly GameplayPopupService _gameplayPopupService;
+        private readonly StatsService _statsService;
         private LevelConfig _levelConfig;
 
         public WinState(
@@ -26,6 +28,7 @@ namespace Assets._Project.Develop.Runtime.Gameplay.States.EndGame
             VictoryDefeatCounter victoryDefeatCounter,
             WalletService walletService,
             GameplayPopupService gameplayPopupService,
+            StatsService statsService,
             LevelConfig levelConfig) : base(inputService)
         {
             _playerDataProvider = playerDataProvider;
@@ -33,6 +36,7 @@ namespace Assets._Project.Develop.Runtime.Gameplay.States.EndGame
             _victoryDefeatCounter = victoryDefeatCounter;
             _walletService = walletService;
             _gameplayPopupService = gameplayPopupService;
+            _statsService = statsService;
             _levelConfig = levelConfig;
         }
 
@@ -42,9 +46,12 @@ namespace Assets._Project.Develop.Runtime.Gameplay.States.EndGame
 
             Debug.Log("Победа!");
 
+            int goldCount = _levelConfig.VictoryGoldCost + (int)(_levelConfig.VictoryGoldCost * _statsService.GetKoefBy(StatTypes.LootIncrease));
+            int diamondCount = _levelConfig.VictoryDiamondCost + (int)(_levelConfig.VictoryDiamondCost * _statsService.GetKoefBy(StatTypes.LootIncrease));
+
             _victoryDefeatCounter.AddVictory();
-            _walletService.Add(CurrencyTypes.Gold, _levelConfig.VictoryGoldCost);
-            _walletService.Add(CurrencyTypes.Diamond, _levelConfig.VictoryDiamondCost);
+            _walletService.Add(CurrencyTypes.Gold, goldCount);
+            _walletService.Add(CurrencyTypes.Diamond, diamondCount);
 
             _coroutinesPerformer.StartPerform(_playerDataProvider.SaveAcync());
             _gameplayPopupService.OpenWinPopup();
