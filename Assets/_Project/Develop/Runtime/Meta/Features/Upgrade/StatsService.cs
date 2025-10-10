@@ -33,7 +33,12 @@ namespace Assets._Project.Develop.Runtime.Meta.Features.Upgrade
 
         public float GetKoefBy(StatTypes type)
         {
-            return _statsKoefs.First(result => result.Key == type).Value.Value + 1;
+            float koef = _statsKoefs.First(result => result.Key == type).Value.Value;
+
+            if (koef == GetKoefFromConfigBy(type))
+                return 1;
+            else
+                return 1 + koef;
         }
 
         public void Upgrade(StatTypes type)
