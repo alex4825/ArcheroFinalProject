@@ -81,6 +81,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <Fortress>k__BackingField: {fileID: 969602670953644814}
   <FortressCollider>k__BackingField: {fileID: 3349686284531101103}
+  <LightingSettings>k__BackingField: {fileID: 4890085278179872738, guid: 6f37c761c41c0394c8e1f1fdf3510e09,
+    type: 2}
 --- !u!1001 &1506140622730541220
 PrefabInstance:
   m_ObjectHideFlags: 0
