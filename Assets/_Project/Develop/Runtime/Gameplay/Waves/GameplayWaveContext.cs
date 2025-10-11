@@ -53,7 +53,6 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Waves
             _currentWave?.Dispose();
             _currentWave = null;
 
-            WavesPassed = 0;
             _currentWaveNumber.Value = 0;
         }
 

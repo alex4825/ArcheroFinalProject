@@ -97,20 +97,16 @@ namespace Assets._Project.Develop.Runtime.Gameplay.States
                 .Add(new FuncCondition(() => _gameplayWaveContext.WavesPassed == _levelConfig.WavesCount))
                 .Add(new FuncCondition(() => _fortressHolderService.Fortress.IsDead.Value == false));
 
-            ICompositeCondition coreLoopToDefeatStateCondition = new CompositeCondition(LogicOperations.Or)
-                .Add(new FuncCondition(() => _fortressHolderService.Fortress == null))
+            ICompositeCondition coreLoopToDefeatStateCondition = new CompositeCondition()
                 .Add(new FuncCondition(() => _fortressHolderService.Fortress.IsDead.Value));
 
             disposables.Add(coreLoopState.Entered.Subscribe(_brainsContext.Enable));
             disposables.Add(coreLoopState.Exited.Subscribe(_brainsContext.Disable));
             disposables.Add(coreLoopState.Disposed.Subscribe(() =>
             {
-                bool isLevelSkipped = coreLoopToWinStateCondition.Evaluate() == false && coreLoopToDefeatStateCondition.Evaluate() == false;
-
-                if (isLevelSkipped)
+                if (_gameplayWaveContext.WavesPassed != _levelConfig.WavesCount)
                     _walletService.Add(CurrencyTypes.Gold, goldSpendInGame.Value);
             }));
-
 
             GameplayStateMachine gameplayCycle = new GameplayStateMachine(disposables);
 
