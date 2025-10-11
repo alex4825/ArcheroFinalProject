@@ -46,8 +46,8 @@ namespace Assets._Project.Develop.Runtime.Gameplay.States.EndGame
 
             Debug.Log("Победа!");
 
-            int goldCount = _levelConfig.VictoryGoldCost + (int)(_levelConfig.VictoryGoldCost * _statsService.GetKoefBy(StatTypes.LootIncrease));
-            int diamondCount = _levelConfig.VictoryDiamondCost + (int)(_levelConfig.VictoryDiamondCost * _statsService.GetKoefBy(StatTypes.LootIncrease));
+            int goldCount = _levelConfig.VictoryGoldCost + (int)(_levelConfig.VictoryGoldCost * (_statsService.GetKoefBy(StatTypes.LootIncrease) - 1));
+            int diamondCount = _levelConfig.VictoryDiamondCost + (int)(_levelConfig.VictoryDiamondCost * (_statsService.GetKoefBy(StatTypes.LootIncrease) - 1));
 
             _victoryDefeatCounter.AddVictory();
             _walletService.Add(CurrencyTypes.Gold, goldCount);
