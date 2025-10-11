@@ -91,14 +91,12 @@ namespace Assets._Project.Develop.Runtime.Infrastracture.EntryPoint
             IDataKeysStorage dataKeysStorage = new MapDataKeysStorage();
 
             IDataRepository dataRepository;
-/*#if UNITY_WEBGL
+#if UNITY_WEBGL
             dataRepository = new PlayerPrefsDataRepository();
 #else
             string saveFolderPath = Application.isEditor ? Application.dataPath : Application.persistentDataPath;
             dataRepository = new LocalFileDataRepository(saveFolderPath, "json");
-#endif*/
-            string saveFolderPath = Application.isEditor ? Application.dataPath : Application.persistentDataPath;
-            dataRepository = new LocalFileDataRepository(saveFolderPath, "json");
+#endif
             return new SaveLoadService(serializer, dataKeysStorage, dataRepository);
         }
 
