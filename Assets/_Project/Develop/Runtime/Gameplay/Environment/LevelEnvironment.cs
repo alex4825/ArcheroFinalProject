@@ -7,6 +7,5 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Environment
     {
         [field: SerializeField] public MonoEntity Fortress { get; private set; }
         [field: SerializeField] public Collider FortressCollider { get; private set; }
-        [field: SerializeField] public LightingSettings LightingSettings { get; private set; }
     }
 }
