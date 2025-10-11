@@ -77,6 +77,8 @@ namespace Assets._Project.Develop.Runtime.Infrastracture.Gameplay.Infrastracture
             LevelConfig currentLevel = _container.Resolve<ConfigsProviderService>().GetConfig<LevelsListConfig>().GetBy(_inputArgs.LevelNumber);
             LevelEnvironment levelEnvironment = Instantiate(currentLevel.LevelEnvironment);
 
+            StaticBatchingUtility.Combine(levelEnvironment.gameObject);
+
             _entitiesFactory.CreateFortress(levelEnvironment.Fortress);
         }
 
