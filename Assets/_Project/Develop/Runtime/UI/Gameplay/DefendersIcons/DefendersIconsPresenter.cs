@@ -43,6 +43,14 @@ namespace Assets._Project.Develop.Runtime.UI.Gameplay.DefendersIcons
             }
         }
 
+        public void DeselectAll()
+        {
+            foreach (DefenderIconView iconView in _iconsListView.Elements)
+            {
+                iconView.SetBackgroundColor(_iconsListView.DefaultBackgroundColor);
+            }
+        }
+
         private void OnIconClicked(DefenderIconView clickedIconView)
         {
             clickedIconView.SetBackgroundColor(_iconsListView.SelectedBackgroundColor);

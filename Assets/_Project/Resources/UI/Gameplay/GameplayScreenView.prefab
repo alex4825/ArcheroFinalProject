@@ -177,8 +177,7 @@ MonoBehaviour:
   _parent: {fileID: 4778570782537770968}
   <DefaultBackgroundColor>k__BackingField: {r: 0.16078432, g: 0.16078432, b: 0.16078432,
     a: 1}
-  <SelectedBackgroundColor>k__BackingField: {r: 0.06247943, g: 0.4716981, b: 0.027589865,
-    a: 1}
+  <SelectedBackgroundColor>k__BackingField: {r: 0.06942726, g: 0.87169814, b: 0, a: 1}
   <DefendersConfigs>k__BackingField:
   - {fileID: 11400000, guid: a093cb20511f9a149a53930385cde5c7, type: 2}
   - {fileID: 11400000, guid: c23580ad74dd76547a8b4bb84504b7e0, type: 2}

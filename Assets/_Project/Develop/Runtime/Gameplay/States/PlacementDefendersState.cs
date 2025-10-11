@@ -44,6 +44,8 @@ namespace Assets._Project.Develop.Runtime.Gameplay.States
 
             _placeFoundDisposable = _placeFound.Subscribe(OnPlaceFound);
             _defendersIconsPresenter.IconClicked += OnDefenderConfigSelected;
+
+            DeselectConfig();
         }
 
         public void Update(float deltaTime)
@@ -58,6 +60,7 @@ namespace Assets._Project.Develop.Runtime.Gameplay.States
 
             _placeFoundDisposable?.Dispose();
             _defendersIconsPresenter.IconClicked -= OnDefenderConfigSelected;
+            DeselectConfig();
         }
 
         private void OnPlaceFound(Vector3 position)
@@ -71,6 +74,12 @@ namespace Assets._Project.Develop.Runtime.Gameplay.States
                 _created?.Invoke(entity, _currentDefenderConfig.Cost);
                 _walletService.Spend(CurrencyTypes.Gold, _currentDefenderConfig.Cost);
             }
+        }
+
+        private void DeselectConfig()
+        {
+            _currentDefenderConfig = null;
+            _defendersIconsPresenter.DeselectAll();
         }
 
         private void OnDefenderConfigSelected(DefenderConfig config)
