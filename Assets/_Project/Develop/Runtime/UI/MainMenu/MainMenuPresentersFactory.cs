@@ -23,7 +23,7 @@ namespace Assets._Project.Develop.Runtime.UI.MainMenu
 
         public UpgradeCardPresenter CreateUpgradeCardPresenter(UpgradeCardView cardView, UpgradeConfig config)
         {
-            return new UpgradeCardPresenter(cardView, config, _container.Resolve<ViewsFactory>());
+            return new UpgradeCardPresenter(cardView, config, _container.Resolve<ViewsFactory>(), _container.Resolve<StatsService>());
         }
 
         public UpgradePopupPresenter CreateUpgradePopupPresenter(UpgradePopupView view)

@@ -22,23 +22,38 @@ namespace Assets._Project.Develop.Runtime.Utilities.DataManagement.DataProviders
             return new PlayerData()
             {
                 WalletData = InitWalletData(),
-                StatsData = InitStatsData(),
+                StatsKoefs = InitStatsKoefs(),
+                StatsCosts = InitStatsCosts(),
                 CompletedLevels = new()
             };
         }
 
-        private Dictionary<StatTypes, float> InitStatsData()
+        private Dictionary<StatTypes, int> InitStatsCosts()
         {
             StatsConfig statsConfig = _configsProviderService.GetConfig<StatsConfig>();
 
-            Dictionary<StatTypes, float> statsData = new();
+            Dictionary<StatTypes, int> statsCosts = new();
 
             foreach (UpgradeConfig upgradeConfig in statsConfig.Configs)
             {
-                statsData.Add(upgradeConfig.Type, upgradeConfig.Koef);
+                statsCosts.Add(upgradeConfig.Type, upgradeConfig.Cost);
             }
 
-            return statsData;
+            return statsCosts;
+        }
+
+        private Dictionary<StatTypes, float> InitStatsKoefs()
+        {
+            StatsConfig statsConfig = _configsProviderService.GetConfig<StatsConfig>();
+
+            Dictionary<StatTypes, float> statsKoefs = new();
+
+            foreach (UpgradeConfig upgradeConfig in statsConfig.Configs)
+            {
+                statsKoefs.Add(upgradeConfig.Type, upgradeConfig.Koef);
+            }
+
+            return statsKoefs;
         }
 
         private Dictionary<CurrencyTypes, int> InitWalletData()

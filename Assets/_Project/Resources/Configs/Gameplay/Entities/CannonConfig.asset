@@ -19,7 +19,7 @@ MonoBehaviour:
   <RotationSpeed>k__BackingField: 500
   <AttackProcessTime>k__BackingField: 1
   <AttackCooldown>k__BackingField: 2.5
-  <MinAttackDistance>k__BackingField: 22
+  <MinAttackDistance>k__BackingField: 16
   <MaxHealth>k__BackingField: 150
   <DeathProcessTime>k__BackingField: 1
   <Team>k__BackingField: 1

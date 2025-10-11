@@ -14,6 +14,8 @@ namespace Assets._Project.Develop.Runtime.Utilities.DataManagement
 
         public int DefeatCount;
 
-        public Dictionary<StatTypes, float> StatsData;
+        public Dictionary<StatTypes, float> StatsKoefs;
+
+        public Dictionary<StatTypes, int> StatsCosts;
     }
 }
