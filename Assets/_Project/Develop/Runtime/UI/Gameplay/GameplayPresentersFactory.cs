@@ -10,10 +10,12 @@ using Assets._Project.Develop.Runtime.UI.Core;
 using Assets._Project.Develop.Runtime.UI.Gameplay.DefendersIcons;
 using Assets._Project.Develop.Runtime.UI.Gameplay.HealthDisplay;
 using Assets._Project.Develop.Runtime.UI.Gameplay.ResultsPopups;
+using Assets._Project.Develop.Runtime.UI.Gameplay.Wave;
 using Assets._Project.Develop.Runtime.UI.Statistics;
 using Assets._Project.Develop.Runtime.UI.Wallet;
 using Assets._Project.Develop.Runtime.Utilities.CoroutinesManagement;
 using Assets._Project.Develop.Runtime.Utilities.SceneManagement;
+using Assets._Project.Develop.Runtime.Utilities.Timer;
 
 namespace Assets._Project.Develop.Runtime.UI.Gameplay
 {
@@ -30,7 +32,15 @@ namespace Assets._Project.Develop.Runtime.UI.Gameplay
             _viewsFactory = _container.Resolve<ViewsFactory>();
         }
 
-        public CurrencyPresenter CreateGoldPresenter(IconTextListView parent)
+        public RestTimerPresenter CreateRestTimerPresenter(SimpleListView parent, TimerService timer)
+        {
+            RestTimerView view = _viewsFactory.Create<RestTimerView>(ViewIDs.RestTimerView);
+            parent.Add(view);
+
+            return new RestTimerPresenter(view, timer, _viewsFactory);
+        }
+
+        public CurrencyPresenter CreateGoldPresenter(SimpleListView parent)
         {
             IconTextView view = _viewsFactory.Create<IconTextView>(ViewIDs.CurrencyView);
             parent.Add(view);
@@ -43,7 +53,7 @@ namespace Assets._Project.Develop.Runtime.UI.Gameplay
             return goldPresenter;
         }
 
-        public WaveCountPresenter CreateWaveCountPresenter(IconTextListView parent, int wavesCount)
+        public WaveCountPresenter CreateWaveCountPresenter(SimpleListView parent, int wavesCount)
         {
             IconTextView view = _viewsFactory.Create<IconTextView>(ViewIDs.WavesCountView);
             parent.Add(view);

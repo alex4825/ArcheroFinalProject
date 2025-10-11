@@ -11,7 +11,7 @@ namespace Assets._Project.Develop.Runtime.UI.Gameplay
     {
         public event Action CloseButtonClicked;
 
-        [field: SerializeField] public IconTextListView TopBarView { get; private set; }
+        [field: SerializeField] public SimpleListView TopBarView { get; private set; }
         [field: SerializeField] public DefendersIconsListView DefenderIconListView { get; private set; }
         [field: SerializeField] public EntitiesHealthDisplay EntitiesHealthDisplay { get; private set; }
 

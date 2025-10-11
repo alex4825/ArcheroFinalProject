@@ -26,6 +26,7 @@ namespace Assets._Project.Develop.Runtime.UI.Core
             {ViewIDs.UpgradePopupView, "UI/MainMenu/UpgradeMenu/UpgradePopupView" },
             {ViewIDs.UpgradeCardView, "UI/MainMenu/UpgradeMenu/UpgradeCardView" },
             {ViewIDs.WavesCountView, "UI/Gameplay/WavesCountView" },
+            {ViewIDs.RestTimerView, "UI/Gameplay/RestTimerView" },
         };
 
         public ViewsFactory(ResourcesAssetsLoader resourcesAssetsLoader)

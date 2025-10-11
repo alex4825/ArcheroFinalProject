@@ -2,9 +2,12 @@
 using Assets._Project.Develop.Runtime.Gameplay.Waves;
 using Assets._Project.Develop.Runtime.UI.Core;
 using Assets._Project.Develop.Runtime.UI.Gameplay.HealthDisplay;
+using Assets._Project.Develop.Runtime.UI.Gameplay.Wave;
 using Assets._Project.Develop.Runtime.UI.Statistics;
 using Assets._Project.Develop.Runtime.Utilities.CoroutinesManagement;
+using Assets._Project.Develop.Runtime.Utilities.Reactive;
 using Assets._Project.Develop.Runtime.Utilities.SceneManagement;
+using Assets._Project.Develop.Runtime.Utilities.Timer;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,6 +26,7 @@ namespace Assets._Project.Develop.Runtime.UI.Gameplay
         private int _wavesCount;
 
         private readonly List<IPresenter> _childPresenters = new();
+        private IDisposable _cooldownTimerDisposable;
 
         public GameplayScreenPresenter(
             GameplayScreenView view,
@@ -62,7 +66,7 @@ namespace Assets._Project.Develop.Runtime.UI.Gameplay
         public void Dispose()
         {
             foreach (IPresenter childPresenter in _childPresenters)
-                childPresenter.Dispose();
+                childPresenter?.Dispose();
 
             _childPresenters.Clear();
 
@@ -72,6 +76,24 @@ namespace Assets._Project.Develop.Runtime.UI.Gameplay
         public TPresenter GetChild<TPresenter>() where TPresenter : class, IPresenter
         {
             return _childPresenters.OfType<TPresenter>().First();
+        }
+
+        public void ShowTimer(TimerService timer)
+        {
+            RestTimerPresenter restTimerPresenter = _gameplayPresentersFactory.CreateRestTimerPresenter(_view.TopBarView, timer);
+            restTimerPresenter.Initialize();
+
+            _cooldownTimerDisposable = timer.CooldownEnded.Subscribe(() => HideTimer(restTimerPresenter));
+
+            _childPresenters.Add(restTimerPresenter);
+        }
+
+        private void HideTimer(RestTimerPresenter restTimerPresenter)
+        {
+            _childPresenters.Remove(restTimerPresenter);
+
+            _cooldownTimerDisposable.Dispose();
+            restTimerPresenter?.Dispose();
         }
 
         private void OnCloseMenuButtonClicked()

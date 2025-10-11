@@ -16,5 +16,6 @@
         public const string UpgradePopupView = nameof(UpgradePopupView);
         public const string UpgradeCardView = nameof(UpgradeCardView);
         public const string WavesCountView = nameof(WavesCountView);
+        public const string RestTimerView = nameof(RestTimerView);
     }
 }

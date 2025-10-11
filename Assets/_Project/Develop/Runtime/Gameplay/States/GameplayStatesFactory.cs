@@ -17,6 +17,7 @@ using Assets._Project.Develop.Runtime.Meta.Features.Upgrade;
 using Assets._Project.Develop.Runtime.UI.Core;
 using Assets._Project.Develop.Runtime.UI.Gameplay;
 using Assets._Project.Develop.Runtime.UI.Gameplay.DefendersIcons;
+using Assets._Project.Develop.Runtime.UI.Gameplay.Wave;
 using Assets._Project.Develop.Runtime.Utilities;
 using Assets._Project.Develop.Runtime.Utilities.Conditions;
 using Assets._Project.Develop.Runtime.Utilities.ConfigsManagement;
@@ -124,7 +125,7 @@ namespace Assets._Project.Develop.Runtime.Gameplay.States
         {
             List<IDisposable> disposables = new List<IDisposable>();
 
-            TimerService startDelayTimer = _timerServiceFactory.Create(startDelayTime);
+            TimerService restTimer = _timerServiceFactory.Create(startDelayTime);
 
             GameplayParallelState restPhaseState = CreateRestPhaseState(out IReadonlyEvent<Entity, int> entityCreated);
 
@@ -141,9 +142,12 @@ namespace Assets._Project.Develop.Runtime.Gameplay.States
 
             bool isWaveWin = false;
 
-            disposables.Add(startDelayTimer);
+            disposables.Add(restTimer);
 
-            disposables.Add(restPhaseState.Entered.Subscribe(() => startDelayTimer.Restart()));
+            disposables.Add(restPhaseState.Entered.Subscribe(() => restTimer.Restart()));
+
+            GameplayScreenPresenter screenPresenter = _container.Resolve<GameplayScreenPresenter>();
+            disposables.Add(restPhaseState.Entered.Subscribe(() => screenPresenter.ShowTimer(restTimer)));
 
             disposables.Add(waveCycleState.Entered.Subscribe(() => isWaveWin = false));
 
@@ -151,7 +155,7 @@ namespace Assets._Project.Develop.Runtime.Gameplay.States
 
             _gameplayWaveContext.CurrentWaveEnded.Subscribe((waveResult) => isWaveWin = waveResult.IsWin);
 
-            FuncCondition placementMinesToWaveCycleCondition = new FuncCondition(() => startDelayTimer.IsOver);
+            FuncCondition placementMinesToWaveCycleCondition = new FuncCondition(() => restTimer.IsOver);
             FuncCondition waveCycleToPlacementMinesCondition = new FuncCondition(() => isWaveWin);
 
             GameplayStateMachine coreLoopState = new GameplayStateMachine(disposables);
