@@ -43,6 +43,7 @@ namespace Assets._Project.Develop.Runtime.Gameplay.States
         private readonly FortressHolderService _fortressHolderService;
         private readonly StatsService _statsService;
         private readonly WalletService _walletService;
+        private readonly ICoroutinesPerformer _coroutinesPerformer;
         private readonly LevelConfig _levelConfig;
 
         public GameplayStatesFactory(DIContainer container, LevelConfig levelConfig)
@@ -55,6 +56,7 @@ namespace Assets._Project.Develop.Runtime.Gameplay.States
             _fortressHolderService = _container.Resolve<FortressHolderService>();
             _statsService = _container.Resolve<StatsService>();
             _walletService = _container.Resolve<WalletService>();
+            _coroutinesPerformer = _container.Resolve<ICoroutinesPerformer>();
             _levelConfig = levelConfig;
         }
 
@@ -63,7 +65,7 @@ namespace Assets._Project.Develop.Runtime.Gameplay.States
             return new WinState(
                 _container.Resolve<IInputService>(),
                 _container.Resolve<PlayerDataProvider>(),
-                _container.Resolve<ICoroutinesPerformer>(),
+                _coroutinesPerformer,
                 _container.Resolve<VictoryDefeatCounter>(),
                 _walletService,
                 _container.Resolve<GameplayPopupService>(),
@@ -76,7 +78,7 @@ namespace Assets._Project.Develop.Runtime.Gameplay.States
             return new DefeatState(
                 _container.Resolve<IInputService>(),
                 _container.Resolve<PlayerDataProvider>(),
-                _container.Resolve<ICoroutinesPerformer>(),
+                _coroutinesPerformer,
                 _container.Resolve<VictoryDefeatCounter>(),
                 _container.Resolve<GameplayPopupService>());
         }
@@ -106,7 +108,10 @@ namespace Assets._Project.Develop.Runtime.Gameplay.States
             disposables.Add(coreLoopState.Disposed.Subscribe(() =>
             {
                 if (_gameplayWaveContext.WavesPassed != _levelConfig.WavesCount)
+                {
                     _walletService.Add(CurrencyTypes.Gold, goldSpendInGame.Value);
+                    _coroutinesPerformer.StartPerform(_container.Resolve<PlayerDataProvider>().SaveAcync());
+                }
             }));
 
             GameplayStateMachine gameplayCycle = new GameplayStateMachine(disposables);
