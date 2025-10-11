@@ -42,7 +42,7 @@ namespace Assets._Project.Develop.Runtime.UI.Gameplay
 
         public void Initialize()
         {
-            CreateWaveCountPresenter();
+            CreateTopBarPresenters();
 
             CreateDefendersIconsPresenter();
 
@@ -66,7 +66,7 @@ namespace Assets._Project.Develop.Runtime.UI.Gameplay
 
             _childPresenters.Clear();
 
-            _view.CloseButtonClicked += OnCloseMenuButtonClicked;
+            _view.CloseButtonClicked -= OnCloseMenuButtonClicked;
         }
 
         public TPresenter GetChild<TPresenter>() where TPresenter : class, IPresenter
@@ -84,9 +84,11 @@ namespace Assets._Project.Develop.Runtime.UI.Gameplay
             _childPresenters.Add(_gameplayPresentersFactory.CreateDefendersIconsPresenter(_view.DefenderIconListView));
         }
 
-        private void CreateWaveCountPresenter()
+        private void CreateTopBarPresenters()
         {
-            _childPresenters.Add(new WaveCountPresenter(_gameplayWaveContext, _view.WaveCountView, _wavesCount));
+            _childPresenters.Add(_gameplayPresentersFactory.CreateGoldPresenter(_view.TopBarView));
+
+            _childPresenters.Add(_gameplayPresentersFactory.CreateWaveCountPresenter(_view.TopBarView, _wavesCount));
         }
 
         private void CreateEntitiesHealthDisplay()

@@ -15,5 +15,6 @@
         public const string DefenderIconView = nameof(DefenderIconView);
         public const string UpgradePopupView = nameof(UpgradePopupView);
         public const string UpgradeCardView = nameof(UpgradeCardView);
+        public const string WavesCountView = nameof(WavesCountView);
     }
 }
