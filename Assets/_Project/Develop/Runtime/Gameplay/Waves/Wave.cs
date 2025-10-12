@@ -14,7 +14,7 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Waves
 {
     public class Wave : IDisposable
     {
-        private const float MaxPointDeviation = 25f;
+        private const float MaxPointDeviation = 35f;
 
         private readonly EnemiesFactory _enemiesFactory;
         private WaveConfig _waveConfig;
@@ -123,9 +123,19 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Waves
 
             Vector3 randomPoint = _fortressPosition + randomDirection.normalized * randomLength;
 
-            NavMesh.SamplePosition(randomPoint, out NavMeshHit navMeshHit, MaxPointDeviation, NavMesh.AllAreas);
+            if (NavMesh.SamplePosition(randomPoint, out NavMeshHit navMeshHit, MaxPointDeviation, NavMesh.AllAreas) == false)
+            {
+                randomPoint = navMeshHit.position;
+                Debug.LogWarning("Рандомная точка спавна не найдена!!!");
+            }
+            else
+            {
+                randomPoint = new Vector3(40, 0, -8);
+            }
 
-            return navMeshHit.position;
+            Debug.Log("Точка спавна: " + randomPoint);
+
+            return randomPoint;
         }
 
         private void RandomizeSpawnDelay() => _currentSpawnDelay = Random.Range(_waveConfig.MinSpawnDelayTime, _waveConfig.MaxSpawnDelayTime);

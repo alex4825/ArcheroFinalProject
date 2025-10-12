@@ -13,7 +13,7 @@ namespace Assets._Project.Develop.Runtime.UI.Gameplay.ResultsPopups
 
         [SerializeField] private TMP_Text _title;
         [SerializeField] private Button _continueButton;
-        [SerializeField] private Button _restartButton;
+        //[SerializeField] private Button _restartButton;
 
         public void SetTitle(string title) => _title.text = title;
 
@@ -22,7 +22,7 @@ namespace Assets._Project.Develop.Runtime.UI.Gameplay.ResultsPopups
             base.OnPreShow();
 
             _continueButton.onClick.AddListener(OnContinueButtonClciked);
-            _restartButton.onClick.AddListener(OnRestartButtonClciked);
+            //_restartButton.onClick.AddListener(OnRestartButtonClciked);
         }
 
         protected override void OnPreHide()
@@ -30,16 +30,16 @@ namespace Assets._Project.Develop.Runtime.UI.Gameplay.ResultsPopups
             base.OnPreHide();
 
             _continueButton.onClick.RemoveListener(OnContinueButtonClciked);
-            _restartButton.onClick.RemoveListener(OnRestartButtonClciked);
+            //_restartButton.onClick.RemoveListener(OnRestartButtonClciked);
         }
 
         private void OnDisable()
         {
             _continueButton.onClick.RemoveListener(OnContinueButtonClciked);
-            _restartButton.onClick.RemoveListener(OnRestartButtonClciked);
+            //_restartButton.onClick.RemoveListener(OnRestartButtonClciked);
         }
 
-        private void OnRestartButtonClciked() => RestartClicked?.Invoke();
+        //private void OnRestartButtonClciked() => RestartClicked?.Invoke();
 
         private void OnContinueButtonClciked() => ContinueClicked?.Invoke();
     }

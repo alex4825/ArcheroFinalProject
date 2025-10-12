@@ -45,9 +45,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dd5304307de8e6249876a13298dc1fc7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _clickSound: {fileID: 8300000, guid: b2ef429fac8fef6489d67789cda53022, type: 3}
-  _upgradeApplySound: {fileID: 8300000, guid: 8915b376c603229408e3481148265eb0, type: 3}
-  _upgradeCancelSound: {fileID: 8300000, guid: a3c473e08b3b73942af4bc59e565c450, type: 3}
+  _clickSound: {fileID: 8300000, guid: bd5268233a73ae24e9cc4824f84ee1a6, type: 3}
+  _upgradeApplySound: {fileID: 8300000, guid: 0f8a30bf06f73cc4a94c663f3591ada8, type: 3}
+  _upgradeCancelSound: {fileID: 8300000, guid: 556b7197df9b50a4bb4cc97f6714a3ee, type: 3}
 --- !u!82 &284762251904665270
 AudioSource:
   m_ObjectHideFlags: 0
@@ -69,7 +69,7 @@ AudioSource:
   Priority: 128
   DopplerLevel: 1
   MinDistance: 1
-  MaxDistance: 500
+  MaxDistance: 100
   Pan2D: 0
   rolloffMode: 0
   BypassEffects: 0
@@ -104,7 +104,7 @@ AudioSource:
     m_Curve:
     - serializedVersion: 3
       time: 0
-      value: 0
+      value: 0.05
       inSlope: 0
       outSlope: 0
       tangentMode: 0
