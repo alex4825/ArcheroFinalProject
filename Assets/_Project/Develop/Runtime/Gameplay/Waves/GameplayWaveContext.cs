@@ -14,9 +14,11 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Waves
 
         private Wave _currentWave;
 
+        private ReactiveEvent _enemyKilled = new();
         private ReactiveEvent<WaveResult> _currentWaveEnded = new();
         private ReactiveVariable<int> _currentWaveNumber = new();
 
+        private IDisposable _enemyKilledDisposable;
         private IDisposable _waveEndedDisposable;
 
         public GameplayWaveContext(FortressHolderService fortressHolderService, StatsService statsService)
@@ -29,6 +31,8 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Waves
 
         public IReadonlyVariable<int> CurrentWaveNumber => _currentWaveNumber;
 
+        public IReadonlyEvent EnemyKilled => _enemyKilled;
+
         public int WavesPassed { get; private set; }
 
         public void Set(Wave wave)
@@ -40,6 +44,7 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Waves
             _currentWaveNumber.Value++;
 
             _waveEndedDisposable = _currentWave.Ended.Subscribe(OnCurrentWaveEnded);
+            _enemyKilledDisposable = _currentWave.EnemyKilled.Subscribe(OnEnemyKilled);
         }
 
         public void Update(float deltaTime)
@@ -49,6 +54,7 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Waves
 
         public void Dispose()
         {
+            _enemyKilledDisposable?.Dispose();
             _waveEndedDisposable?.Dispose();
             _currentWave?.Dispose();
             _currentWave = null;
@@ -56,8 +62,11 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Waves
             _currentWaveNumber.Value = 0;
         }
 
+        private void OnEnemyKilled() => _enemyKilled?.Invoke();
+
         private void OnCurrentWaveEnded(WaveResult result)
         {
+            _enemyKilledDisposable?.Dispose();
             _currentWave.Dispose();
             _currentWave = null;
             _currentWaveEnded?.Invoke(result);

@@ -86,9 +86,8 @@ namespace Assets._Project.Develop.Runtime.Gameplay.States
             List<IDisposable> disposables = new List<IDisposable>();
 
             ReactiveVariable<int> goldSpendInGame = new();
-            ReactiveVariable<int> killedEnemies = new();
 
-            GameplayStateMachine coreLoopState = CreateCoreLoopState(_levelConfig.DelayBetweenWaves, goldSpendInGame, killedEnemies);
+            GameplayStateMachine coreLoopState = CreateCoreLoopState(_levelConfig.DelayBetweenWaves, goldSpendInGame);
 
             DefeatState defeatState = CreateDefeatState();
             WinState winState = CreateWinState();
@@ -102,16 +101,19 @@ namespace Assets._Project.Develop.Runtime.Gameplay.States
             ICompositeCondition coreLoopToDefeatStateCondition = new CompositeCondition()
                 .Add(new FuncCondition(() => _fortressHolderService.Fortress.IsDead.Value));
 
+            int killedEnemies = 0;
+            disposables.Add(_gameplayWaveContext.EnemyKilled.Subscribe(() => killedEnemies++));
             disposables.Add(coreLoopState.Entered.Subscribe(_brainsContext.Enable));
             disposables.Add(coreLoopState.Exited.Subscribe(_brainsContext.Disable));
             disposables.Add(coreLoopState.Disposed.Subscribe(() =>
             {
-                bool isLevelDefeat = _gameplayWaveContext.WavesPassed != _levelConfig.WavesCount;
+                bool isLevelDefeatOdSkipped = _gameplayWaveContext.WavesPassed != _levelConfig.WavesCount;
 
-                if (isLevelDefeat)
+                if (isLevelDefeatOdSkipped)
                 {
-                    int addedGoldByKilling = killedEnemies.Value * _levelConfig.EnemyKillCost;
-                    _walletService.Add(CurrencyTypes.Gold, goldSpendInGame.Value - addedGoldByKilling);
+                    int addedGoldByKilling = killedEnemies * _levelConfig.EnemyKillCost;
+                    _walletService.Spend(CurrencyTypes.Gold, addedGoldByKilling);
+                    _walletService.Add(CurrencyTypes.Gold, goldSpendInGame.Value);
                 }
 
                 _coroutinesPerformer.StartPerform(_container.Resolve<PlayerDataProvider>().SaveAcync());
@@ -129,7 +131,7 @@ namespace Assets._Project.Develop.Runtime.Gameplay.States
             return gameplayCycle;
         }
 
-        public GameplayStateMachine CreateCoreLoopState(float startDelayTime, ReactiveVariable<int> goldSpend, ReactiveVariable<int> killedEnemies)
+        public GameplayStateMachine CreateCoreLoopState(float startDelayTime, ReactiveVariable<int> goldSpend)
         {
             List<IDisposable> disposables = new List<IDisposable>();
 
@@ -162,8 +164,6 @@ namespace Assets._Project.Develop.Runtime.Gameplay.States
             disposables.Add(_gameplayWaveContext.CurrentWaveEnded.Subscribe((waveResult) =>
             {
                 isWaveWin = waveResult.IsWin;
-
-                killedEnemies.Value += waveResult.KilledEnemiesCount;
             }));
 
             FuncCondition placementMinesToWaveCycleCondition = new FuncCondition(() => restTimer.IsOver);
