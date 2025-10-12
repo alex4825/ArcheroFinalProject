@@ -2,6 +2,7 @@
 using Assets._Project.Develop.Runtime.Infrastracture.Meta.Features.Wallet;
 using Assets._Project.Develop.Runtime.Meta.Features.LevelsProgression;
 using Assets._Project.Develop.Runtime.Meta.Features.Upgrade;
+using Assets._Project.Develop.Runtime.Meta.Sound;
 using Assets._Project.Develop.Runtime.UI;
 using Assets._Project.Develop.Runtime.UI.Core;
 using Assets._Project.Develop.Runtime.Utilities.AssetsManagement;
@@ -30,6 +31,8 @@ namespace Assets._Project.Develop.Runtime.Infrastracture.EntryPoint
         {
             container.RegisterAsSingle<ICoroutinesPerformer>(CreateCoroutinesPerformer);
 
+            container.RegisterAsSingle(CreateSoundLauncher).NonLazy();
+
             container.RegisterAsSingle(CreateConfigsProviderService);
 
             container.RegisterAsSingle(CreateResourcesAssetsLoader);
@@ -57,6 +60,15 @@ namespace Assets._Project.Develop.Runtime.Infrastracture.EntryPoint
             container.RegisterAsSingle(CreateVictoryDefeatCounter).NonLazy();
 
             container.RegisterAsSingle(CreateStatsService).NonLazy();
+        }
+
+        private static SoundLauncher CreateSoundLauncher(DIContainer container)
+        {
+            ResourcesAssetsLoader resourcesAssetsLoader = container.Resolve<ResourcesAssetsLoader>();
+
+            SoundLauncher SoundLauncherPrefab = resourcesAssetsLoader.Load<SoundLauncher>("Utilities/SoundLauncher");
+
+            return Object.Instantiate(SoundLauncherPrefab);
         }
 
         private static StatsService CreateStatsService(DIContainer container)

@@ -1,4 +1,5 @@
 using Assets._Project.Develop.Runtime.Infrastracture.Gameplay.Infrastracture;
+using Assets._Project.Develop.Runtime.Meta.Sound;
 using Assets._Project.Develop.Runtime.UI.Core;
 using Assets._Project.Develop.Runtime.Utilities.CoroutinesManagement;
 using Assets._Project.Develop.Runtime.Utilities.SceneManagement;
@@ -13,17 +14,20 @@ namespace Assets._Project.Develop.Runtime.UI.Gameplay.ResultsPopups
         private readonly SceneSwitcherService _sceneSwitcher;
         private readonly ICoroutinesPerformer _coroutinesPerformer;
         private readonly GameplayInputArgs _currentLevelArgs;
+        private readonly SoundLauncher _soundLauncher;
 
         public DefeatPopupPresenter(
             ICoroutinesPerformer coroutinesPerformer,
             DefeatPopupView view,
             SceneSwitcherService sceneSwitcher,
-            GameplayInputArgs currentLevelArgs) : base(coroutinesPerformer)
+            GameplayInputArgs currentLevelArgs,
+            SoundLauncher soundLauncher) : base(coroutinesPerformer)
         {
             _coroutinesPerformer = coroutinesPerformer;
             _view = view;
             _sceneSwitcher = sceneSwitcher;
             _currentLevelArgs = currentLevelArgs;
+            _soundLauncher = soundLauncher;
         }
 
         protected override PopupViewBase PopupView => _view;
@@ -56,12 +60,16 @@ namespace Assets._Project.Develop.Runtime.UI.Gameplay.ResultsPopups
 
         private void OnContinueClicked()
         {
+            _soundLauncher.PlayClickSound();
+
             _coroutinesPerformer.StartPerform(_sceneSwitcher.ProcessSwitchTo(Scenes.MainMenu));
             OnCloseRequest();
         }
 
         private void OnRestartClicked()
         {
+            _soundLauncher.PlayClickSound();
+
             _coroutinesPerformer.StartPerform(_sceneSwitcher.ProcessSwitchTo(Scenes.Gameplay, new GameplayInputArgs(_currentLevelArgs.LevelNumber)));
             OnCloseRequest();
         }

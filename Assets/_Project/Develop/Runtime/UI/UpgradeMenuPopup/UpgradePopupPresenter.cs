@@ -1,6 +1,7 @@
 using Assets._Project.Develop.Runtime.Configs.Meta.Upgrade;
 using Assets._Project.Develop.Runtime.Infrastracture.Meta.Features.Wallet;
 using Assets._Project.Develop.Runtime.Meta.Features.Upgrade;
+using Assets._Project.Develop.Runtime.Meta.Sound;
 using Assets._Project.Develop.Runtime.UI.Core;
 using Assets._Project.Develop.Runtime.UI.MainMenu;
 using Assets._Project.Develop.Runtime.Utilities.CoroutinesManagement;
@@ -16,6 +17,7 @@ namespace Assets._Project.Develop.Runtime.UI.UpgradeMenuPopup
         private readonly MainMenuPresentersFactory _presentersFactory;
         private readonly StatsService _upgradeService;
         private readonly WalletService _wallet;
+        private readonly SoundLauncher _soundLauncher;
 
         private List<UpgradeCardPresenter> _cardsPresenters = new();
 
@@ -26,7 +28,8 @@ namespace Assets._Project.Develop.Runtime.UI.UpgradeMenuPopup
             ICoroutinesPerformer coroutinesPerformer,
             ViewsFactory viewsFactory,
             MainMenuPresentersFactory presentersFactory,
-            WalletService wallet) : base(coroutinesPerformer)
+            WalletService wallet,
+            SoundLauncher soundLauncher) : base(coroutinesPerformer)
         {
             _upgradePopupView = upgradePopupView;
             _upgradesConfig = statsConfig;
@@ -34,6 +37,7 @@ namespace Assets._Project.Develop.Runtime.UI.UpgradeMenuPopup
             _presentersFactory = presentersFactory;
             _upgradeService = upgradeService;
             _wallet = wallet;
+            _soundLauncher = soundLauncher;
         }
 
         protected override PopupViewBase PopupView => _upgradePopupView;
@@ -73,6 +77,12 @@ namespace Assets._Project.Develop.Runtime.UI.UpgradeMenuPopup
             {
                 _wallet.Spend(CurrencyTypes.Diamond, _upgradesConfig.GetBy(type).Cost);
                 _upgradeService.Upgrade(type);
+
+                _soundLauncher.PlayUpgradeApplySound();
+            }
+            else
+            {
+                _soundLauncher.PlayUpgradeCancelSound();
             }
 
             OnCloseRequest();

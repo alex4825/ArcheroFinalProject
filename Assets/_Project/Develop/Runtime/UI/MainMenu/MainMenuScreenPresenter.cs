@@ -1,4 +1,5 @@
 ﻿using Assets._Project.Develop.Runtime.Infrastracture.Gameplay.Infrastracture;
+using Assets._Project.Develop.Runtime.Meta.Sound;
 using Assets._Project.Develop.Runtime.UI.Core;
 using Assets._Project.Develop.Runtime.UI.Statistics;
 using Assets._Project.Develop.Runtime.UI.UpgradeMenuPopup;
@@ -18,6 +19,7 @@ namespace Assets._Project.Develop.Runtime.UI.MainMenu
         private readonly ICoroutinesPerformer _coroutinesPerformer;
         private readonly MainMenuPopupService _mainMenuPopupService;
         private int _levelsCount;
+        private readonly SoundLauncher _soundLauncher;
 
         private readonly List<IPresenter> _childPresenters = new();
 
@@ -27,7 +29,8 @@ namespace Assets._Project.Develop.Runtime.UI.MainMenu
             SceneSwitcherService sceneSwitcherService,
             ICoroutinesPerformer coroutinesPerformer,
             MainMenuPopupService mainMenuPopupService,
-            int levelsCount)
+            int levelsCount,
+            SoundLauncher soundLauncher)
         {
             _screen = screen;
             _projectPresentersFactory = projectPresentersFactory;
@@ -35,6 +38,7 @@ namespace Assets._Project.Develop.Runtime.UI.MainMenu
             _coroutinesPerformer = coroutinesPerformer;
             _mainMenuPopupService = mainMenuPopupService;
             _levelsCount = levelsCount;
+            _soundLauncher = soundLauncher;
         }
 
         public void Initialize()
@@ -82,6 +86,8 @@ namespace Assets._Project.Develop.Runtime.UI.MainMenu
 
         private void OnPlayRandomLevelButtonClicked()
         {
+            _soundLauncher.PlayClickSound();
+
             _coroutinesPerformer.StartPerform(
                 _sceneSwitcherService.ProcessSwitchTo
                 (Scenes.Gameplay,
@@ -90,6 +96,8 @@ namespace Assets._Project.Develop.Runtime.UI.MainMenu
 
         private void OnUpgradeButtonClicked()
         {
+            _soundLauncher.PlayClickSound();
+
             UpgradePopupPresenter upgradePopup = _mainMenuPopupService.OpenUpgradePopup();
 
             upgradePopup.CloseRequest += OnCloseUpgradePopup;
@@ -105,6 +113,8 @@ namespace Assets._Project.Develop.Runtime.UI.MainMenu
 
         private void OnCloseButtonClicked()
         {
+            _soundLauncher.PlayClickSound();
+
 #if UNITY_EDITOR
             UnityEditor.EditorApplication.isPlaying = false;
 #else

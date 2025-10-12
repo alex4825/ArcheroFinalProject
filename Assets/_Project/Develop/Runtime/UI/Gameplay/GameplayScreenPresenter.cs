@@ -1,5 +1,6 @@
 ﻿using Assets._Project.Develop.Runtime.Gameplay.Features.MainHero;
 using Assets._Project.Develop.Runtime.Gameplay.Waves;
+using Assets._Project.Develop.Runtime.Meta.Sound;
 using Assets._Project.Develop.Runtime.UI.Core;
 using Assets._Project.Develop.Runtime.UI.Gameplay.HealthDisplay;
 using Assets._Project.Develop.Runtime.UI.Gameplay.Wave;
@@ -22,6 +23,7 @@ namespace Assets._Project.Develop.Runtime.UI.Gameplay
         private readonly GameplayWaveContext _gameplayWaveContext;
         private readonly SceneSwitcherService _sceneSwitcherService;
         private readonly ICoroutinesPerformer _coroutinesPerformer;
+        private readonly SoundLauncher _soundLauncher;
 
         private int _wavesCount;
 
@@ -34,6 +36,7 @@ namespace Assets._Project.Develop.Runtime.UI.Gameplay
             GameplayPresentersFactory gameplayPresentersFactory,
             SceneSwitcherService sceneSwitcherService,
             ICoroutinesPerformer coroutinesPerformer,
+            SoundLauncher soundLauncher,
             int wavesCount)
         {
             _view = view;
@@ -41,6 +44,7 @@ namespace Assets._Project.Develop.Runtime.UI.Gameplay
             _gameplayPresentersFactory = gameplayPresentersFactory;
             _sceneSwitcherService = sceneSwitcherService;
             _coroutinesPerformer = coroutinesPerformer;
+            _soundLauncher = soundLauncher;
             _wavesCount = wavesCount;
         }
 
@@ -55,7 +59,7 @@ namespace Assets._Project.Develop.Runtime.UI.Gameplay
             foreach (IPresenter presenter in _childPresenters)
                 presenter.Initialize();
 
-            _view.CloseButtonClicked += OnCloseMenuButtonClicked;
+            _view.CloseButtonClicked += OnCloseButtonClicked;
         }
 
         public void LateUpdate()
@@ -70,7 +74,7 @@ namespace Assets._Project.Develop.Runtime.UI.Gameplay
 
             _childPresenters.Clear();
 
-            _view.CloseButtonClicked -= OnCloseMenuButtonClicked;
+            _view.CloseButtonClicked -= OnCloseButtonClicked;
         }
 
         public TPresenter GetChild<TPresenter>() where TPresenter : class, IPresenter
@@ -96,8 +100,10 @@ namespace Assets._Project.Develop.Runtime.UI.Gameplay
             restTimerPresenter?.Dispose();
         }
 
-        private void OnCloseMenuButtonClicked()
+        private void OnCloseButtonClicked()
         {
+            _soundLauncher.PlayClickSound();
+
             _coroutinesPerformer.StartPerform(_sceneSwitcherService.ProcessSwitchTo(Scenes.MainMenu));
         }
 

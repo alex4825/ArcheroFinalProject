@@ -5,6 +5,7 @@ using Assets._Project.Develop.Runtime.Gameplay.Waves;
 using Assets._Project.Develop.Runtime.Infrastracture.DI;
 using Assets._Project.Develop.Runtime.Infrastracture.Gameplay.Infrastracture;
 using Assets._Project.Develop.Runtime.Infrastracture.Meta.Features.Wallet;
+using Assets._Project.Develop.Runtime.Meta.Sound;
 using Assets._Project.Develop.Runtime.UI.CommonViews;
 using Assets._Project.Develop.Runtime.UI.Core;
 using Assets._Project.Develop.Runtime.UI.Gameplay.DefendersIcons;
@@ -88,6 +89,7 @@ namespace Assets._Project.Develop.Runtime.UI.Gameplay
                 this,
                 _container.Resolve<SceneSwitcherService>(),
                 _container.Resolve<ICoroutinesPerformer>(),
+                _container.Resolve<SoundLauncher>(),
                 currentLevelConfig.WavesCount);
         }
 
@@ -96,7 +98,8 @@ namespace Assets._Project.Develop.Runtime.UI.Gameplay
             return new WinPopupPresenter(
                 _container.Resolve<ICoroutinesPerformer>(),
                 view,
-                _container.Resolve<SceneSwitcherService>());
+                _container.Resolve<SceneSwitcherService>(),
+                _container.Resolve<SoundLauncher>());
         }
 
         public DefeatPopupPresenter CreateDefeatPopupPresenter(DefeatPopupView view)
@@ -105,7 +108,8 @@ namespace Assets._Project.Develop.Runtime.UI.Gameplay
                 _container.Resolve<ICoroutinesPerformer>(),
                 view,
                 _container.Resolve<SceneSwitcherService>(),
-                _gameplayInputArgs);
+                _gameplayInputArgs,
+                _container.Resolve<SoundLauncher>());
         }
     }
 }

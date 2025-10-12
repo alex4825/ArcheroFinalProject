@@ -1,3 +1,4 @@
+using Assets._Project.Develop.Runtime.Meta.Sound;
 using Assets._Project.Develop.Runtime.UI.Core;
 using Assets._Project.Develop.Runtime.Utilities.CoroutinesManagement;
 using Assets._Project.Develop.Runtime.Utilities.SceneManagement;
@@ -11,15 +12,18 @@ namespace Assets._Project.Develop.Runtime.UI.Gameplay.ResultsPopups
         private readonly WinPopupView _view;
         private readonly SceneSwitcherService _sceneSwitcher;
         private readonly ICoroutinesPerformer _coroutinesPerformer;
+        private readonly SoundLauncher _soundLauncher;
 
         public WinPopupPresenter(
             ICoroutinesPerformer coroutinesPerformer,
             WinPopupView view,
-            SceneSwitcherService sceneSwitcher) : base(coroutinesPerformer)
+            SceneSwitcherService sceneSwitcher,
+            SoundLauncher soundLauncher) : base(coroutinesPerformer)
         {
             _coroutinesPerformer = coroutinesPerformer;
             _view = view;
             _sceneSwitcher = sceneSwitcher;
+            _soundLauncher = soundLauncher;
         }
 
         protected override PopupViewBase PopupView => _view;
@@ -49,6 +53,8 @@ namespace Assets._Project.Develop.Runtime.UI.Gameplay.ResultsPopups
 
         private void OnContinueClicked()
         {
+            _soundLauncher.PlayClickSound();
+
             _coroutinesPerformer.StartPerform(_sceneSwitcher.ProcessSwitchTo(Scenes.MainMenu));
             OnCloseRequest();
         }
