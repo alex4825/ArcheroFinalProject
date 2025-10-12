@@ -18,10 +18,14 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 9d24c95659eac09488a16b30fde8484f, type: 2}
   - {fileID: 11400000, guid: b3c7afb2ac7deac40a409e267961a2e6, type: 2}
   - {fileID: 11400000, guid: 9d24c95659eac09488a16b30fde8484f, type: 2}
+  - {fileID: 11400000, guid: b3c7afb2ac7deac40a409e267961a2e6, type: 2}
   - {fileID: 11400000, guid: 9d24c95659eac09488a16b30fde8484f, type: 2}
   - {fileID: 11400000, guid: b3c7afb2ac7deac40a409e267961a2e6, type: 2}
+  - {fileID: 11400000, guid: 9d24c95659eac09488a16b30fde8484f, type: 2}
+  - {fileID: 11400000, guid: b3c7afb2ac7deac40a409e267961a2e6, type: 2}
+  - {fileID: 11400000, guid: 9d24c95659eac09488a16b30fde8484f, type: 2}
   <EnemiesGenerationMode>k__BackingField: 0
   <MinSpawnDelayTime>k__BackingField: 0.5
-  <MaxSpawnDelayTime>k__BackingField: 1
+  <MaxSpawnDelayTime>k__BackingField: 0.5
   <MinSpawnRadius>k__BackingField: 30
   <MaxSpawnRadius>k__BackingField: 35

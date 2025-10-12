@@ -25,8 +25,8 @@ MonoBehaviour:
     type: 2}
   <DelayBetweenWaves>k__BackingField: 5
   <FortressHP>k__BackingField: 200
-  <VictoryGoldCost>k__BackingField: 700
+  <VictoryGoldCost>k__BackingField: 350
   <VictoryDiamondCost>k__BackingField: 50
-  <EnemyKillCost>k__BackingField: 15
+  <EnemyKillCost>k__BackingField: 5
   <LevelEnvironment>k__BackingField: {fileID: 124691657050534622, guid: 81b845120b2227341963483930779e2b,
     type: 3}
