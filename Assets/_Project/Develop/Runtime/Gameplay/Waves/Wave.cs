@@ -123,7 +123,7 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Waves
 
             Vector3 randomPoint = _fortressPosition + randomDirection.normalized * randomLength;
 
-            if (NavMesh.SamplePosition(randomPoint, out NavMeshHit navMeshHit, MaxPointDeviation, NavMesh.AllAreas) == false)
+            /*if (NavMesh.SamplePosition(randomPoint, out NavMeshHit navMeshHit, MaxPointDeviation, NavMesh.AllAreas) == false)
             {
                 randomPoint = navMeshHit.position;
                 Debug.LogWarning("Рандомная точка спавна не найдена!!!");
@@ -131,11 +131,13 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Waves
             else
             {
                 randomPoint = new Vector3(40, 0, -8);
-            }
+            }*/
 
-            Debug.Log("Точка спавна: " + randomPoint);
+            NavMesh.SamplePosition(randomPoint, out NavMeshHit navMeshHit, MaxPointDeviation, NavMesh.AllAreas);
 
-            return randomPoint;
+            //Debug.Log("Точка спавна: " + randomPoint);
+
+            return navMeshHit.position;
         }
 
         private void RandomizeSpawnDelay() => _currentSpawnDelay = Random.Range(_waveConfig.MinSpawnDelayTime, _waveConfig.MaxSpawnDelayTime);

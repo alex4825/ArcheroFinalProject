@@ -27,5 +27,5 @@ MonoBehaviour:
   <EnemiesGenerationMode>k__BackingField: 0
   <MinSpawnDelayTime>k__BackingField: 0.5
   <MaxSpawnDelayTime>k__BackingField: 0.5
-  <MinSpawnRadius>k__BackingField: 27
-  <MaxSpawnRadius>k__BackingField: 30
+  <MinSpawnRadius>k__BackingField: 30
+  <MaxSpawnRadius>k__BackingField: 35

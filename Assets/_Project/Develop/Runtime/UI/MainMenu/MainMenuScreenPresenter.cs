@@ -118,7 +118,10 @@ namespace Assets._Project.Develop.Runtime.UI.MainMenu
 #if UNITY_EDITOR
             UnityEditor.EditorApplication.isPlaying = false;
 #else
-        Application.Quit();
+#if !UNITY_WEBGL
+            
+            Application.Quit();
+#endif
 #endif
         }
     }
