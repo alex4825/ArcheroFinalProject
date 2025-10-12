@@ -698,6 +698,30 @@ namespace Assets._Project.Develop.Runtime.Gameplay.EntitiesCore
 			return AddComponent(new Assets._Project.Develop.Runtime.Gameplay.Features.LifeCycle.IsOneWaveLifetime() {Value = value}); 
 		}
 
+		public Assets._Project.Develop.Runtime.Gameplay.Features.LifeCycle.IsKilled IsKilledC => GetComponent<Assets._Project.Develop.Runtime.Gameplay.Features.LifeCycle.IsKilled>();
+
+		public Assets._Project.Develop.Runtime.Utilities.Reactive.ReactiveVariable<System.Boolean> IsKilled => IsKilledC.Value;
+
+		public bool TryGetIsKilled(out Assets._Project.Develop.Runtime.Utilities.Reactive.ReactiveVariable<System.Boolean> value)
+		{
+			bool result = TryGetComponent(out Assets._Project.Develop.Runtime.Gameplay.Features.LifeCycle.IsKilled component);
+			if(result)
+				value = component.Value;
+			else
+				value = default(Assets._Project.Develop.Runtime.Utilities.Reactive.ReactiveVariable<System.Boolean>);
+			return result;
+		}
+
+		public Assets._Project.Develop.Runtime.Gameplay.EntitiesCore.Entity AddIsKilled()
+		{
+			return AddComponent(new Assets._Project.Develop.Runtime.Gameplay.Features.LifeCycle.IsKilled() { Value = new Assets._Project.Develop.Runtime.Utilities.Reactive.ReactiveVariable<System.Boolean>() }); 
+		}
+
+		public Assets._Project.Develop.Runtime.Gameplay.EntitiesCore.Entity AddIsKilled(Assets._Project.Develop.Runtime.Utilities.Reactive.ReactiveVariable<System.Boolean> value)
+		{
+			return AddComponent(new Assets._Project.Develop.Runtime.Gameplay.Features.LifeCycle.IsKilled() {Value = value}); 
+		}
+
 		public Assets._Project.Develop.Runtime.Gameplay.Features.CurrencyFeature.InitialEnergyCount InitialEnergyCountC => GetComponent<Assets._Project.Develop.Runtime.Gameplay.Features.CurrencyFeature.InitialEnergyCount>();
 
 		public Assets._Project.Develop.Runtime.Utilities.Reactive.ReactiveVariable<System.Single> InitialEnergyCount => InitialEnergyCountC.Value;

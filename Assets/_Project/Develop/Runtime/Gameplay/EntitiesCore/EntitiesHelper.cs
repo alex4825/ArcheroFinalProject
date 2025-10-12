@@ -1,3 +1,4 @@
+using Assets._Project.Develop.Runtime.Gameplay.Features.LifeCycle;
 using Assets._Project.Develop.Runtime.Gameplay.Features.TeamsFeature;
 using Assets._Project.Develop.Runtime.Utilities.Reactive;
 
@@ -17,6 +18,9 @@ namespace Assets._Project.Develop.Runtime.Gameplay.EntitiesCore
                     return false;
             }
 
+            if (damageable.HasComponent<IsKilled>() && damageable.CurrentHealth.Value - damage <= 0)
+                damageable.IsKilled.Value = true;
+
             takeDamageRequest.Invoke(damage);
             return true;
         }
@@ -29,6 +33,9 @@ namespace Assets._Project.Develop.Runtime.Gameplay.EntitiesCore
             if (damageable.TryGetTeam(out ReactiveVariable<Teams> damageableTeam))
                 if (team == damageableTeam.Value)
                     return false;
+
+            if (damageable.HasComponent<IsKilled>() && damageable.CurrentHealth.Value - damage <= 0)
+                damageable.IsKilled.Value = true;
 
             takeDamageRequest.Invoke(damage);
             return true;

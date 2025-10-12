@@ -1,4 +1,5 @@
 ﻿using Assets._Project.Develop.Runtime.Gameplay.EntitiesCore;
+using Assets._Project.Develop.Runtime.Gameplay.Features.TeamsFeature;
 using Assets._Project.Develop.Runtime.Utilities.Conditions;
 using Assets._Project.Develop.Runtime.Utilities.Reactive;
 using System.Collections.Generic;
@@ -57,6 +58,11 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Features.LifeCycle
     }
 
     public class IsOneWaveLifetime : IEntityComponent
+    {
+        public ReactiveVariable<bool> Value;
+    }
+
+    public class IsKilled : IEntityComponent
     {
         public ReactiveVariable<bool> Value;
     }

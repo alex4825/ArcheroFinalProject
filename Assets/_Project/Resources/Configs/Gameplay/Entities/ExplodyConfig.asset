@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: ExplodyConfig
   m_EditorClassIdentifier: 
   <PrefabPath>k__BackingField: Entities/Explody
-  <MoveSpeed>k__BackingField: 3
+  <MoveSpeed>k__BackingField: 4
   <RotationSpeed>k__BackingField: 900
   <ExplodeDamage>k__BackingField: 100
   <ExplodeRadius>k__BackingField: 7

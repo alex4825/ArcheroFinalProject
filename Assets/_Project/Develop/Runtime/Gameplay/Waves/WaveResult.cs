@@ -5,10 +5,10 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Waves
         public WaveResult(bool isWin, int defeatedEnemiesCount)
         {
             IsWin = isWin;
-            DefeatedEnemiesCount = defeatedEnemiesCount;
+            KilledEnemiesCount = defeatedEnemiesCount;
         }
 
         public bool IsWin { get; }
-        public int DefeatedEnemiesCount { get; }
+        public int KilledEnemiesCount { get; }
     }
 }

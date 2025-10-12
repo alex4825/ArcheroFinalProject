@@ -24,12 +24,14 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Waves
         private Entity _fortress;
 
         private ReactiveEvent<WaveResult> _ended = new();
+        private ReactiveEvent _enemyKilled = new();
 
         private bool _isRunning;
         private float _time;
         private float _currentSpawnDelay;
         private int _currentSpawnIndex;
         private int _defeatedEnemies;
+        private int _killedEnemies;
 
         private List<IDisposable> _disposables = new();
 
@@ -47,6 +49,7 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Waves
         }
 
         public IReadonlyEvent<WaveResult> Ended => _ended;
+        public IReadonlyEvent EnemyKilled => _enemyKilled;
 
         public void Run()
         {
@@ -63,7 +66,7 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Waves
 
             if (_defeatedEnemies >= _enemyConfigs.Count)
             {
-                _ended?.Invoke(new WaveResult(true, _defeatedEnemies));
+                _ended?.Invoke(new WaveResult(true, _killedEnemies));
                 _isRunning = false;
             }
 
@@ -76,7 +79,7 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Waves
             {
                 Entity enemy = _enemiesFactory.Create(GetRandomPosition(), _enemyConfigs[_currentSpawnIndex], Teams.Enemies);
                 _currentSpawnIndex++;
-                _disposables.Add(enemy.IsDead.Subscribe(OnEnemyDie));
+                _disposables.Add(enemy.IsDead.Subscribe((oldDie, isDie) => OnEnemyDie(isDie, enemy.IsKilled.Value)));
 
                 _time = 0;
 
@@ -95,13 +98,21 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Waves
         private void OnFortressDestroyed(bool arg1, bool isDestroyed)
         {
             if (isDestroyed)
-                _ended?.Invoke(new WaveResult(false, _defeatedEnemies));
+                _ended?.Invoke(new WaveResult(false, _killedEnemies));
         }
 
-        private void OnEnemyDie(bool arg1, bool isDie)
+        private void OnEnemyDie(bool isDie, bool isKilled)
         {
             if (isDie)
+            {
                 _defeatedEnemies++;
+
+                if (isKilled)
+                {
+                    _killedEnemies++;
+                    _enemyKilled?.Invoke();
+                }
+            }
         }
 
         private Vector3 GetRandomPosition()

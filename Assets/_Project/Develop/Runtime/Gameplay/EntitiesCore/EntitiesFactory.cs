@@ -359,7 +359,8 @@ namespace Assets._Project.Develop.Runtime.Gameplay.EntitiesCore
 
             _monoEntitiesFactory.Create(entity, position, config.PrefabPath);
 
-            entity.AddTeam(new ReactiveVariable<Teams>(team))
+            entity.AddIsKilled()
+                  .AddTeam(new ReactiveVariable<Teams>(team))
                   .AddMaxHealth(new ReactiveVariable<float>(config.MaxHealth))
                   .AddCurrentHealth(new ReactiveVariable<float>(config.MaxHealth))
                   .AddIsMoving()
@@ -416,6 +417,7 @@ namespace Assets._Project.Develop.Runtime.Gameplay.EntitiesCore
             _monoEntitiesFactory.Create(entity, position, config.PrefabPath);
 
             entity
+                .AddIsKilled()
                 .AddTeam(new ReactiveVariable<Teams>(team))
                 .AddMoveDirection()
                 .AddMoveSpeed(new ReactiveVariable<float>(config.MoveSpeed))

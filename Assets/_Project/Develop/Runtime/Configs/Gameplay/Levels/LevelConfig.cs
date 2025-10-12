@@ -15,6 +15,7 @@ namespace Assets._Project.Develop.Runtime.Configs.Gameplay.Levels
         [field: SerializeField] public int FortressHP { get; private set; } = 500;
         [field: SerializeField] public int VictoryGoldCost { get; private set; } = 100;
         [field: SerializeField] public int VictoryDiamondCost { get; private set; } = 10;
+        [field: SerializeField] public int EnemyKillCost { get; private set; } = 10;
         [field: SerializeField] public LevelEnvironment LevelEnvironment { get; private set; }
 
         public Vector3 FortressPosition => LevelEnvironment.Fortress.transform.position;

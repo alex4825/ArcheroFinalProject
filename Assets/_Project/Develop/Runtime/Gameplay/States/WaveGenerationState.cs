@@ -2,7 +2,9 @@
 using Assets._Project.Develop.Runtime.Gameplay.Environment;
 using Assets._Project.Develop.Runtime.Gameplay.Features.Enemies;
 using Assets._Project.Develop.Runtime.Gameplay.Waves;
+using Assets._Project.Develop.Runtime.Infrastracture.Meta.Features.Wallet;
 using Assets._Project.Develop.Runtime.Utilities.StateMachineCore;
+using System;
 using UnityEngine;
 
 namespace Assets._Project.Develop.Runtime.Gameplay.States
@@ -13,15 +15,19 @@ namespace Assets._Project.Develop.Runtime.Gameplay.States
         private readonly EnemiesFactory _enemiesFactory;
         private readonly LevelConfig _levelConfig;
         private readonly FortressHolderService _fortressHolderService;
+        private readonly WalletService _walletService;
 
         private Wave _currentWave;
         private int _currentWaveIndex;
+
+        private IDisposable _enemyKilledDisposable;
 
         public WaveGenerationState(
             GameplayWaveContext gameplayWaveContext,
             EnemiesFactory enemiesFactory,
             LevelConfig levelConfig,
-            FortressHolderService fortressHolderService)
+            FortressHolderService fortressHolderService,
+            WalletService walletService)
         {
             _gameplayWaveContext = gameplayWaveContext;
             _enemiesFactory = enemiesFactory;
@@ -29,6 +35,7 @@ namespace Assets._Project.Develop.Runtime.Gameplay.States
 
             _currentWaveIndex = 0;
             _fortressHolderService = fortressHolderService;
+            _walletService = walletService;
         }
 
         public override void Enter()
@@ -39,6 +46,8 @@ namespace Assets._Project.Develop.Runtime.Gameplay.States
             _currentWave = new Wave(_enemiesFactory, _levelConfig, _currentWaveIndex, _fortressHolderService.Fortress);
             _gameplayWaveContext.Set(_currentWave);
             _currentWave.Run();
+
+            _enemyKilledDisposable = _currentWave.EnemyKilled.Subscribe(OnEnemyKilled);
         }
 
         public void Update(float deltaTime)
@@ -54,6 +63,12 @@ namespace Assets._Project.Develop.Runtime.Gameplay.States
             _currentWave?.Dispose();
 
             _currentWaveIndex++;
+            _enemyKilledDisposable?.Dispose();
+        }
+
+        private void OnEnemyKilled()
+        {
+            _walletService.Add(CurrencyTypes.Gold, _levelConfig.EnemyKillCost);
         }
     }
 }

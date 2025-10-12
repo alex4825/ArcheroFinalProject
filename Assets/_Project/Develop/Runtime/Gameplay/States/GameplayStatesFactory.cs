@@ -17,7 +17,6 @@ using Assets._Project.Develop.Runtime.Meta.Features.Upgrade;
 using Assets._Project.Develop.Runtime.UI.Core;
 using Assets._Project.Develop.Runtime.UI.Gameplay;
 using Assets._Project.Develop.Runtime.UI.Gameplay.DefendersIcons;
-using Assets._Project.Develop.Runtime.UI.Gameplay.Wave;
 using Assets._Project.Develop.Runtime.Utilities;
 using Assets._Project.Develop.Runtime.Utilities.Conditions;
 using Assets._Project.Develop.Runtime.Utilities.ConfigsManagement;
@@ -28,7 +27,6 @@ using Assets._Project.Develop.Runtime.Utilities.Reactive;
 using Assets._Project.Develop.Runtime.Utilities.Timer;
 using System;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
 namespace Assets._Project.Develop.Runtime.Gameplay.States
@@ -88,8 +86,9 @@ namespace Assets._Project.Develop.Runtime.Gameplay.States
             List<IDisposable> disposables = new List<IDisposable>();
 
             ReactiveVariable<int> goldSpendInGame = new();
+            ReactiveVariable<int> killedEnemies = new();
 
-            GameplayStateMachine coreLoopState = CreateCoreLoopState(_levelConfig.DelayBetweenWaves, goldSpendInGame);
+            GameplayStateMachine coreLoopState = CreateCoreLoopState(_levelConfig.DelayBetweenWaves, goldSpendInGame, killedEnemies);
 
             DefeatState defeatState = CreateDefeatState();
             WinState winState = CreateWinState();
@@ -107,11 +106,15 @@ namespace Assets._Project.Develop.Runtime.Gameplay.States
             disposables.Add(coreLoopState.Exited.Subscribe(_brainsContext.Disable));
             disposables.Add(coreLoopState.Disposed.Subscribe(() =>
             {
-                if (_gameplayWaveContext.WavesPassed != _levelConfig.WavesCount)
+                bool isLevelDefeat = _gameplayWaveContext.WavesPassed != _levelConfig.WavesCount;
+
+                if (isLevelDefeat)
                 {
-                    _walletService.Add(CurrencyTypes.Gold, goldSpendInGame.Value);
-                    _coroutinesPerformer.StartPerform(_container.Resolve<PlayerDataProvider>().SaveAcync());
+                    int addedGoldByKilling = killedEnemies.Value * _levelConfig.EnemyKillCost;
+                    _walletService.Add(CurrencyTypes.Gold, goldSpendInGame.Value - addedGoldByKilling);
                 }
+
+                _coroutinesPerformer.StartPerform(_container.Resolve<PlayerDataProvider>().SaveAcync());
             }));
 
             GameplayStateMachine gameplayCycle = new GameplayStateMachine(disposables);
@@ -126,7 +129,7 @@ namespace Assets._Project.Develop.Runtime.Gameplay.States
             return gameplayCycle;
         }
 
-        public GameplayStateMachine CreateCoreLoopState(float startDelayTime, ReactiveVariable<int> goldSpend)
+        public GameplayStateMachine CreateCoreLoopState(float startDelayTime, ReactiveVariable<int> goldSpend, ReactiveVariable<int> killedEnemies)
         {
             List<IDisposable> disposables = new List<IDisposable>();
 
@@ -156,9 +159,12 @@ namespace Assets._Project.Develop.Runtime.Gameplay.States
 
             disposables.Add(waveCycleState.Entered.Subscribe(() => isWaveWin = false));
 
-            disposables.Add(_gameplayWaveContext.CurrentWaveEnded.Subscribe((waveResult) => isWaveWin = waveResult.IsWin));
+            disposables.Add(_gameplayWaveContext.CurrentWaveEnded.Subscribe((waveResult) =>
+            {
+                isWaveWin = waveResult.IsWin;
 
-            _gameplayWaveContext.CurrentWaveEnded.Subscribe((waveResult) => isWaveWin = waveResult.IsWin);
+                killedEnemies.Value += waveResult.KilledEnemiesCount;
+            }));
 
             FuncCondition placementMinesToWaveCycleCondition = new FuncCondition(() => restTimer.IsOver);
             FuncCondition waveCycleToPlacementMinesCondition = new FuncCondition(() => isWaveWin);
@@ -207,7 +213,8 @@ namespace Assets._Project.Develop.Runtime.Gameplay.States
                 _gameplayWaveContext,
                 _container.Resolve<EnemiesFactory>(),
                 _levelConfig,
-                _fortressHolderService);
+                _fortressHolderService,
+                _walletService);
 
             WaitingForPointingState waitingForExplodePointState = new WaitingForPointingState(_container.Resolve<IInputService>());
 

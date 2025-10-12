@@ -65,7 +65,8 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Waves
 
             Healer.Heal(_fortressHolderService.Fortress, _statsService.GetKoefBy(StatTypes.FortressRepairOnWaveStart));
 
-            WavesPassed++;
+            if (result.IsWin)
+                WavesPassed++;
         }
     }
 }
